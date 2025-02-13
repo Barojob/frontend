@@ -70,7 +70,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="w-full flex flex-col justify-center bg-white">
+    <div className="w-full flex flex-col justify-center h-screen bg-white">
       <div className="flex items-center justify-center">
         <div className="p-6 w-[25rem]">
           <div className="text-2xl mb-10 text-left">

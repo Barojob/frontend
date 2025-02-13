@@ -85,7 +85,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center h-screen font-['Pretendard-Regular']">
+    <div className="flex flex-col justify-center h-screen font-['Pretendard-Regular'] bg-white">
       <div className="flex items-center justify-center">
         <div className="p-6 w-[25rem]">
           <div className="text-2xl font-medium mb-10 text-left">

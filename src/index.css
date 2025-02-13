@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: antiquewhite;
+}
+
 @font-face {
   font-family: "Pretendard-Black";
   src: url("./assets/fonts/Pretendard-Black.woff") format("woff");

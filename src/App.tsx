@@ -7,23 +7,9 @@ const App = () => {
     <Router>
       <Routes>
         {/* 로그인 페이지 */}
-        <Route
-          path="/login"
-          element={
-            <div className="flex min-h-screen justify-center items-center">
-              <LoginPage />
-            </div>
-          }
-        />
+        <Route path="/login" element={<LoginPage />} />
         {/* 회원가입 페이지 */}
-        <Route
-          path="/signup"
-          element={
-            <div className="flex min-h-screen justify-center items-center">
-              <SignupPage />
-            </div>
-          }
-        />
+        <Route path="/signup" element={<SignupPage />} />
       </Routes>
     </Router>
   );
