@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "../component/Button/Button";
 import { Input } from "../component/Input/Input";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +16,27 @@ const LoginPage = () => {
 
   const handleChange =
     (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData({ ...formData, [field]: e.target.value });
+      let value = e.target.value;
+
+      if (field === "phone") {
+        // 숫자만 남기기
+        value = value.replace(/\D/g, "");
+
+        // 입력 길이 제한 (010-1234-5678 형식: 최대 13자)
+        if (value.length > 11) {
+          return; // 더 이상 입력 불가
+        }
+
+        // 010-1234-5678 형식으로 변환
+        if (value.length > 3 && value.length <= 7) {
+          value = value.replace(/(\d{3})(\d+)/, "$1-$2");
+        } else if (value.length > 7) {
+          value = value.replace(/(\d{3})(\d{4})(\d+)/, "$1-$2-$3");
+        }
+      }
+
+      // 변환된 값을 상태에 반영
+      setFormData({ ...formData, [field]: value });
     };
 
   const validateForm = () => {
@@ -49,19 +70,30 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center h-screen bg-gray-100">
+    <div className="w-full flex flex-col justify-center bg-white">
       <div className="flex items-center justify-center">
-        <div className="bg-white p-8 w-[25rem] rounded-lg shadow-lg">
-          <h1 className="text-2xl font-bold mb-8 text-center">로그인</h1>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div className="p-6 w-[25rem]">
+          <div className="text-2xl mb-10 text-left">
+            <span className="text-blue-500 font-pretendard font-semibold">
+              바로잡
+            </span>
+            <span className="font-pretendard font-medium"> 시작하기</span>
+          </div>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col font-pretendard"
+          >
             {/* 전화번호 */}
             <Input
               label="전화번호"
-              placeholder="010-1234-5678"
+              type="text"
+              inputMode="numeric"
+              placeholder="휴대폰번호( - 없이 숫자만 입력)"
               value={formData.phone}
               onChange={handleChange("phone")}
               variant={errors.phone ? "error" : "default"}
               errorMessage={errors.phone}
+              className="mb-4"
             />
 
             {/* 비밀번호 */}
@@ -73,11 +105,17 @@ const LoginPage = () => {
               onChange={handleChange("password")}
               variant={errors.password ? "error" : "default"}
               errorMessage={errors.password}
+              showToggleIcon
             />
 
             {/* 로그인 버튼 */}
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-8 mb-3">
               <Button primary label="로그인" size="large" />
+            </div>
+            <div className="flex justify-center">
+              <Link to="/signup" className="w-full">
+                <Button secondary label="회원가입" size="large" />
+              </Link>
             </div>
           </form>
         </div>

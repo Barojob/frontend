@@ -1,29 +1,30 @@
 import { cva, VariantProps } from "class-variance-authority";
 
-const buttonStyles = cva(
-  "rounded-md font-bold focus:outline-none focus:ring-2 focus:ring-offset-2",
-  {
-    variants: {
-      primary: {
-        true: "bg-blue-500 text-white hover:bg-blue-600",
-        false: "bg-gray-200 text-gray-700 hover:bg-gray-300",
-      },
-      size: {
-        small: "px-3 py-1 text-sm",
-        medium: "px-4 py-2 text-base",
-        large: "px-5 py-3 text-lg",
-      },
-      disabled: {
-        true: "opacity-50 cursor-not-allowed",
-        false: "",
-      },
+const buttonStyles = cva("rounded-md font-bold focus:outline-none", {
+  variants: {
+    primary: {
+      true: "bg-blue-500 text-white hover:bg-blue-600",
+      false: "bg-gray-200 text-gray-700 hover:bg-gray-300",
     },
-    defaultVariants: {
-      size: "medium",
-      primary: false,
+    secondary: {
+      true: "bg-gray-100 text-gray-700 hover:bg-gray-200",
+      false: "bg-gray-200 text-gray-700 hover:bg-gray-300",
     },
-  }
-);
+    size: {
+      small: "px-3 py-1 text-sm",
+      medium: "px-4 py-2 text-base",
+      large: "w-full px-5 py-2.5 text-lg",
+    },
+    disabled: {
+      true: "opacity-50 cursor-not-allowed",
+      false: "",
+    },
+  },
+  defaultVariants: {
+    size: "medium",
+    primary: false,
+  },
+});
 
 export interface ButtonProps extends VariantProps<typeof buttonStyles> {
   label: string;

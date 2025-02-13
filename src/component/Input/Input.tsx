@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { cva, VariantProps } from "class-variance-authority";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const inputStyles = cva(
-  "block w-full px-4 py-2 rounded-md border focus:outline-none focus:ring-2 focus:ring-offset-2",
+  "block w-full px-3 py-2 rounded-md border focus:outline-none focus:border-blue-400 focus:ring-1",
   {
     variants: {
       variant: {
@@ -29,29 +30,69 @@ export interface InputProps
   label?: string;
   errorMessage?: string;
   className?: string;
+  type?: string;
+  showToggleIcon?: boolean; // Eye icon 표시 여부
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { label, variant, inputSize, errorMessage, className = "", ...props },
+    {
+      label,
+      variant,
+      inputSize,
+      errorMessage,
+      type = "text",
+      className = "",
+      showToggleIcon = false,
+      ...props
+    },
     ref
-  ) => (
-    <div className="w-full">
-      {label && (
-        <label className="block mb-1 text-sm font-semibold text-gray-700">
-          {label}
-        </label>
-      )}
-      <input
-        ref={ref}
-        className={`${inputStyles({ variant, inputSize })} ${className}`}
-        {...props}
-      />
-      {errorMessage && (
-        <span className="mt-1 text-sm text-red-500">{errorMessage}</span>
-      )}
-    </div>
-  )
+  ) => {
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+      setShowPassword((prev) => !prev);
+    };
+
+    const isPasswordType = type === "password";
+
+    return (
+      <div className="w-full">
+        {label && (
+          <label className="block mb-1 text-sm font-semibold text-gray-700">
+            {label}
+          </label>
+        )}
+        <div className="relative">
+          <input
+            ref={ref}
+            type={isPasswordType && showPassword ? "text" : type}
+            className={`${inputStyles({
+              variant,
+              inputSize,
+            })} pr-10 ${className}`} // 오른쪽 공간 확보
+            {...props}
+          />
+          {isPasswordType && showToggleIcon && (
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+            >
+              {showPassword ? (
+                <EyeIcon className="w-5 h-5" aria-hidden="true" />
+              ) : (
+                <EyeSlashIcon className="w-5 h-5" aria-hidden="true" />
+              )}
+            </button>
+          )}
+        </div>
+        {errorMessage && (
+          <span className="mt-1 text-sm text-red-500">{errorMessage}</span>
+        )}
+      </div>
+    );
+  }
 );
 
 Input.displayName = "Input";
