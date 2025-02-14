@@ -1,98 +1,92 @@
-import React, { useState } from "react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { cva, VariantProps } from "class-variance-authority";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import React from "react";
+import { cn } from "../../utils/classname";
 
-const inputStyles = cva(
-  "block w-full px-3 py-2 rounded-md border focus:outline-none focus:border-blue-400 focus:ring-1",
+type InputProps = VariantProps<typeof InputVariant> & {
+  className?: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  type?: "text" | "password" | "email" | "textarea";
+  placeholder?: string;
+};
+
+const InputVariant = cva(
+  "focus:border-red w-full text-left font-bold focus:border focus:outline-hidden",
   {
     variants: {
       variant: {
-        default: "border-gray-300 focus:ring-blue-500",
-        error: "border-red-500 focus:ring-red-500",
-        success: "border-green-500 focus:ring-green-500",
+        primary: "text-gray-1 bg-white font-normal",
       },
-      inputSize: {
-        small: "text-sm",
-        medium: "text-base",
-        large: "text-lg",
+      rounded: {
+        full: "rounded-full",
+        lg: "rounded-lg",
+        md: "rounded-md",
+      },
+      size: {
+        lg: "h-11 px-4 py-3.5 text-base",
+        md: "h-10 px-3 py-2.5 text-sm",
+        sm: "h-8 px-2 py-1.5 text-sm",
       },
     },
     defaultVariants: {
-      variant: "default",
-      inputSize: "medium",
+      variant: "primary",
+      rounded: "lg",
+      size: "md",
     },
   }
 );
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof inputStyles> {
-  label?: string;
-  errorMessage?: string;
-  className?: string;
-  type?: string;
-  showToggleIcon?: boolean; // Eye icon 표시 여부
-}
+const Input: React.FC<InputProps> = ({
+  className,
+  value,
+  onValueChange,
+  type = "text",
+  placeholder,
+  ...props
+}) => {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const inputClassName = cn(InputVariant(props), className);
+  const handlePasswordVisibility = () => setShowPassword((prev) => !prev);
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      label,
-      variant,
-      inputSize,
-      errorMessage,
-      type = "text",
-      className = "",
-      showToggleIcon = false,
-      ...props
-    },
-    ref
-  ) => {
-    const [showPassword, setShowPassword] = useState(false);
+  return (
+    <div className={cn("relative w-full", className)} {...props}>
+      {type === "textarea" ? (
+        <textarea
+          className={cn(inputClassName, "resize-none")}
+          placeholder={placeholder}
+        />
+      ) : (
+        <input
+          className={inputClassName}
+          type={type === "password" && showPassword ? "text" : type}
+          value={value}
+          placeholder={placeholder}
+          onChange={handleValueChange}
+        />
+      )}
 
-    const togglePasswordVisibility = () => {
-      setShowPassword((prev) => !prev);
-    };
-
-    const isPasswordType = type === "password";
-
-    return (
-      <div className="w-full">
-        {label && (
-          <label className="block mb-1 text-sm font-semibold text-gray-700">
-            {label}
-          </label>
-        )}
-        <div className="relative">
-          <input
-            ref={ref}
-            type={isPasswordType && showPassword ? "text" : type}
-            className={`${inputStyles({
-              variant,
-              inputSize,
-            })} pr-10 ${className}`} // 오른쪽 공간 확보
-            {...props}
-          />
-          {isPasswordType && showToggleIcon && (
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute inset-y-0 right-3 flex items-center text-gray-500"
-            >
-              {showPassword ? (
-                <EyeIcon className="w-5 h-5" aria-hidden="true" />
-              ) : (
-                <EyeSlashIcon className="w-5 h-5" aria-hidden="true" />
-              )}
-            </button>
+      {type === "password" && (
+        <button
+          className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+          type="button"
+          aria-label={showPassword ? "Hide password" : "Show password"}
+          onClick={handlePasswordVisibility}
+        >
+          {showPassword ? (
+            <EyeIcon className="size-5" />
+          ) : (
+            <EyeSlashIcon className="size-5" />
           )}
-        </div>
-        {errorMessage && (
-          <span className="mt-1 text-sm text-red-500">{errorMessage}</span>
-        )}
-      </div>
-    );
-  }
-);
+        </button>
+      )}
+    </div>
+  );
 
-Input.displayName = "Input";
+  function handleValueChange(event: React.ChangeEvent<HTMLInputElement>) {
+    onValueChange(event.target.value);
+  }
+};
+
+export default Input;
+export type { InputProps };

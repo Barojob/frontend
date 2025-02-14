@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 body {
-  max-width: 420px;
+  max-width: 430px;
   margin-left: auto;
   margin-right: auto;
-  background-color: antiquewhite;
+  background-color: azure;
 }
 
 @font-face {

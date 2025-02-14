@@ -1,63 +1,46 @@
+import React from "react";
+import { cn } from "../../utils/classname";
 import { cva, VariantProps } from "class-variance-authority";
 
-const buttonStyles = cva("rounded-md font-bold focus:outline-none", {
-  variants: {
-    primary: {
-      true: "bg-blue-500 text-white hover:bg-blue-600",
-      false: "bg-gray-200 text-gray-700 hover:bg-gray-300",
+const ButtonVariant = cva(
+  "w-full border border-black text-center font-[16px] inline-block",
+  {
+    variants: {
+      variant: {
+        primary: "text-black bg-white",
+        secondary: "text-white bg-black",
+      },
+      size: {
+        md: "px-12 py-2.5 rounded-md",
+      },
     },
-    secondary: {
-      true: "bg-gray-100 text-gray-700 hover:bg-gray-200",
-      false: "bg-gray-200 text-gray-700 hover:bg-gray-300",
+    defaultVariants: {
+      variant: "primary",
+      size: "md",
     },
-    size: {
-      small: "px-3 py-1 text-sm",
-      medium: "px-4 py-2 text-base",
-      large: "w-full px-5 py-2.5 text-lg",
-    },
-    disabled: {
-      true: "opacity-50 cursor-not-allowed",
-      false: "",
-    },
-  },
-  defaultVariants: {
-    size: "medium",
-    primary: false,
-  },
-});
+  }
+);
 
-export interface ButtonProps extends VariantProps<typeof buttonStyles> {
-  label: string;
-  onClick?: () => void;
-  backgroundColor?: string;
-  isLoading?: boolean;
-  icon?: React.ReactNode;
-}
+export type ButtonProps = VariantProps<typeof ButtonVariant> & {
+  className?: string;
+  children: React.ReactNode;
+};
 
-export const Button = ({
-  primary,
-  size,
-  disabled,
-  backgroundColor,
-  label,
-  isLoading,
-  icon,
+const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
+  className,
+  children,
+  variant = "primary",
+  size = "md",
   ...props
-}: ButtonProps) => {
+}) => {
   return (
     <button
-      type="button"
-      className={buttonStyles({ primary, size, disabled })}
-      style={{ backgroundColor }}
-      disabled={disabled || isLoading}
+      className={cn(ButtonVariant({ variant, size }), className)}
       {...props}
     >
-      {isLoading ? (
-        "Loading..."
-      ) : icon ? (
-        <span className="mr-2">{icon}</span>
-      ) : null}
-      {label}
+      {children}
     </button>
   );
 };
+
+export default Button;
