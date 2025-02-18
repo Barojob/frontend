@@ -9,9 +9,14 @@ export type Props = {
 
 const HomeIntro: React.FC<Props> = ({ className, imgSrc, introText }) => {
   return (
-    <div className={cn("w-full flex flex-col justify-center", className)}>
-      <img src={imgSrc} className="w-full" />
-      <p className="text-center font-brand mt-2 font-semibold text-[1.125rem]">
+    <div
+      className={cn(
+        "w-full flex flex-col justify-center items-center ",
+        className
+      )}
+    >
+      <img src={imgSrc} className="w-full max-w-[60%] sm:max-w-sm" />
+      <p className="text-center font-brand mt-6 font-semibold text-[1.125rem]">
         {introText}
       </p>
     </div>

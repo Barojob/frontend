@@ -11,7 +11,7 @@ const HomePage: React.FC<Props> = ({ className }) => {
   return (
     <div
       className={cn(
-        "w-full flex flex-col px-2 justify-center items-center h-screen bg-white",
+        "w-full flex flex-col justify-end pb-[24%] sm:pb-[20%] md:pb-[5%] items-center h-screen bg-white",
         className
       )}
     >

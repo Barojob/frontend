@@ -12,7 +12,10 @@ export type Props = {
 };
 
 const intros = [
-  { imgSrc: img1, introText: "우리 앱에 오신 것을 환영합니다!" },
+  {
+    imgSrc: img1,
+    introText: "우리 앱에 오신 것을 환영합니다!",
+  },
   { imgSrc: img2, introText: "새로운 기능을 만나보세요!" },
   { imgSrc: img3, introText: "친구들과 함께 연결되어 있어요!" },
   { imgSrc: img4, introText: "지금 시작해보세요!" },
@@ -74,7 +77,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
           {intros.map((intro, index) => (
             <div
               key={index}
-              className="w-full flex-shrink-0 h-fit flex justify-center items-center"
+              className="w-full flex-shrink-0 flex justify-center items-center"
             >
               <HomeIntro imgSrc={intro.imgSrc} introText={intro.introText} />
             </div>
@@ -128,7 +131,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
         )}
       </div>
 
-      <div className="flex justify-center items-center pt-14 pb-5">
+      <div className="flex justify-center items-center pt-[15%] sm:pt-[5%] md:pt-[3%] pb-5">
         {intros.map((_, index) => (
           <div
             key={index}
