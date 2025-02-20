@@ -15,7 +15,7 @@ const HomeIntro: React.FC<Props> = ({ className, imgSrc, introText }) => {
         className
       )}
     >
-      <img src={imgSrc} className="w-full max-w-[60%] sm:max-w-sm" />
+      <img src={imgSrc} className="w-full max-w-[60%]" />
       <p className="text-center font-brand mt-6 font-semibold text-[1.125rem]">
         {introText}
       </p>

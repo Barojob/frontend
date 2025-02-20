@@ -1,127 +1,65 @@
-// import React, { useState } from "react";
-// import { Button } from "../component/Button/Button";
-// import { Input } from "../component/Input/Input";
-// import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import Button from "../component/Button/Button";
+import Input from "../component/Input/Input";
+import Layout from "../component/layouts/Layout";
+import { cn } from "../utils/classname";
+import LeftArrowIcon from "../svgs/LeftArrowIcon";
+import { useNavigate } from "react-router-dom";
 
-// const LoginPage = () => {
-//   const [formData, setFormData] = useState({
-//     phone: "",
-//     password: "",
-//   });
+type Props = {
+  className?: string;
+};
 
-//   const [errors, setErrors] = useState({
-//     phone: "",
-//     password: "",
-//   });
+const LoginPage: React.FC<Props> = ({ className }) => {
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [textColor, setTextColor] = useState(false);
 
-//   const handleChange =
-//     (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-//       let value = e.target.value;
+  const navigate = useNavigate();
 
-//       if (field === "phone") {
-//         // 숫자만 남기기
-//         value = value.replace(/\D/g, "");
+  const handleBack = () => {
+    navigate("/");
+  };
 
-//         // 입력 길이 제한 (010-1234-5678 형식: 최대 13자)
-//         if (value.length > 11) {
-//           return; // 더 이상 입력 불가
-//         }
+  useEffect(() => {
+    setTextColor(phoneNumber.length === 13);
+  }, [phoneNumber]);
 
-//         // 010-1234-5678 형식으로 변환
-//         if (value.length > 3 && value.length <= 7) {
-//           value = value.replace(/(\d{3})(\d+)/, "$1-$2");
-//         } else if (value.length > 7) {
-//           value = value.replace(/(\d{3})(\d{4})(\d+)/, "$1-$2-$3");
-//         }
-//       }
+  return (
+    <Layout className={cn("", className)}>
+      <div className="w-full flex flex-1 mt-6 flex-col justify-start">
+        <LeftArrowIcon onClick={handleBack} onTouchStart={handleBack} />
+        <div className="mt-6 font-black text-2xl">
+          안녕하세요!
+          <br />
+          휴대폰 번호로 로그인해주세요.
+        </div>
+        <div className="text-[0.75rem] mt-3 text-gray-600">
+          휴대폰 번호는 안전하게 보관되며 다른 용도로 사용되지 않아요.
+        </div>
+        <Input
+          type="tel"
+          placeholder="휴대폰번호( - 없이 숫자만 입력)"
+          value={phoneNumber}
+          onValueChange={setPhoneNumber}
+          rounded={"md"}
+          className="mt-2 text-gray-800 focus:border-blue-2"
+        />
+        <Button
+          className={cn(
+            "mt-4 text-base font-black border-2 border-gray-200 transition-colors",
+            textColor
+              ? "text-white border-blue-500 bg-blue-500"
+              : "text-gray-400"
+          )}
+          children="인증문자 받기"
+        />
+        <div className="text-center mt-4 text-[13px] text-gray-600 font-normal">
+          휴대폰 번호가 변경되었나요?{" "}
+          <span className="border-gray-600 border-b">이메일로 계정찾기</span>
+        </div>
+      </div>
+    </Layout>
+  );
+};
 
-//       // 변환된 값을 상태에 반영
-//       setFormData({ ...formData, [field]: value });
-//     };
-
-//   const validateForm = () => {
-//     const newErrors = {
-//       phone: "",
-//       password: "",
-//     };
-
-//     // 전화번호 유효성 검사
-//     if (!formData.phone.match(/^010-\d{4}-\d{4}$/)) {
-//       newErrors.phone = "올바른 전화번호 형식이 아닙니다 (예: 010-1234-5678)";
-//     }
-
-//     // 비밀번호 유효성 검사
-//     if (formData.password.length < 8) {
-//       newErrors.password = "비밀번호는 최소 8자 이상이어야 합니다.";
-//     }
-
-//     setErrors(newErrors);
-
-//     // 에러가 없으면 true 반환
-//     return Object.values(newErrors).every((error) => error === "");
-//   };
-
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-//     if (validateForm()) {
-//       console.log("로그인 성공:", formData);
-//       alert("로그인이 완료되었습니다!");
-//     }
-//   };
-
-//   return (
-//     <div className="w-full flex flex-col justify-center h-screen bg-white">
-//       <div className="flex items-center justify-center">
-//         <div className="p-6 w-[25rem]">
-//           <div className="text-2xl mb-10 text-left">
-//             <span className="text-blue-500 font-pretendard font-semibold">
-//               바로잡
-//             </span>
-//             <span className="font-pretendard font-medium"> 시작하기</span>
-//           </div>
-//           <form
-//             onSubmit={handleSubmit}
-//             className="flex flex-col font-pretendard"
-//           >
-//             {/* 전화번호 */}
-//             <Input
-//               label="전화번호"
-//               type="text"
-//               inputMode="numeric"
-//               placeholder="휴대폰번호( - 없이 숫자만 입력)"
-//               value={formData.phone}
-//               onChange={handleChange("phone")}
-//               variant={errors.phone ? "error" : "default"}
-//               errorMessage={errors.phone}
-//               className="mb-4"
-//             />
-
-//             {/* 비밀번호 */}
-//             <Input
-//               label="비밀번호"
-//               type="password"
-//               placeholder="비밀번호 입력"
-//               value={formData.password}
-//               onChange={handleChange("password")}
-//               variant={errors.password ? "error" : "default"}
-//               errorMessage={errors.password}
-//               showToggleIcon
-//             />
-
-//             {/* 로그인 버튼 */}
-//             <div className="flex justify-center mt-8 mb-3">
-//               <Button primary label="로그인" size="large" />
-//             </div>
-//             <div className="flex justify-center">
-//               <Link to="/signup" className="w-full">
-//                 <Button secondary label="회원가입" size="large" />
-//               </Link>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default LoginPage;
+export default LoginPage;

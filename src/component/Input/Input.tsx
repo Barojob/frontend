@@ -7,16 +7,16 @@ type InputProps = VariantProps<typeof InputVariant> & {
   className?: string;
   value: string;
   onValueChange: (value: string) => void;
-  type?: "text" | "password" | "email" | "textarea";
+  type?: "text" | "password" | "email" | "textarea" | "number" | "tel";
   placeholder?: string;
 };
 
 const InputVariant = cva(
-  "focus:border-red w-full text-left font-bold focus:border focus:outline-hidden",
+  "w-full text-left border-2 border-gray-200 focus:outline-none",
   {
     variants: {
       variant: {
-        primary: "text-gray-1 bg-white font-normal",
+        primary: "bg-white focus:border-gray-400 font-normal",
       },
       rounded: {
         full: "rounded-full",
@@ -25,7 +25,7 @@ const InputVariant = cva(
       },
       size: {
         lg: "h-11 px-4 py-3.5 text-base",
-        md: "h-10 px-3 py-2.5 text-sm",
+        md: "h-auto px-3 py-2 text-base",
         sm: "h-8 px-2 py-1.5 text-sm",
       },
     },
@@ -49,6 +49,26 @@ const Input: React.FC<InputProps> = ({
   const inputClassName = cn(InputVariant(props), className);
   const handlePasswordVisibility = () => setShowPassword((prev) => !prev);
 
+  // 📌 휴대폰 번호 자동 포맷 함수
+  const formatPhoneNumber = (input: string) => {
+    const onlyNumbers = input.replace(/[^0-9]/g, ""); // 숫자만 남기기
+    if (onlyNumbers.length <= 3) return onlyNumbers;
+    if (onlyNumbers.length <= 7)
+      return `${onlyNumbers.slice(0, 3)}-${onlyNumbers.slice(3)}`;
+    return `${onlyNumbers.slice(0, 3)}-${onlyNumbers.slice(
+      3,
+      7
+    )}-${onlyNumbers.slice(7, 11)}`;
+  };
+
+  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let newValue = event.target.value;
+    if (type === "tel") {
+      newValue = formatPhoneNumber(newValue);
+    }
+    onValueChange(newValue);
+  };
+
   return (
     <div className={cn("relative w-full", className)} {...props}>
       {type === "textarea" ? (
@@ -62,7 +82,9 @@ const Input: React.FC<InputProps> = ({
           type={type === "password" && showPassword ? "text" : type}
           value={value}
           placeholder={placeholder}
+          maxLength={type === "tel" ? 13 : undefined} // 📌 전화번호는 13자 제한 (010-1234-5678)
           onChange={handleValueChange}
+          inputMode={type === "tel" ? "numeric" : undefined} // 📌 모바일 키보드 숫자 전용 모드
         />
       )}
 
@@ -82,10 +104,6 @@ const Input: React.FC<InputProps> = ({
       )}
     </div>
   );
-
-  function handleValueChange(event: React.ChangeEvent<HTMLInputElement>) {
-    onValueChange(event.target.value);
-  }
 };
 
 export default Input;

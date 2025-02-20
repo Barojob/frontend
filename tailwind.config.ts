@@ -16,6 +16,11 @@ export default {
           "sans-serif",
         ],
       },
+      colors: {
+        blue: {
+          2: "#376FFF",
+        },
+      },
     },
   },
   plugins: [
