@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "../component/Button/Button";
 import Input from "../component/Input/Input";
 import Layout from "../component/layouts/Layout";
@@ -12,8 +12,11 @@ type Props = {
 
 const LoginPage: React.FC<Props> = ({ className }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [textColor, setTextColor] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [timer, setTimer] = useState(300);
+  const [verificationCode, setVerificationCode] = useState("");
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -21,8 +24,54 @@ const LoginPage: React.FC<Props> = ({ className }) => {
   };
 
   useEffect(() => {
-    setTextColor(phoneNumber.length === 13);
-  }, [phoneNumber]);
+    let countdown: ReturnType<typeof setInterval>;
+    if (verificationSent && timer > 0) {
+      countdown = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      setVerificationSent(false);
+    }
+    return () => clearInterval(countdown);
+  }, [verificationSent, timer]);
+
+  const handleRequestVerification = () => {
+    if (phoneNumber.length !== 13) return; // 버튼 비활성화된 상태에서 눌릴 경우 방지
+    setVerificationSent(true);
+    setTimer(300);
+    setVerificationCode("");
+  };
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+  };
+
+  const isPhoneNumberValid = phoneNumber.length === 13; // 010-1234-5678 형식인지 확인
+  const isVerificationCodeValid = verificationCode.length === 6; // 보통 6자리 인증번호
+
+  // 입력 필드가 focus될 때 자동 스크롤
+  useEffect(() => {
+    const handleFocus = () => {
+      setTimeout(() => {
+        inputRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 300);
+    };
+
+    if (inputRef.current) {
+      inputRef.current.addEventListener("focus", handleFocus);
+    }
+
+    return () => {
+      if (inputRef.current) {
+        inputRef.current.removeEventListener("focus", handleFocus);
+      }
+    };
+  }, []);
 
   return (
     <Layout className={cn("", className)}>
@@ -33,7 +82,7 @@ const LoginPage: React.FC<Props> = ({ className }) => {
           <br />
           휴대폰 번호로 로그인해주세요.
         </div>
-        <div className="text-[0.75rem] mt-3 text-gray-600">
+        <div className="text-[0.8125rem] mt-3 text-gray-600">
           휴대폰 번호는 안전하게 보관되며 다른 용도로 사용되지 않아요.
         </div>
         <Input
@@ -42,18 +91,52 @@ const LoginPage: React.FC<Props> = ({ className }) => {
           value={phoneNumber}
           onValueChange={setPhoneNumber}
           rounded={"md"}
-          className="mt-2 text-gray-800 focus:border-blue-2"
+          className="mt-2 text-gray-800 focus:border-gray-400"
         />
         <Button
+          onClick={handleRequestVerification}
+          disabled={!isPhoneNumberValid} // 입력값이 13자리 아니면 비활성화
           className={cn(
-            "mt-4 text-base font-black border-2 border-gray-200 transition-colors",
-            textColor
-              ? "text-white border-blue-500 bg-blue-500"
-              : "text-gray-400"
+            "mt-4 text-base font-black border-2 transition-colors",
+            isPhoneNumberValid
+              ? "text-white border-gray-400 bg-gray-400"
+              : "text-gray-400 border-gray-200 cursor-not-allowed"
           )}
-          children="인증문자 받기"
-        />
-        <div className="text-center mt-4 text-[13px] text-gray-600 font-normal">
+        >
+          {verificationSent
+            ? `인증문자 다시 받기 (${formatTime(timer)})`
+            : "인증문자 받기"}
+        </Button>
+
+        {verificationSent && (
+          <div className="mt-4">
+            <Input
+              ref={inputRef}
+              type="text"
+              placeholder="인증번호 입력"
+              value={verificationCode}
+              onValueChange={setVerificationCode}
+              rounded={"md"}
+              className="mt-2 focus:border-blue-500 text-gray-800"
+            />
+            <div className="p-1 text-gray-500 text-[0.8125rem]">
+              어떤 경우에도 타인과 공유하지 마세요!
+            </div>
+            <Button
+              className={cn(
+                "mt-3 text-base font-black border-2 transition-colors",
+                isVerificationCodeValid
+                  ? "border-blue-500 bg-blue-500 text-gray-100"
+                  : "border-gray-300 text-gray-400 cursor-not-allowed",
+                { "opacity-50 pointer-events-none": !isVerificationCodeValid } // 6자리 입력 안 되면 비활성화
+              )}
+            >
+              인증번호 확인
+            </Button>
+          </div>
+        )}
+
+        <div className="text-center mt-4 text-[0.8125rem] text-gray-600 font-normal">
           휴대폰 번호가 변경되었나요?{" "}
           <span className="border-gray-600 border-b">이메일로 계정찾기</span>
         </div>

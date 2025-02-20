@@ -23,6 +23,7 @@ export type ButtonProps = VariantProps<typeof ButtonVariant> & {
   children: React.ReactNode;
   onClick?: () => void;
   onTouchStart?: () => void;
+  disabled?: boolean;
 };
 
 const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
@@ -30,6 +31,7 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
   children,
   variant = "primary",
   size = "md",
+  disabled,
   onClick,
   onTouchStart,
   ...props
@@ -38,6 +40,7 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
     <button
       onClick={onClick}
       onTouchStart={onTouchStart}
+      disabled={disabled}
       className={cn("text-nowrap", ButtonVariant({ variant, size }), className)}
       {...props}
     >

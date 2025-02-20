@@ -9,6 +9,7 @@ type InputProps = VariantProps<typeof InputVariant> & {
   onValueChange: (value: string) => void;
   type?: "text" | "password" | "email" | "textarea" | "number" | "tel";
   placeholder?: string;
+  ref?: React.Ref<HTMLInputElement>;
 };
 
 const InputVariant = cva(
@@ -43,6 +44,7 @@ const Input: React.FC<InputProps> = ({
   onValueChange,
   type = "text",
   placeholder,
+  ref,
   ...props
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -79,6 +81,7 @@ const Input: React.FC<InputProps> = ({
       ) : (
         <input
           className={inputClassName}
+          ref={ref}
           type={type === "password" && showPassword ? "text" : type}
           value={value}
           placeholder={placeholder}
