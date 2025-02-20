@@ -61,7 +61,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
   };
 
   return (
-    <div className={cn("w-full bg-white flex flex-col", className)}>
+    <div className={cn("flex flex-col", className)}>
       {/* 슬라이드 영역 */}
       <div
         className="relative flex-1 overflow-hidden"
@@ -131,7 +131,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
         )}
       </div>
 
-      <div className="flex justify-center items-center pt-[15%] sm:pt-[5%] md:pt-[3%] pb-5">
+      <div className="flex justify-center items-center pt-[17%] pb-5">
         {intros.map((_, index) => (
           <div
             key={index}

@@ -21,6 +21,8 @@ const ButtonVariant = cva("w-full text-center font-[16px] inline-block", {
 export type ButtonProps = VariantProps<typeof ButtonVariant> & {
   className?: string;
   children: React.ReactNode;
+  onClick?: () => void;
+  onTouchStart?: () => void;
 };
 
 const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
@@ -28,10 +30,14 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = ({
   children,
   variant = "primary",
   size = "md",
+  onClick,
+  onTouchStart,
   ...props
 }) => {
   return (
     <button
+      onClick={onClick}
+      onTouchStart={onTouchStart}
       className={cn("text-nowrap", ButtonVariant({ variant, size }), className)}
       {...props}
     >
