@@ -38,7 +38,7 @@ const LoginPage: React.FC<Props> = ({ className }) => {
   const handleRequestVerification = () => {
     if (phoneNumber.length !== 13) return; // 버튼 비활성화된 상태에서 눌릴 경우 방지
     setVerificationSent(true);
-    setTimer(300);
+    setTimer(60);
     setVerificationCode("");
   };
 
@@ -49,7 +49,7 @@ const LoginPage: React.FC<Props> = ({ className }) => {
   };
 
   const isPhoneNumberValid = phoneNumber.length === 13;
-  const isVerificationCodeValid = verificationCode.length === 6;
+  const isVerificationCodeValid = verificationCode.length >= 6;
 
   // 입력 필드가 focus될 때 자동 스크롤
   useEffect(() => {
@@ -75,14 +75,14 @@ const LoginPage: React.FC<Props> = ({ className }) => {
 
   return (
     <Layout className={cn("", className)}>
-      <div className="w-full flex flex-1 mt-6 flex-col justify-start">
+      <div className="w-full flex flex-1 mt-4 flex-col justify-start">
         <LeftArrowIcon onClick={handleBack} onTouchStart={handleBack} />
         <div className="mt-6 font-black text-2xl">
           안녕하세요!
           <br />
           휴대폰 번호로 로그인해주세요.
         </div>
-        <div className="text-[0.8125rem] mt-3 text-gray-600">
+        <div className="text-sm mt-2 text-gray-500">
           휴대폰 번호는 안전하게 보관되며 다른 용도로 사용되지 않아요.
         </div>
         <Input
@@ -91,16 +91,16 @@ const LoginPage: React.FC<Props> = ({ className }) => {
           value={phoneNumber}
           onValueChange={setPhoneNumber}
           rounded={"md"}
-          className="mt-2 text-gray-800 focus:border-gray-400"
+          className="mt-2 text-black-1 focus:border focus:border-gray-400 placeholder-gray-300"
         />
         <Button
           onClick={handleRequestVerification}
           disabled={!isPhoneNumberValid} // 입력값이 13자리 아니면 비활성화
           className={cn(
-            "mt-4 text-base font-black border-2 transition-colors",
+            "mt-4 text-base font-normal border transition-colors",
             isPhoneNumberValid
               ? "text-white border-gray-400 bg-gray-400"
-              : "text-gray-400 border-gray-200 cursor-not-allowed"
+              : "text-gray-300 border-gray-200 cursor-not-allowed"
           )}
         >
           {verificationSent
@@ -117,14 +117,14 @@ const LoginPage: React.FC<Props> = ({ className }) => {
               value={verificationCode}
               onValueChange={setVerificationCode}
               rounded={"md"}
-              className="mt-2 focus:border-blue-500 text-gray-800"
+              className="mt-2 focus:border-blue-500 text-black-1 placeholder-gray-300"
             />
-            <div className="p-1 text-gray-500 text-[0.8125rem]">
+            <div className="p-1 text-gray-500 text-sm">
               어떤 경우에도 타인과 공유하지 마세요!
             </div>
             <Button
               className={cn(
-                "mt-3 text-base font-black border-2 transition-colors",
+                "mt-3 text-base font-normal border-2 transition-colors",
                 isVerificationCodeValid
                   ? "border-blue-500 bg-blue-500 text-gray-100"
                   : "border-gray-300 text-gray-400 cursor-not-allowed",

@@ -13,7 +13,7 @@ type InputProps = VariantProps<typeof InputVariant> & {
 };
 
 const InputVariant = cva(
-  "w-full text-left border-2 border-gray-200 focus:outline-none",
+  "w-full text-left border border-gray-200 focus:outline-none",
   {
     variants: {
       variant: {
