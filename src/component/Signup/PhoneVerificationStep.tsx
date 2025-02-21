@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "../../utils/classname";
+import LabelInput from "../Input/LabelInput";
 
 type PhoneVerificationStepProps = {
   className?: string;
@@ -10,13 +11,12 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
   className,
   onValidityChange,
 }) => {
-  const [phone, setPhone] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [carrier, setCarrier] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [name, setName] = useState("");
 
-  // 간단한 유효성 검사: 전화번호 10자리 이상, 생년월일은 8자리(YYYYMMDD), 이름은 비어있지 않아야 함
-  const isPhoneValid = phone.trim().length >= 10;
+  const isPhoneValid = phoneNumber.trim().length >= 13;
   const isCarrierSelected = carrier.trim() !== "";
   const isBirthDateValid = birthDate.trim().length === 8;
   const isNameValid = name.trim().length > 0;
@@ -29,17 +29,18 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-6 font-black text-2xl text-black">바로잡 회원가입</div>
-      <label htmlFor="phone" className="block text-sm font-medium">
-        휴대폰 번호
-      </label>
-      <input
+      <div className="mt-7 font-black text-2xl text-black">휴대폰 인증</div>
+      <div className="mt-1 text-base text-gray-500 mb-5">
+        최초 1회 휴대폰 인증이 필요합니다.
+      </div>
+      <LabelInput
         type="tel"
-        id="phone"
-        placeholder="휴대폰 번호 입력"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        className="w-full p-2 border rounded"
+        label="휴대폰 번호"
+        placeholder="휴대폰번호( - 없이 숫자만 입력)"
+        value={phoneNumber}
+        onValueChange={setPhoneNumber}
+        rounded={"md"}
+        className="text-black-1 focus:border-gray-500 placeholder-gray-300"
       />
 
       {isPhoneValid && !isCarrierSelected && (
