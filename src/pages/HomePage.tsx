@@ -14,17 +14,17 @@ const HomePage: React.FC<Props> = ({ className }) => {
 
   const handleLogin = () => {
     navigate("/login");
-  }
+  };
 
   const handleSignUp = () => {
     navigate("/signup");
-  }
+  };
 
   return (
-    <Layout className={cn("", className)} >
+    <Layout className={cn("touch-none", className)}>
       <HomeIntroList />
       <div className="w-fit flex gap-4">
-         <Button
+        <Button
           variant={"primary"}
           size={"md"}
           className="w-fit"

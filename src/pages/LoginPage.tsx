@@ -48,8 +48,8 @@ const LoginPage: React.FC<Props> = ({ className }) => {
     return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
   };
 
-  const isPhoneNumberValid = phoneNumber.length === 13; // 010-1234-5678 형식인지 확인
-  const isVerificationCodeValid = verificationCode.length === 6; // 보통 6자리 인증번호
+  const isPhoneNumberValid = phoneNumber.length === 13;
+  const isVerificationCodeValid = verificationCode.length === 6;
 
   // 입력 필드가 focus될 때 자동 스크롤
   useEffect(() => {
