@@ -82,7 +82,11 @@ const LoginPage: React.FC<Props> = ({ className }) => {
           <br />
           휴대폰 번호로 로그인해주세요.
         </div>
+<<<<<<< HEAD
+        <div className="text-[0.75rem] mt-3 text-gray-600">
+=======
         <div className="text-sm mt-2 text-gray-500">
+>>>>>>> bea64eb (feat: 회원가입 페이지 구조 세팅 및 첫스텝 페이지 구현 완료.)
           휴대폰 번호는 안전하게 보관되며 다른 용도로 사용되지 않아요.
         </div>
         <Input
