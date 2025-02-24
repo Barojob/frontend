@@ -6,7 +6,7 @@ export type LabelInputProps = InputProps & {
   className?: string;
   label: string;
   error?: string;
-  readOnly?: boolean;
+  tabIndex?: number;
 };
 
 const LabelInput = forwardRef<HTMLInputElement, LabelInputProps>(

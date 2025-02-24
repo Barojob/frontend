@@ -189,10 +189,13 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
         />
       )}
 
-      {/* CarrierModal을 조건부 렌더링 */}
+      {/* 통신사 모달 (하단에서 슬라이드업, 외부 클릭 시 닫힘) */}
       {showCarrierModal && (
         <CarrierModal
-          setCarrier={setCarrier}
+          setCarrier={(selectedCarrier) => {
+            setCarrier(selectedCarrier);
+            setShowCarrierModal(false);
+          }}
           setShowCarrierModal={setShowCarrierModal}
         />
       )}
