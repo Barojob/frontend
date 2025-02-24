@@ -6,12 +6,14 @@ type BorderedLabelInputProps = InputProps & {
   className?: string;
   label: string;
   error?: string;
+  readOnly?: boolean;
 };
 
 const BorderedLabelInput: React.FC<BorderedLabelInputProps> = ({
   className,
   label,
   error,
+  readOnly,
   ...props
 }) => {
   return (

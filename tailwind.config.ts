@@ -20,7 +20,7 @@ export default {
         blue: {
           2: "#376FFF",
         },
-        black: {
+        extraBlack: {
           1: "#242424",
         },
       },
