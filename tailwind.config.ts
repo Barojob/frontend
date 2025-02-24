@@ -20,11 +20,7 @@ export default {
         blue: {
           2: "#376FFF",
         },
-<<<<<<< HEAD
         extraBlack: {
-=======
-        black: {
->>>>>>> bea64eb (feat: 회원가입 페이지 구조 세팅 및 첫스텝 페이지 구현 완료.)
           1: "#242424",
         },
       },
