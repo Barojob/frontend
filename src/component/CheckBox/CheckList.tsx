@@ -7,27 +7,58 @@ type CheckItem = {
   id: number;
   label: string;
   checked: boolean;
+  required: boolean;
 };
 
 type Props = {
   className?: string;
-  onAllCheckedChange: (allChecked: boolean) => void;
+  onAllCheckedChange: (allRequiredChecked: boolean) => void;
 };
 
 const CheckList: React.FC<Props> = ({ className, onAllCheckedChange }) => {
   const [items, setItems] = useState<CheckItem[]>([
-    { id: 1, label: "[필수] 바로잡 서비스 이용약관 동의", checked: false },
-    { id: 2, label: "[필수] 개인정보 수집 및 이용 동의", checked: false },
-    { id: 3, label: "[선택] 개인정보 수집 및 이용 동의", checked: false },
-    { id: 4, label: "[선택] 개인정보 제3자 제공 동의", checked: false },
-    { id: 5, label: "[선택] 마케팅 정보 수신 동의", checked: false },
+    {
+      id: 1,
+      label: "바로잡 서비스 이용약관 동의",
+      checked: false,
+      required: true,
+    },
+    {
+      id: 2,
+      label: "개인정보 수집 및 이용 동의",
+      checked: false,
+      required: true,
+    },
+    {
+      id: 3,
+      label: "개인정보 수집 및 이용 동의",
+      checked: false,
+      required: false,
+    },
+    {
+      id: 4,
+      label: "개인정보 제3자 제공 동의",
+      checked: false,
+      required: false,
+    },
+    {
+      id: 5,
+      label: "마케팅 정보 수신 동의",
+      checked: false,
+      required: false,
+    },
   ]);
 
   const isAllChecked = items.every((item) => item.checked);
+  // 다음 버튼 활성화는 필수 항목만 체크되었는지를 기준으로 합니다.
+
+  const isRequiredChecked = items
+    .filter((item) => item.required)
+    .every((item) => item.checked);
 
   useEffect(() => {
-    onAllCheckedChange(isAllChecked);
-  }, [isAllChecked, onAllCheckedChange]);
+    onAllCheckedChange(isRequiredChecked);
+  }, [isRequiredChecked, onAllCheckedChange]);
 
   const toggleAll = () => {
     setItems(items.map((item) => ({ ...item, checked: !isAllChecked })));
@@ -57,7 +88,9 @@ const CheckList: React.FC<Props> = ({ className, onAllCheckedChange }) => {
             key={item.id}
             isChecked={item.checked}
             onToggle={() => toggleItem(item.id)}
-            label={item.label}
+            label={
+              item.required ? `[필수] ${item.label}` : `[선택] ${item.label}`
+            }
           />
         ))}
       </div>
