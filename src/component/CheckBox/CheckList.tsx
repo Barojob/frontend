@@ -84,7 +84,7 @@ const CheckList: React.FC<Props> = ({ className, onAllCheckedChange }) => {
       {/* 개별 체크박스들 */}
       <div className="flex flex-col">
         {items.map((item) => (
-          <button className="mb-3.5" onClick={() => toggleItem(item.id)}>
+          <div key={item.id} className="mb-3.5">
             <CheckBox
               key={item.id}
               isChecked={item.checked}
@@ -93,7 +93,7 @@ const CheckList: React.FC<Props> = ({ className, onAllCheckedChange }) => {
                 item.required ? `[필수] ${item.label}` : `[선택] ${item.label}`
               }
             />
-          </button>
+          </div>
         ))}
       </div>
     </div>

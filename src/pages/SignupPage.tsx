@@ -8,6 +8,7 @@ import PhoneVerificationStep from "../component/Signup/PhoneVerificationStep";
 import ProfileSetupStep from "../component/Signup/ProfileSetupStep";
 import Button from "../component/Button/Button";
 import PhoneAgreeModal from "../component/Signup/PhoneAgreeModal";
+import InputVerifyNumber from "../component/Signup/InputVerifyNumber";
 
 type Props = {
   className?: string;
@@ -24,6 +25,9 @@ const SignupPage: React.FC<Props> = ({ className }) => {
     if (step === 1) {
       navigate("/");
     } else {
+      if (step === 3) {
+        setPhoneAgree(false);
+      }
       setStep((prev) => prev - 1);
     }
   };
@@ -32,7 +36,7 @@ const SignupPage: React.FC<Props> = ({ className }) => {
     if (step === 2) {
       // 2단계에서는 모달을 열어서 약관 동의를 받도록 함
       setShowPhoneAgreeModal(true);
-    } else if (step < 3) {
+    } else if (step < 4) {
       setStep((prev) => prev + 1);
     } else {
       // 회원가입 완료 처리
@@ -54,6 +58,8 @@ const SignupPage: React.FC<Props> = ({ className }) => {
       case 2:
         return <PhoneVerificationStep onValidityChange={setIsStepValid} />;
       case 3:
+        return <InputVerifyNumber onValidityChange={setIsStepValid} />;
+      case 4:
         return <ProfileSetupStep onValidityChange={setIsStepValid} />;
       default:
         return null;
@@ -73,7 +79,7 @@ const SignupPage: React.FC<Props> = ({ className }) => {
           )}
           onClick={handleNext}
         >
-          {step < 3 ? "다음" : "완료"}
+          {step < 4 ? "다음" : "완료"}
         </Button>
       </div>
       {showPhoneAgreeModal && (
