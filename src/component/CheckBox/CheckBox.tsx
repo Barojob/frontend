@@ -23,7 +23,7 @@ const CheckBox: React.FC<Props> = ({
         xmlns="http://www.w3.org/2000/svg"
         //   onTouchEnd={onToggle} // 중복실행됨.
         className={cn(
-          "size-7 transition-all duration-200 cursor-pointer flex ",
+          "size-7 transition-all duration-100 cursor-pointer flex ",
           isChecked ? "fill-blue-2" : "fill-gray-300",
           className // 클릭하면 색상 변경
         )}
@@ -38,7 +38,7 @@ const CheckBox: React.FC<Props> = ({
       </svg>
       <div
         className={cn(
-          "text-sm ml-2 duration-200",
+          "text-sm ml-1 duration-100",
           isChecked ? "text-black-1" : "text-gray-400"
         )}
       >

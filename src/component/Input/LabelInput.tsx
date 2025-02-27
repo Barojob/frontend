@@ -6,6 +6,7 @@ export type LabelInputProps = InputProps & {
   className?: string;
   label: string;
   error?: string;
+  tabIndex?: number;
 };
 
 const LabelInput = forwardRef<HTMLInputElement, LabelInputProps>(
@@ -22,7 +23,7 @@ const LabelInput = forwardRef<HTMLInputElement, LabelInputProps>(
           <Input
             {...props}
             ref={ref}
-            className={cn("w-full px-0.5 pt-0 pb-0 border-none", className)}
+            className={cn("w-full px-1 pt-0.5 pb-0 border-none", className)}
           />
         </div>
         {error && <p className="text-red-500 mt-1 text-sm">{error}</p>}

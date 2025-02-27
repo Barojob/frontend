@@ -11,6 +11,8 @@ export type InputProps = VariantProps<typeof InputVariant> & {
   placeholder?: string;
   autoFocus?: boolean;
   readOnly?: boolean;
+  maxLength?: number;
+  tabIndex?: number;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
 };
 
@@ -51,6 +53,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       autoFocus,
       readOnly,
       inputMode,
+      maxLength,
       ...props
     },
     ref
@@ -98,7 +101,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     }
 
     return (
-      <div className={cn("relative w-full")}>
+      <div className={cn("relative")}>
         <input
           ref={ref}
           className={inputClassName}
