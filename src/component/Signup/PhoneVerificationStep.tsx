@@ -106,7 +106,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
               value={name}
               onValueChange={setName}
               rounded="md"
-              className="text-extraBlack-1 focus:border-gray-500 placeholder-gray-300"
+              className="text-extraBlack-1 font-normal focus:border-gray-500 placeholder-gray-300"
             />
           </div>
         )}
