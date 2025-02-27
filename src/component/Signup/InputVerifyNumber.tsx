@@ -49,6 +49,7 @@ const InputVerifyNumber: React.FC<Props> = ({
             value={verifyNumber}
             onChange={(e) => setVerifyNumber(e.target.value)}
             className="w-full px-1 pt-0.5 pb-0 border-none outline-none"
+            inputMode="numeric"
           />
           {/* 타이머를 오른쪽에 절대 위치로 배치 (입력 필드 내부) */}
           <div className="absolute top-6 right-3 text-xs font-normal text-blue-500">
