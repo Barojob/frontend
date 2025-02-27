@@ -136,8 +136,8 @@ const PhoneAgreeModal: React.FC<Props> = ({
           </div>
           <Button
             className={cn(
-              "absolute bottom-0 left-0 rounded-none w-full py-4 bg-blue-300 border-blue-300 text-extraBlack-1 font-normal",
-              !isRequiredChecked ? "opacity-50 " : ""
+              "absolute bottom-0 left-0 rounded-none w-full py-3 bg-blue-300 border-blue-300 text-black-1 font-normal",
+              !isRequiredChecked ? "opacity-50" : ""
             )}
             onClick={() => {
               if (isRequiredChecked) {
