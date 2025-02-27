@@ -106,7 +106,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
               value={name}
               onValueChange={setName}
               rounded="md"
-              className="text-black-1 focus:border-gray-500 placeholder-gray-300"
+              className="text-extraBlack-1 focus:border-gray-500 placeholder-gray-300"
             />
           </div>
         )}
@@ -118,7 +118,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
             </div>
             <div className="flex">
               <Input
-                className="px-1 pt-0.5 pb-0 border-none placeholder:text-gray-300 text-extraBlack-1"
+                className="px-1 pt-0.5 pb-0 border-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none placeholder:text-gray-300 text-extraBlack-1"
                 placeholder="생년월일"
                 type="number"
                 ref={birthDateRef}
@@ -129,7 +129,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
               />
               <div className="text-extraBlack-1">-</div>
               <Input
-                className="text-left pl-3 w-9 sm:w-12 pt-0.5 pb-0 border-none placeholder:text-gray-300 text-extraBlack-1"
+                className="text-left pl-3 w-9 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pt-0.5 pb-0 border-none placeholder:text-gray-300 text-extraBlack-1"
                 placeholder="0"
                 type="number"
                 ref={genderRef}
