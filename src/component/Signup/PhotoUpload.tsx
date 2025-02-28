@@ -3,12 +3,14 @@ import { cn } from "../../utils/classname";
 import CameraIcon from "../../assets/images/CamerIcon.png";
 
 type PhotoUploadProps = {
+  className?: string;
   label: string;
   file: File | null;
   onFileChange: (file: File | null) => void;
 };
 
 const PhotoUpload: React.FC<PhotoUploadProps> = ({
+  className,
   label,
   file,
   onFileChange,
@@ -25,7 +27,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className={cn("flex flex-col", className)}>
       <div className="text-sm font-medium text-extraBlack-1 mb-1">{label}</div>
       <label
         className={cn(

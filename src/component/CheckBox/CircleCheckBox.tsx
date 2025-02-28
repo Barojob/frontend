@@ -37,7 +37,7 @@ const CircleCheckBox: React.FC<Props> = ({
           )}
         />
         <path
-          d="M7.5 12L10.5 15L16.5 9"
+          d="M8.5 12L11 15L16.5 9"
           fill="none"
           stroke="#ffffff"
           strokeWidth="2"

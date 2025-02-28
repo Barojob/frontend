@@ -88,7 +88,7 @@ const SignupPage: React.FC<Props> = ({ className }) => {
         <Button
           disabled={!isStepValid}
           className={cn(
-            "w-full py-3 mt-[10%] rounded-[4px] bg-blue-500 border-blue-300 text-white font-normal",
+            "w-full py-3 my-[10%] rounded-[4px] bg-blue-500 border-blue-500 text-white font-normal",
             isStepValid ? "" : "opacity-50"
           )}
           onClick={handleNext}

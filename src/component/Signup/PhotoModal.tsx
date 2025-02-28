@@ -4,6 +4,7 @@ import Button from "../Button/Button";
 
 type PhotoModalProps = {
   onProceed: () => void;
+  onClose: () => void;
   missingCertificate: boolean;
   missingBankAccount: boolean;
   className?: string;
@@ -12,6 +13,7 @@ type PhotoModalProps = {
 const PhotoModal: React.FC<PhotoModalProps> = ({
   className,
   onProceed,
+  onClose,
   missingCertificate,
   missingBankAccount,
 }) => {
@@ -21,28 +23,35 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
 
   let missingMessage = "";
   if (missingItems.length === 1) {
-    missingMessage = `현재 ${missingItems[0]}이 등록되지 않았습니다.`;
+    missingMessage = `${missingItems[0]}이 등록되지 않았습니다.`;
   } else if (missingItems.length === 2) {
-    missingMessage = `현재 ${missingItems.join(" 및 ")}이 등록되지 않았습니다.`;
+    missingMessage = `${missingItems.join(" 및 ")}이 등록되지 않았습니다.`;
   }
 
   return (
     <ModalWrapper onClose={onProceed} className={className}>
-      <div className="text-xl mb-8 text-center font-black">
+      <div className="text-xl pb-7 pt-5 text-center font-black">
         {missingMessage}
         <br />
         나중에 설정할까요?
-        <br />
-        <span className="text-xs text-gray-400">
-          인증 미등록시 매칭이 불가합니다.
-        </span>
       </div>
-      <Button
-        onClick={onProceed}
-        className="absolute bottom-0 left-0 rounded-none w-full py-4 bg-blue-300 border-blue-300 text-extraBlack-1 font-normal"
-      >
-        나중에 설정할게요
-      </Button>
+      <div className="text-sm mb-14 text-center text-gray-500">
+        인증 미등록시 매칭이 불가합니다.
+      </div>
+      <div className="grid grid-cols-2 w-full absolute bottom-0 left-0">
+        <Button
+          onClick={onClose}
+          className="w-full rounded-none py-4 bg-gray-400 border-gray-400 text-white font-normal"
+        >
+          지금 할게요
+        </Button>
+        <Button
+          onClick={onProceed}
+          className="w-full rounded-none py-4 bg-blue-500 border-blue-500 text-white font-normal"
+        >
+          나중에 할게요
+        </Button>
+      </div>
     </ModalWrapper>
   );
 };

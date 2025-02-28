@@ -116,7 +116,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
           (위에서부터: 이름 → 생년월일 및 성별 → 통신사) */}
       <div className="mb-4 space-y-4">
         {showNameField && (
-          <div className="animate-slide-up">
+          <div className="input-slide-up ">
             <LabelInput
               ref={nameRef}
               type="text"
@@ -131,7 +131,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
         )}
 
         {showBirthDateField && (
-          <div className="flex flex-col animate-slide-up border border-gray-200 focus-within:border-gray-500 rounded-md p-2 pr-5">
+          <div className="flex flex-col input-slide-up border border-gray-200 focus-within:border-gray-500 rounded-md p-2 pr-5">
             <div className="px-1 text-gray-400 text-xs font-normal">
               생년월일 및 성별
             </div>
@@ -168,7 +168,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
 
         {showCarrierField && (
           <div
-            className="animate-slide-up"
+            className="input-slide-up"
             onClick={() => setShowCarrierModal(true)}
           >
             <LabelInput

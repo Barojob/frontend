@@ -90,6 +90,7 @@ const PhoneAgreeModal: React.FC<PhoneAgreeModalProps> = ({
         isChecked={isAllChecked}
         onToggle={toggleAll}
         label="전체 동의하기"
+        className="size-6"
       />
       <div className="flex flex-col mt-5 mb-11">
         {items.map((item) => (
@@ -100,6 +101,7 @@ const PhoneAgreeModal: React.FC<PhoneAgreeModalProps> = ({
               label={
                 item.required ? `[필수] ${item.label}` : `[선택] ${item.label}`
               }
+              className="size-6 mr-0.5"
             />
           </div>
         ))}
