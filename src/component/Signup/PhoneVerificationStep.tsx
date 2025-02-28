@@ -99,13 +99,15 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
       setShowNameField(true);
       setTimeout(() => {
         nameRef.current?.focus();
-      }, 500);
+      }, 200);
     }
   }, [isGenderValid, showNameField]);
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-7 font-black text-2xl text-black">휴대폰 인증</div>
+      <div className="mt-7 font-black text-2xl text-extraBlack-1">
+        휴대폰 인증
+      </div>
       <div className="mt-1 text-base text-gray-500 mb-5">
         최초 1회 휴대폰 인증이 필요합니다.
       </div>

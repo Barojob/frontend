@@ -33,7 +33,9 @@ const InputVerifyNumber: React.FC<Props> = ({
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-6 font-black text-2xl text-black">인증번호 확인</div>
+      <div className="mt-6 font-black text-2xl text-extraBlack-1">
+        인증번호 확인
+      </div>
       <div className="mt-1 text-base text-gray-500">
         휴대폰으로 발송한 인증번호를 입력해주세요
       </div>

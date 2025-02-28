@@ -16,7 +16,9 @@ const SignupTermsStep: React.FC<Props> = ({ className, onValidityChange }) => {
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-6 font-black text-2xl text-black">바로잡 회원가입</div>
+      <div className="mt-6 font-black text-2xl text-extraBlack-1">
+        바로잡 회원가입
+      </div>
       <div className="mt-1 text-base text-gray-500">
         서비스를 이용하려면 약관 동의가 필요합니다.
       </div>

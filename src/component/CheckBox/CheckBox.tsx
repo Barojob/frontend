@@ -24,7 +24,7 @@ const CheckBox: React.FC<Props> = ({
         //   onTouchEnd={onToggle} // 중복실행됨.
         className={cn(
           "size-7 transition-all duration-100 cursor-pointer flex ",
-          isChecked ? "fill-blue-2" : "fill-gray-300",
+          isChecked ? "fill-extraBlack-1" : "fill-gray-300",
           className // 클릭하면 색상 변경
         )}
       >

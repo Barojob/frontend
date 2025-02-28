@@ -33,7 +33,7 @@ const CircleCheckBox: React.FC<Props> = ({
           r="10"
           className={cn(
             "duration-200",
-            isChecked ? "fill-blue-2" : "fill-gray-300"
+            isChecked ? "fill-extraBlack-1" : "fill-gray-300"
           )}
         />
         <path
