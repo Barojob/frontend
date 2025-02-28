@@ -44,6 +44,23 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
     isGenderValid &&
     isNameValid;
 
+  const handleBirthDateChange = (value: string) => {
+    // 숫자 이외의 문자를 제거 (혹시나 발생할 수 있는 경우 대비)
+    const numericValue = value.replace(/[^0-9]/g, "");
+    // 6자리 이하일 때만 업데이트
+    if (numericValue.length <= 6) {
+      setBirthDate(numericValue);
+    }
+  };
+
+  const handleGenderChange = (value: string) => {
+    const numericValue = value.replace(/[^0-9]/g, "");
+    // 1자리 이하일 때만 업데이트
+    if (numericValue.length <= 1) {
+      setGender(numericValue);
+    }
+  };
+
   useEffect(() => {
     onValidityChange(isValid);
   }, [isValid, onValidityChange]);
@@ -123,8 +140,9 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
                 type="number"
                 ref={birthDateRef}
                 value={birthDate}
-                onValueChange={setBirthDate}
+                onValueChange={handleBirthDateChange}
                 inputMode="numeric"
+                pattern="\d*"
                 maxLength={6}
               />
               <div className="text-extraBlack-1">-</div>
@@ -134,8 +152,9 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
                 type="number"
                 ref={genderRef}
                 value={gender}
-                onValueChange={setGender}
+                onValueChange={handleGenderChange}
                 inputMode="numeric"
+                pattern="\d*"
                 maxLength={1}
               />
               <div className="text-nowrap items-center flex pt-0.5">

@@ -13,6 +13,7 @@ export type InputProps = VariantProps<typeof InputVariant> & {
   readOnly?: boolean;
   maxLength?: number;
   tabIndex?: number;
+  pattern?: string;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
 };
 
@@ -54,6 +55,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       readOnly,
       inputMode,
       maxLength,
+      pattern,
       ...props
     },
     ref
@@ -112,6 +114,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           autoFocus={autoFocus}
           readOnly={readOnly}
           inputMode={inputMode}
+          pattern={pattern}
           maxLength={type === "tel" ? 13 : undefined}
           {...restProps}
         />
