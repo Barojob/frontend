@@ -14,11 +14,6 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
   className,
   onValidityChange,
 }) => {
-  // const [phoneNumber, setPhoneNumber] = useState("");
-  // const [carrier, setCarrier] = useState("");
-  // const [birthDate, setBirthDate] = useState("");
-  // const [gender, setGender] = useState("");
-  // const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useSessionStorage("phoneNumber", "");
   const [carrier, setCarrier] = useSessionStorage("carrier", "");
   const [birthDate, setBirthDate] = useSessionStorage("birthDate", "");
@@ -51,9 +46,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
     isNameValid;
 
   const handleBirthDateChange = (value: string) => {
-    // 숫자 이외의 문자를 제거 (혹시나 발생할 수 있는 경우 대비)
     const numericValue = value.replace(/[^0-9]/g, "");
-    // 6자리 이하일 때만 업데이트
     if (numericValue.length <= 6) {
       setBirthDate(numericValue);
     }
@@ -61,7 +54,6 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
 
   const handleGenderChange = (value: string) => {
     const numericValue = value.replace(/[^0-9]/g, "");
-    // 1자리 이하일 때만 업데이트
     if (numericValue.length <= 1) {
       setGender(numericValue);
     }
@@ -74,7 +66,6 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
   // 전화번호가 유효하면 통신사 필드를 나타내고 모달을 열며, 전화번호 입력 필드는 블러 처리
   useEffect(() => {
     const AUTO_MODAL_FLAG = "autoModalShown";
-    // 휴대폰 번호가 유효하고, carrier 필드가 아직 표시되지 않았다면 처리
     if (isPhoneValid && !showCarrierField) {
       if (!sessionStorage.getItem(AUTO_MODAL_FLAG)) {
         // 최초: 모달 자동 열림
@@ -89,17 +80,19 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
     }
   }, [isPhoneValid, showCarrierField]);
 
-  // 통신사가 선택되면 생년월일 필드를 나타내고, 애니메이션 후 focus
+  // 통신사가 선택되면 생년월일 필드를 나타내고, 생년월일이 비어있을 경우에만 focus
   useEffect(() => {
     if (isCarrierSelected && !showBirthDateField) {
       setShowBirthDateField(true);
-      setTimeout(() => {
-        birthDateRef.current?.focus();
-      }, 500); // 애니메이션이 끝나는 시간 후 focus
+      if (birthDate.trim() === "") {
+        setTimeout(() => {
+          birthDateRef.current?.focus();
+        }, 500);
+      }
     }
-  }, [isCarrierSelected, showBirthDateField]);
+  }, [isCarrierSelected, showBirthDateField, birthDate]);
 
-  // 생년월일이 6자리 완성되면 성별 필드로 focus
+  // 생년월일이 6자리 완성되면, 성별 입력이 비어있을 경우에만 focus
   useEffect(() => {
     if (birthDate.trim().length === 6 && gender.trim().length === 0) {
       setTimeout(() => {
@@ -108,15 +101,17 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
     }
   }, [birthDate, gender]);
 
-  // 성별이 유효하면 이름 필드를 나타내고 focus
+  // 성별이 유효해지면 이름 필드를 나타내되, 이름이 비어있을 경우에만 focus
   useEffect(() => {
     if (isGenderValid && !showNameField) {
       setShowNameField(true);
-      setTimeout(() => {
-        nameRef.current?.focus();
-      }, 200);
+      if (!isNameValid) {
+        setTimeout(() => {
+          nameRef.current?.focus();
+        }, 200);
+      }
     }
-  }, [isGenderValid, showNameField]);
+  }, [isGenderValid, showNameField, isNameValid]);
 
   return (
     <div className={cn("", className)}>
@@ -127,11 +122,10 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
         최초 1회 휴대폰 인증이 필요합니다.
       </div>
 
-      {/* 추가 입력 필드들이 전화번호 입력 필드 위쪽에 나타남 
-          (위에서부터: 이름 → 생년월일 및 성별 → 통신사) */}
+      {/* 추가 입력 필드들 (위에서부터: 이름 → 생년월일 및 성별 → 통신사) */}
       <div className="mb-4 space-y-4">
         {showNameField && (
-          <div className="input-slide-up ">
+          <div className="input-slide-up">
             <LabelInput
               ref={nameRef}
               type="text"
