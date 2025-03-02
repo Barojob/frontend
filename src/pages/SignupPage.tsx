@@ -11,6 +11,7 @@ import ProfileSetupStep, {
 import Button from "../component/Button/Button";
 import PhoneAgreeModal from "../component/Signup/PhoneAgreeModal";
 import InputVerifyNumber from "../component/Signup/InputVerifyNumber";
+import AlreadyRegisteredStep from "../component/Signup/AlreadyRegistered";
 
 type Props = {
   className?: string;
@@ -22,6 +23,8 @@ const SignupPage: React.FC<Props> = ({ className }) => {
   const [isStepValid, setIsStepValid] = useState(false);
   const [showPhoneAgreeModal, setShowPhoneAgreeModal] = useState(false);
   const [phoneAgree, setPhoneAgree] = useState(false);
+  // 이미 가입된 회원 여부를 판단하기 위한 상태
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
 
   const profileSetupRef = useRef<ProfileSetupStepHandle>(null);
 
@@ -38,17 +41,29 @@ const SignupPage: React.FC<Props> = ({ className }) => {
 
   const handleNext = () => {
     if (step === 2) {
-      // 2단계에서는 모달을 열어서 약관 동의를 받도록 함
+      // 2단계에서는 약관 동의를 받기 위해 모달을 엽니다.
       setShowPhoneAgreeModal(true);
+    } else if (step === 3) {
+      // step 3에서 인증번호 입력 완료 후 API 체크를 통해 이미 가입된 회원인지 확인합니다.
+      // 아래는 예시로 이미 가입된 회원이라 가정하는 dummy 코드입니다.
+      const isAlreadyRegistered = true; // 실제 로직에선 API 호출 결과에 따라 결정
+      if (isAlreadyRegistered) {
+        setAlreadyRegistered(true);
+      }
+      setStep((prev) => prev + 1);
     } else if (step < 4) {
       setStep((prev) => prev + 1);
     } else {
-      // 회원가입 완료 처리
-      if (
-        profileSetupRef.current &&
-        profileSetupRef.current.triggerComplete()
-      ) {
-        navigate("/signup-complete");
+      // step === 4
+      if (alreadyRegistered) {
+        navigate("/login");
+      } else {
+        if (
+          profileSetupRef.current &&
+          profileSetupRef.current.triggerComplete()
+        ) {
+          navigate("/signup-complete");
+        }
       }
     }
   };
@@ -69,7 +84,9 @@ const SignupPage: React.FC<Props> = ({ className }) => {
       case 3:
         return <InputVerifyNumber onValidityChange={setIsStepValid} />;
       case 4:
-        return (
+        return alreadyRegistered ? (
+          <AlreadyRegisteredStep />
+        ) : (
           <ProfileSetupStep
             ref={profileSetupRef}
             onValidityChange={setIsStepValid}
@@ -93,7 +110,7 @@ const SignupPage: React.FC<Props> = ({ className }) => {
           )}
           onClick={handleNext}
         >
-          {step < 4 ? "다음" : "완료"}
+          {step < 4 ? "다음" : alreadyRegistered ? "로그인" : "완료"}
         </Button>
       </div>
       {showPhoneAgreeModal && (
