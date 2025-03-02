@@ -99,8 +99,8 @@ const LoginPage: React.FC<Props> = ({ className }) => {
           className={cn(
             "mt-4 text-base font-normal border transition-colors",
             isPhoneNumberValid
-              ? "text-white border-gray-400 bg-gray-400"
-              : "text-gray-300 border-gray-200 cursor-not-allowed"
+              ? "text-white border-gray-900 bg-gray-900"
+              : "text-white opacity-30 bg-gray-900 border-gray-900 cursor-not-allowed"
           )}
         >
           {verificationSent
