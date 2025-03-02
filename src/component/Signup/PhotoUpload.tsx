@@ -1,6 +1,7 @@
 import React from "react";
 import { cn } from "../../utils/classname";
 import CameraIcon from "../../assets/images/CamerIcon.png";
+import { TiDelete } from "react-icons/ti";
 
 type PhotoUploadProps = {
   className?: string;
@@ -50,9 +51,9 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
             <button
               type="button"
               onClick={handleRemove}
-              className="absolute text-xs font-bold top-0 right-0 bg-yellow-200 rounded-full py-1.5 px-2 shadow-md"
+              className="absolute text-2xl font-bold top-0 right-0 rounded-full shadow-md"
             >
-              ✕
+              <TiDelete />
             </button>
           </div>
         ) : (

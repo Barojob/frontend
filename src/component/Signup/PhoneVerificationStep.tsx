@@ -73,10 +73,19 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
 
   // 전화번호가 유효하면 통신사 필드를 나타내고 모달을 열며, 전화번호 입력 필드는 블러 처리
   useEffect(() => {
+    const AUTO_MODAL_FLAG = "autoModalShown";
+    // 휴대폰 번호가 유효하고, carrier 필드가 아직 표시되지 않았다면 처리
     if (isPhoneValid && !showCarrierField) {
-      setShowCarrierField(true);
-      setShowCarrierModal(true);
-      phoneNumberRef.current?.blur();
+      if (!sessionStorage.getItem(AUTO_MODAL_FLAG)) {
+        // 최초: 모달 자동 열림
+        setShowCarrierField(true);
+        setShowCarrierModal(true);
+        sessionStorage.setItem(AUTO_MODAL_FLAG, "true");
+        phoneNumberRef.current?.blur();
+      } else {
+        // 뒤로 돌아온 경우: 필드는 보여주되 모달은 자동으로 열리지 않음
+        setShowCarrierField(true);
+      }
     }
   }, [isPhoneValid, showCarrierField]);
 
