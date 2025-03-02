@@ -32,11 +32,20 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
       <div className="text-sm font-medium text-extraBlack-1 mb-1">{label}</div>
       <label
         className={cn(
-          "block w-full h-auto border-2 border-dashed border-gray-300 rounded-md p-4 text-center hover:border-blue-500 transition-colors"
+          "block relative w-full h-auto border-2 border-dashed border-gray-300 rounded-md py-6 px-8 text-center hover:border-blue-500 transition-colors"
         )}
       >
+        {file && (
+          <button
+            type="button"
+            onClick={handleRemove}
+            className="absolute size-5 top-2 right-2 rounded-full shadow-md"
+          >
+            <TiDelete className="size-full" />
+          </button>
+        )}
         {file ? (
-          <div className="relative flex justify-center items-center">
+          <div className="flex justify-center items-center">
             {file.type.startsWith("image/") ? (
               <img
                 src={URL.createObjectURL(file)}
@@ -48,18 +57,11 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
                 <span className="text-gray-500">파일 등록됨</span>
               </div>
             )}
-            <button
-              type="button"
-              onClick={handleRemove}
-              className="absolute text-2xl font-bold top-0 right-0 rounded-full shadow-md"
-            >
-              <TiDelete />
-            </button>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center w-full p-6">
             <div className="mb-2 size-7">
-              <img src={CameraIcon} className="w-full" />
+              <img src={CameraIcon} className="w-full" alt="Camera Icon" />
             </div>
             <span className="text-gray-500">업로드 하기</span>
           </div>
