@@ -3,6 +3,7 @@ import { cn } from "../../utils/classname";
 import LabelInput from "../Input/LabelInput";
 import CarrierModal from "./CarrierModal";
 import Input from "../Input/Input";
+import useSessionStorage from "../../hooks/useSessonStorage";
 
 type PhoneVerificationStepProps = {
   className?: string;
@@ -13,11 +14,16 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
   className,
   onValidityChange,
 }) => {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [carrier, setCarrier] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [gender, setGender] = useState("");
-  const [name, setName] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState("");
+  // const [carrier, setCarrier] = useState("");
+  // const [birthDate, setBirthDate] = useState("");
+  // const [gender, setGender] = useState("");
+  // const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useSessionStorage("phoneNumber", "");
+  const [carrier, setCarrier] = useSessionStorage("carrier", "");
+  const [birthDate, setBirthDate] = useSessionStorage("birthDate", "");
+  const [gender, setGender] = useSessionStorage("gender", "");
+  const [name, setName] = useSessionStorage("name", "");
   const [showCarrierModal, setShowCarrierModal] = useState(false);
 
   // 각 필드가 한 번 나타났는지 여부 (한 번 나타나면 계속 보임)
