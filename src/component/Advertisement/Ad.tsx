@@ -8,8 +8,8 @@ type Props = {
 
 const Ad: React.FC<Props> = ({ className, img }) => {
   return (
-    <div className={cn("w-full", className)}>
-      <img src={img} />
+    <div className={cn("size-full", className)}>
+      <img src={img} className="object-cover size-full" />
     </div>
   );
 };

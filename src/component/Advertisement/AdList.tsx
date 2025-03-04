@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { cn } from "../../utils/classname";
 
 import Ad from "./Ad";
-import Adimg1 from "../../assets/images/test.jpg";
+import Adimg1 from "../../assets/images/test1.jpg";
 import Adimg2 from "../../assets/images/test.jpg";
-import Adimg3 from "../../assets/images/test.jpg";
+import Adimg3 from "../../assets/images/test1.jpg";
 import Adimg4 from "../../assets/images/test.jpg";
+import AdIndicator from "./AdIndicator";
 
 type Props = {
   className?: string;
@@ -66,9 +67,9 @@ const AdList: React.FC<Props> = ({ className }) => {
   };
 
   return (
-    <div className={cn("w-full h-fit flex", className)}>
+    <div className={cn("w-full h-fit flex relative", className)}>
       <div
-        className="relative flex-1 overflow-hidden"
+        className="relative flex-1 overflow-hidden rounded-lg"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -86,6 +87,11 @@ const AdList: React.FC<Props> = ({ className }) => {
             </div>
           ))}
         </div>
+        <AdIndicator
+          className="absolute bottom-2 right-2"
+          currentIndex={currentIndex + 1}
+          length={adList.length}
+        />
       </div>
     </div>
   );

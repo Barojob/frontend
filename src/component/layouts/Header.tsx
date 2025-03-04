@@ -9,7 +9,10 @@ type Props = {
 const Header: React.FC<Props> = ({ className }) => {
   return (
     <div
-      className={cn("flex justify-center items-center w-full h-14", className)}
+      className={cn(
+        "flex justify-center items-center w-full h-14 mt-2",
+        className
+      )}
     >
       <Logo />
     </div>
