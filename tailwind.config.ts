@@ -23,6 +23,13 @@ export default {
         extraBlack: {
           1: "#242424",
         },
+        gray: {
+          1: "#615F5F",
+          2: "#B3B3B3",
+        },
+        main: {
+          1: "#E1E5EF",
+        },
       },
     },
   },
