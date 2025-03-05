@@ -67,9 +67,9 @@ const AdList: React.FC<Props> = ({ className }) => {
   };
 
   return (
-    <div className={cn("w-full h-fit flex relative", className)}>
+    <div className={cn("w-full flex relative", className)}>
       <div
-        className="relative flex-1 overflow-hidden rounded-lg"
+        className="relative flex-1 overflow-hidden"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}

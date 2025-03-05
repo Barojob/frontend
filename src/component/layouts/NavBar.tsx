@@ -12,7 +12,7 @@ const NavBar: React.FC<Props> = ({ className }) => {
   return (
     <div
       className={cn(
-        "grid grid-cols-3 gap-[5.625rem] justify-between px-[3.25rem] pt-2 pb-6 bg-white w-full rounded-t-[1.25rem]",
+        "grid grid-cols-3 gap-[5.625rem] justify-between px-[3.25rem] py-3 bg-white w-full rounded-t-[1.25rem]",
         className
       )}
     >

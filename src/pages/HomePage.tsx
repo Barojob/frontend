@@ -1,7 +1,5 @@
 import React from "react";
 import Button from "../component/Button/Button";
-import { cn } from "../utils/classname";
-import Layout from "../component/layouts/Layout";
 import HomeIntroList from "../component/Home/HomeIntroList";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +7,7 @@ export type Props = {
   className?: string;
 };
 
-const HomePage: React.FC<Props> = ({ className }) => {
+const HomePage: React.FC<Props> = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -21,7 +19,7 @@ const HomePage: React.FC<Props> = ({ className }) => {
   };
 
   return (
-    <Layout className={cn("touch-none", className)}>
+    <div className="px-[6%] flex flex-col justify-center items-center h-full">
       <HomeIntroList />
       <div className="w-fit flex gap-4">
         <Button
@@ -45,7 +43,7 @@ const HomePage: React.FC<Props> = ({ className }) => {
         계정이 기억나지 않나요?{" "}
         <span className="font-bold border-b border-black">계정 찾기</span>
       </div>
-    </Layout>
+    </div>
   );
 };
 

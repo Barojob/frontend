@@ -6,7 +6,7 @@ import { RouteObject } from "react-router-dom";
 
 const routes: RouteObject[] = [
   {
-    path: "/",
+    path: "/home",
     element: <HomePage />,
   },
   {
@@ -18,7 +18,7 @@ const routes: RouteObject[] = [
     element: <SignupPage />,
   },
   {
-    path: "/main",
+    path: "/",
     element: <MainPage />,
   },
 ];

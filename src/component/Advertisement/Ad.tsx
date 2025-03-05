@@ -8,9 +8,7 @@ type Props = {
 
 const Ad: React.FC<Props> = ({ className, img }) => {
   return (
-    <div className={cn("size-full", className)}>
-      <img src={img} className="object-cover size-full" />
-    </div>
+    <img src={img} className={cn("object-cover h-36 w-full", className)} />
   );
 };
 export default Ad;

@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { cn } from "../utils/classname";
-import Layout from "../component/layouts/Layout";
 import LeftArrowIcon from "../svgs/LeftArrowIcon";
 import SignupTermsStep from "../component/Signup/SignupTermsStep";
 import PhoneVerificationStep from "../component/Signup/PhoneVerificationStep";
@@ -17,7 +16,7 @@ type Props = {
   className?: string;
 };
 
-const SignupPage: React.FC<Props> = ({ className }) => {
+const SignupPage: React.FC<Props> = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [isStepValid, setIsStepValid] = useState(false);
@@ -98,7 +97,7 @@ const SignupPage: React.FC<Props> = ({ className }) => {
   };
 
   return (
-    <Layout className={cn("", className)}>
+    <div className="px-[6%]">
       <div className="w-full h-auto flex flex-1 mt-4 flex-col justify-start">
         <LeftArrowIcon onClick={handleBack} />
         <div>{renderStep()}</div>
@@ -120,7 +119,7 @@ const SignupPage: React.FC<Props> = ({ className }) => {
           onAllCheckedChange={() => {}}
         />
       )}
-    </Layout>
+    </div>
   );
 };
 
