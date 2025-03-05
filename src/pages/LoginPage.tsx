@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
 import Button from "../component/Button/Button";
 import Input from "../component/Input/Input";
 import Layout from "../component/layouts/Layout";
-import { cn } from "../utils/classname";
 import LeftArrowIcon from "../svgs/LeftArrowIcon";
-import { useNavigate } from "react-router-dom";
+import { cn } from "../utils/classname";
 
 type Props = {
   className?: string;
@@ -108,7 +109,13 @@ const LoginPage: React.FC<Props> = ({ className }) => {
             : "인증문자 받기"}
         </Button>
 
-        {verificationSent && (
+        <CSSTransition
+          in={verificationSent}
+          timeout={300}
+          classNames={"scale"}
+          unmountOnExit
+          mountOnEnter
+        >
           <div className="mt-4">
             <Input
               ref={inputRef}
@@ -133,13 +140,14 @@ const LoginPage: React.FC<Props> = ({ className }) => {
             >
               인증번호 확인
             </Button>
+            <div className="text-center mt-4 text-[0.8125rem] text-gray-600 font-normal">
+              휴대폰 번호가 변경되었나요?{" "}
+              <span className="border-gray-600 border-b">
+                이메일로 계정찾기
+              </span>
+            </div>
           </div>
-        )}
-
-        <div className="text-center mt-4 text-[0.8125rem] text-gray-600 font-normal">
-          휴대폰 번호가 변경되었나요?{" "}
-          <span className="border-gray-600 border-b">이메일로 계정찾기</span>
-        </div>
+        </CSSTransition>
       </div>
     </Layout>
   );

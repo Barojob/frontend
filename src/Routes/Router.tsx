@@ -1,19 +1,22 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
-import SignupPage from "../pages/SignupPage";
-import MainPage from "../pages/MainPage";
+import { useLocation, useRoutes } from "react-router-dom";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
+import routes from "./routes";
 
 const Router = () => {
+  const renderedRoutes = useRoutes(routes);
+
+  const location = useLocation();
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/main" element={<MainPage />} />
-      </Routes>
-    </BrowserRouter>
+    <SwitchTransition mode={"out-in"}>
+      <CSSTransition
+        key={location.pathname}
+        timeout={300}
+        classNames={"scale"}
+        unmountOnExit
+      >
+        {renderedRoutes}
+      </CSSTransition>
+    </SwitchTransition>
   );
 };
 
