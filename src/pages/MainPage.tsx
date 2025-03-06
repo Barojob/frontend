@@ -11,7 +11,7 @@ type Props = {
 
 const MainPage: React.FC<Props> = () => {
   return (
-    <div className="bg-gray-100 h-full w-full flex flex-col ">
+    <div className="bg-main-1 h-full w-full flex flex-col ">
       <Header />
       <main className="flex-1 overflow-scroll">
         <div className="flex flex-col gap-7 ">
