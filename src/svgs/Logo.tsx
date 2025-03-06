@@ -3,14 +3,16 @@ import { cn } from "../utils/classname";
 
 type Props = {
   className?: string;
+  width?: number;
+  height?: number;
 };
 
-const Logo: React.FC<Props> = ({ className }) => {
+const Logo: React.FC<Props> = ({ className, width = 100, height = 20 }) => {
   return (
     <div className={cn("", className)}>
       <svg
-        width="110"
-        height="25"
+        width={width}
+        height={height}
         viewBox="0 0 110 25"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

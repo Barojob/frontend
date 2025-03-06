@@ -1,8 +1,8 @@
 import React from "react";
 import { cn } from "../../utils/classname";
 import Logo from "../../svgs/Logo";
-import Button from "../Button/Button";
 import { useNavigate } from "react-router-dom";
+import { IoPerson } from "react-icons/io5";
 
 type Props = {
   className?: string;
@@ -19,12 +19,15 @@ const Header: React.FC<Props> = ({ className }) => {
       )}
     >
       <Logo />
-      <Button
+      <div
         onClick={() => navigate("/home")}
-        className="w-fit rounded-lg text-gray-1 text-sm px-2.5 py-1.5"
+        className="w-fit rounded-lg bg-white border text-gray-1 text-xs px-2.5 py-1.5 flex items-center gap-0.5"
       >
-        로그인/가입
-      </Button>
+        <div className=" p-1 rounded-full">
+          <IoPerson className="text-[10px] text-gray-400" />
+        </div>
+        로그인
+      </div>
     </div>
   );
 };
