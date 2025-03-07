@@ -1,4 +1,5 @@
 import HomePage from "@/pages/HomePage";
+import JobRequestPage from "@/pages/JobRequestPage";
 import LoginPage from "@/pages/LoginPage";
 import MainPage from "@/pages/MainPage";
 import SignupPage from "@/pages/SignupPage";
@@ -20,6 +21,10 @@ const routes: RouteObject[] = [
   {
     path: "/",
     element: <MainPage />,
+  },
+  {
+    path: "jobrequest",
+    element: <JobRequestPage />,
   },
 ];
 

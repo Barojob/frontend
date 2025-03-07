@@ -3,12 +3,14 @@ import { cn } from "../../utils/classname";
 import Board from "./Board";
 import RightArrowIcon from "../../svgs/RightArrowIcon";
 import SearchIcon from "../../svgs/SearchIcon";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   className?: string;
 };
 
 const SearchBoard: React.FC<Props> = ({ className }) => {
+  const navigate = useNavigate();
   return (
     <Board className={cn("flex flex-col justify-center", className)}>
       <div className="flex items-center">
@@ -17,7 +19,10 @@ const SearchBoard: React.FC<Props> = ({ className }) => {
         </div>
         <RightArrowIcon className="ml-3" />
       </div>
-      <div className="flex justify-center items-center mt-4">
+      <div
+        className="flex justify-center items-center mt-4 cursor-pointer"
+        onClick={() => navigate("/jobrequest")}
+      >
         <div className="text-[1.563rem] font-normal text-blue-3 leading-none">
           일자리 요청하기
         </div>

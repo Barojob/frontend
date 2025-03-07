@@ -29,7 +29,7 @@ const SignupPage: React.FC<Props> = () => {
 
   const handleBack = () => {
     if (step === 1) {
-      navigate("/");
+      navigate("/home");
     } else {
       if (step === 3) {
         setPhoneAgree(false);
