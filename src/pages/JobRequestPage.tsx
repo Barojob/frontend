@@ -5,7 +5,7 @@ import LocationSelectStep from "@/component/JobRequest/LocationSelectStep";
 import LeftArrowIcon from "@/svgs/LeftArrowIcon";
 import NaverMapSelector from "@/component/NaverMapSelector";
 import { RecentLocation } from "@/component/JobRequest/RecentLocationList";
-import StepIndicator from "@/component/JobRequest/StepIndicator"; // 추가
+import StepIndicator from "@/component/JobRequest/StepIndicator";
 
 const JobRequestPage: React.FC = () => {
   // 초기 최근 위치 데이터 (예시)
@@ -21,8 +21,7 @@ const JobRequestPage: React.FC = () => {
     useState<RecentLocation | null>(null);
   const [currentLocation, setCurrentLocation] = useState<string>("");
   const [isMapOpen, setIsMapOpen] = useState<boolean>(false);
-
-  // 현재 스텝을 관리 (예: 1: 출발지, 2: 도착지, 3: 확인)
+  // 현재 스텝 (예시: 1: 출발지, 2: 도착지, 3: 확인)
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const handleRecentLocationClick = (location: RecentLocation) => {
@@ -33,12 +32,11 @@ const JobRequestPage: React.FC = () => {
   const handleConfirmRecentLocation = () => {
     if (selectedRecentLocation) {
       setCurrentLocation(selectedRecentLocation.address);
-      // 이후 스텝으로 진행
       setCurrentStep(2);
     }
   };
 
-  // 현위치 버튼 클릭 시 지도 영역 토글 (모달 대신 inline으로 노출)
+  // 현위치 버튼 클릭 시 지도 영역 토글
   const handleCurrentLocationClick = () => {
     setIsMapOpen(!isMapOpen);
   };
@@ -46,13 +44,11 @@ const JobRequestPage: React.FC = () => {
   // 지도 영역에서 위치 선택 후 호출
   const handleMapSelect = (location: RecentLocation) => {
     setCurrentLocation(location.address);
-    // 새로운 위치가 이미 리스트에 없으면 추가 (중복 체크)
     setRecentLocations((prev) => {
       const exists = prev.find((loc) => loc.address === location.address);
       return exists ? prev : [location, ...prev];
     });
     setIsMapOpen(false);
-    // 이후 스텝으로 진행할 수도 있음
     setCurrentStep(2);
   };
 
@@ -64,21 +60,21 @@ const JobRequestPage: React.FC = () => {
   return (
     <div className="bg-white h-full w-full flex flex-col">
       <LeftArrowIcon onClick={handleBack} className="ml-4 mt-4" />
-      {/* 페이지 인디케이터 추가 */}
       <StepIndicator currentStep={currentStep} className="px-4" />
-      <LocationSelectStep
-        className="mt-2"
-        pick={currentLocation}
-        recentLocations={recentLocations}
-        selectedRecentLocation={selectedRecentLocation}
-        onLocationClick={handleRecentLocationClick}
-        onConfirmRecentLocation={handleConfirmRecentLocation}
-        onCurrentLocationClick={handleCurrentLocationClick}
-      />
-      {isMapOpen && (
-        <div className="mt-4">
-          <NaverMapSelector onSelect={handleMapSelect} />
-        </div>
+      {isMapOpen ? (
+        // isMapOpen 상태이면 지도만 보여줌
+        <NaverMapSelector onSelect={handleMapSelect} />
+      ) : (
+        // 그렇지 않으면 기존 UI (최근 위치 리스트, 현위치 버튼 등)을 보여줌
+        <LocationSelectStep
+          className="mt-2"
+          pick={currentLocation}
+          recentLocations={recentLocations}
+          selectedRecentLocation={selectedRecentLocation}
+          onLocationClick={handleRecentLocationClick}
+          onConfirmRecentLocation={handleConfirmRecentLocation}
+          onCurrentLocationClick={handleCurrentLocationClick}
+        />
       )}
     </div>
   );
