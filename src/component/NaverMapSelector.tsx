@@ -4,6 +4,7 @@ import { RecentLocation } from "@/component/JobRequest/RecentLocationList";
 import { cn } from "@/utils/classname";
 import Button from "./Button/Button";
 import { IoIosArrowForward } from "react-icons/io";
+import { MdMyLocation } from "react-icons/md";
 
 type Props = {
   className?: string;
@@ -25,7 +26,25 @@ const NaverMapSelector: React.FC<Props> = ({ className, onSelect }) => {
   const [mapInstance, setMapInstance] = useState<any>(null);
   const [markerInstance, setMarkerInstance] = useState<any>(null);
 
-  // 역지오코딩: 좌표 → 주소(또는 위치명) 가져오기
+  // 현재 위치를 가져와 markerPosition 업데이트
+  const fetchCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setMarkerPosition({ lat: latitude, lng: longitude });
+          // (아래 useEffect에서 지도/마커 업데이트 처리)
+        },
+        (error) => {
+          console.error("현재 위치를 가져오지 못했습니다.", error);
+        }
+      );
+    } else {
+      console.error("Geolocation API를 지원하지 않습니다.");
+    }
+  };
+
+  // 역지오코딩: 좌표 → 주소(또는 위치명)
   const getLocationName = (lat: number, lng: number): Promise<string> => {
     return new Promise((resolve, reject) => {
       const geocoder = (window as any).naver.maps.services.Geocoder();
@@ -73,7 +92,9 @@ const NaverMapSelector: React.FC<Props> = ({ className, onSelect }) => {
         markerPosition.lat,
         markerPosition.lng
       ),
-      zoom: 13,
+      zoom: 18,
+      maxZoom: 18,
+      minZoom: 15,
     });
     setMapInstance(map);
 
@@ -97,9 +118,6 @@ const NaverMapSelector: React.FC<Props> = ({ className, onSelect }) => {
         const newLat = pos.y;
         const newLng = pos.x;
         setMarkerPosition({ lat: newLat, lng: newLng });
-        getLocationName(newLat, newLng)
-          .then((name) => setLocationName(name))
-          .catch((err) => console.error(err));
       }
     );
 
@@ -113,9 +131,6 @@ const NaverMapSelector: React.FC<Props> = ({ className, onSelect }) => {
         const newLat = clickedPosition.y;
         const newLng = clickedPosition.x;
         setMarkerPosition({ lat: newLat, lng: newLng });
-        getLocationName(newLat, newLng)
-          .then((name) => setLocationName(name))
-          .catch((err) => console.error(err));
       }
     );
 
@@ -123,24 +138,32 @@ const NaverMapSelector: React.FC<Props> = ({ className, onSelect }) => {
     getLocationName(markerPosition.lat, markerPosition.lng)
       .then((name) => setLocationName(name))
       .catch((err) => console.error(err));
+
+    // 페이지가 로드될 때 현재 위치 가져오기
+    fetchCurrentLocation();
   }, []);
 
-  // 검색 버튼 클릭 시 (검색 입력란이 보이는 상태에서)
+  // markerPosition 상태 변경 시 지도와 마커 업데이트 및 역지오코딩
+  useEffect(() => {
+    if (mapInstance && markerInstance) {
+      const newLatLng = new (window as any).naver.maps.LatLng(
+        markerPosition.lat,
+        markerPosition.lng
+      );
+      markerInstance.setPosition(newLatLng);
+      mapInstance.setCenter(newLatLng);
+      getLocationName(markerPosition.lat, markerPosition.lng)
+        .then((name) => setLocationName(name))
+        .catch((err) => console.error(err));
+    }
+  }, [markerPosition, mapInstance, markerInstance]);
+
+  // 주소 검색 버튼 클릭 시
   const handleSearch = async () => {
     try {
       const result = await searchAddress(searchQuery);
       setMarkerPosition(result);
-      if (mapInstance && markerInstance) {
-        const newLatLng = new (window as any).naver.maps.LatLng(
-          result.lat,
-          result.lng
-        );
-        markerInstance.setPosition(newLatLng);
-        mapInstance.setCenter(newLatLng);
-      }
-      getLocationName(result.lat, result.lng)
-        .then((name) => setLocationName(name))
-        .catch((err) => console.error(err));
+      // 이후 useEffect가 markerPosition 변경을 감지하여 업데이트
     } catch (error) {
       console.error(error);
     }
@@ -155,21 +178,49 @@ const NaverMapSelector: React.FC<Props> = ({ className, onSelect }) => {
     onSelect(newLocation);
   };
 
+  // 지도 내부 '현재 위치' 버튼 클릭 시 재조회
+  const handleGoToCurrentLocation = () => {
+    fetchCurrentLocation();
+  };
+
   return (
     <div className={cn("w-full h-full relative", className)}>
-      <div
-        ref={mapRef}
-        className="w-full h-full rounded-3xl backdrop-blur-xl"
-      />
-      <div className="w-full px-4 text-base absolute bottom-0 left-0 z-[120] h-auto py-6 bg-white">
-        <Button className="w-full rounded-xl bg-blue-2 border-blue-2 text-white py-3">
+      <div ref={mapRef} className="w-full h-full rounded-3xl" />
+      <button
+        onClick={handleGoToCurrentLocation}
+        className="absolute top-4 right-4 z-[130] p-2 bg-white bg-opacity-80 backdrop-blur-sm rounded-full shadow"
+      >
+        <MdMyLocation />
+      </button>
+      <div className="w-full px-4 text-base absolute bottom-0 left-0 z-[120] h-auto pb-8 pt-6 backdrop-blur-md bg-white rounded-t-2xl">
+        <Button
+          onClick={handleSelect}
+          className="w-full rounded-xl bg-blue-2 border-blue-2 text-white py-3"
+        >
           출발지로 설정
         </Button>
-        <Button className="flex justify-center items-center gap-1 text-blue-2 mt-2 border-none">
+        <Button
+          onClick={() => setIsSearchVisible((prev) => !prev)}
+          className="flex justify-center items-center gap-1 text-blue-2 mt-2 border-none"
+        >
           <p>출발지 검색하기</p>
           <IoIosArrowForward />
         </Button>
       </div>
+      {isSearchVisible && (
+        <div className="absolute top-16 left-1/2 transform -translate-x-1/2 z-[130] w-11/12 px-4 py-2 bg-white bg-opacity-90 rounded-lg shadow">
+          <input
+            type="text"
+            placeholder="주소 입력"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full border p-2"
+          />
+          <Button onClick={handleSearch} className="w-full mt-2">
+            검색
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
