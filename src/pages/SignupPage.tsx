@@ -45,7 +45,7 @@ const SignupPage: React.FC<Props> = () => {
     } else if (step === 3) {
       // step 3에서 인증번호 입력 완료 후 API 체크를 통해 이미 가입된 회원인지 확인합니다.
       // 아래는 예시로 이미 가입된 회원이라 가정하는 dummy 코드입니다.
-      const isAlreadyRegistered = true; // 실제 로직에선 API 호출 결과에 따라 결정
+      const isAlreadyRegistered = false; // 실제 로직에선 API 호출 결과에 따라 결정
       if (isAlreadyRegistered) {
         setAlreadyRegistered(true);
       }
@@ -61,7 +61,7 @@ const SignupPage: React.FC<Props> = () => {
           profileSetupRef.current &&
           profileSetupRef.current.triggerComplete()
         ) {
-          navigate("/signup-complete");
+          navigate("/login");
         }
       }
     }

@@ -15,6 +15,18 @@ const JobRequestPage: React.FC = () => {
     { address: "대구시 수성구 수성동 123-4", name: "수성 주민센터" },
     { address: "부산시 해운대구 우동 123-4", name: "우동 주민센터" },
     { address: "광주시 서구 농성동 123-4", name: "농성 주민센터" },
+    { address: "대전시 유성구 봉명동 123-4", name: "봉명 주민센터" },
+    { address: "인천시 남동구 구월동 123-4", name: "구월 주민센터" },
+    { address: "울산시 남구 삼산동 123-4", name: "삼산 주민센터" },
+    { address: "세종시 한솔동 123-4", name: "세종 주민센터" },
+    { address: "경기도 수원시 팔달구 인계동 123-4", name: "인계 주민센터" },
+    { address: "강원도 춘천시 효자동 123-4", name: "효자 주민센터" },
+    { address: "충청북도 청주시 상당구 용암동 123-4", name: "용암 주민센터" },
+    { address: "전라북도 전주시 완산구 효자동 123-4", name: "효자 주민센터" },
+    { address: "전라남도 목포시 용당동 123-4", name: "용당 주민센터" },
+    { address: "경상북도 포항시 북구 장량동 123-4", name: "장량 주민센터" },
+    { address: "경상남도 창원시 의창구 사림동 123-4", name: "사림 주민센터" },
+    { address: "제주특별자치도 제주시 일도2동 123-4", name: "일도 주민센터" },
   ]);
 
   const [selectedRecentLocation, setSelectedRecentLocation] =
@@ -58,7 +70,7 @@ const JobRequestPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-white h-full w-full flex flex-col">
+    <div className="bg-white h-full w-full flex flex-col ">
       <LeftArrowIcon onClick={handleBack} className="ml-4 mt-4" />
       <StepIndicator currentStep={currentStep} className="px-4" />
       {isMapOpen ? (
@@ -67,7 +79,7 @@ const JobRequestPage: React.FC = () => {
       ) : (
         // 그렇지 않으면 기존 UI (최근 위치 리스트, 현위치 버튼 등)을 보여줌
         <LocationSelectStep
-          className="mt-2"
+          className="mt-2 flex-1 overflow-hidden"
           pick={currentLocation}
           recentLocations={recentLocations}
           selectedRecentLocation={selectedRecentLocation}

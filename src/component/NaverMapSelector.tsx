@@ -1,20 +1,23 @@
 // NaverMapSelector.tsx
 import React, { useEffect, useRef, useState } from "react";
-import Button from "@/component/Button/Button";
 import { RecentLocation } from "@/component/JobRequest/RecentLocationList";
+import { cn } from "@/utils/classname";
+import Button from "./Button/Button";
+import { IoIosArrowForward } from "react-icons/io";
 
 type Props = {
+  className?: string;
   onSelect: (location: RecentLocation) => void;
 };
 
-const NaverMapSelector: React.FC<Props> = ({ onSelect }) => {
+const NaverMapSelector: React.FC<Props> = ({ className, onSelect }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [markerPosition, setMarkerPosition] = useState<{
     lat: number;
     lng: number;
   }>({
-    lat: 37.5665,
-    lng: 126.978,
+    lat: 37.5617,
+    lng: 127.065,
   });
   const [locationName, setLocationName] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -153,29 +156,19 @@ const NaverMapSelector: React.FC<Props> = ({ onSelect }) => {
   };
 
   return (
-    <div className="p-4 border rounded bg-white">
-      <div ref={mapRef} style={{ width: "100%", height: "400px" }} />
-      <div className="mt-4">
-        <p>선택된 위치: {locationName || "선택 중..."}</p>
-        <div className="flex gap-2 mt-2">
-          {isSearchVisible ? (
-            <>
-              <input
-                type="text"
-                placeholder="주소 입력"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="border p-2 flex-1"
-              />
-              <Button onClick={handleSearch}>검색</Button>
-            </>
-          ) : (
-            <Button onClick={() => setIsSearchVisible(true)}>검색하기</Button>
-          )}
-        </div>
-        <div className="flex justify-end mt-4">
-          <Button onClick={handleSelect}>출발지로 설정</Button>
-        </div>
+    <div className={cn("w-full h-full relative", className)}>
+      <div
+        ref={mapRef}
+        className="w-full h-full rounded-3xl backdrop-blur-xl"
+      />
+      <div className="w-full px-4 text-base absolute bottom-0 left-0 z-[120] h-auto py-6 bg-white">
+        <Button className="w-full rounded-xl bg-blue-2 border-blue-2 text-white py-3">
+          출발지로 설정
+        </Button>
+        <Button className="flex justify-center items-center gap-1 text-blue-2 mt-2 border-none">
+          <p>출발지 검색하기</p>
+          <IoIosArrowForward />
+        </Button>
       </div>
     </div>
   );
