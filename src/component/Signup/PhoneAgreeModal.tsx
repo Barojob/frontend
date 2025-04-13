@@ -62,15 +62,15 @@ const PhoneAgreeModal: React.FC<PhoneAgreeModalProps> = ({
 
   const toggleAll = () => {
     setItems((prev) =>
-      prev.map((item) => ({ ...item, checked: !isAllChecked }))
+      prev.map((item) => ({ ...item, checked: !isAllChecked })),
     );
   };
 
   const toggleItem = (id: number) => {
     setItems((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, checked: !item.checked } : item
-      )
+        item.id === id ? { ...item, checked: !item.checked } : item,
+      ),
     );
   };
 
@@ -83,7 +83,7 @@ const PhoneAgreeModal: React.FC<PhoneAgreeModalProps> = ({
 
   return (
     <ModalWrapper onClose={() => handleClose()} className={className}>
-      <div className="text-xl mb-8 text-center font-black">
+      <div className="mb-8 text-center text-xl font-black">
         휴대폰 본인확인 약관 동의
       </div>
       <CircleCheckBox
@@ -92,7 +92,7 @@ const PhoneAgreeModal: React.FC<PhoneAgreeModalProps> = ({
         label="전체 동의하기"
         className="size-6"
       />
-      <div className="flex flex-col mt-5 mb-11">
+      <div className="mb-11 mt-5 flex flex-col">
         {items.map((item) => (
           <div key={item.id} className="mb-3.5">
             <CheckBox
@@ -101,13 +101,13 @@ const PhoneAgreeModal: React.FC<PhoneAgreeModalProps> = ({
               label={
                 item.required ? `[필수] ${item.label}` : `[선택] ${item.label}`
               }
-              className="size-6 mr-0.5"
+              className="mr-0.5 size-6"
             />
           </div>
         ))}
       </div>
       <Button
-        className={`absolute bottom-0 left-0 rounded-none w-full py-4 bg-blue-500 border-blue-500 text-white font-normal ${
+        className={`absolute bottom-0 left-0 w-full rounded-none border-blue-500 bg-blue-500 py-4 font-normal text-white ${
           !isRequiredChecked ? "opacity-50" : ""
         }`}
         onClick={() => {

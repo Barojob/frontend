@@ -1,8 +1,8 @@
-import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
-import { cn } from "../../utils/classname";
-import PhotoUpload from "./PhotoUpload";
-import PhotoModal from "./PhotoModal"; // 경로는 실제 위치에 맞게 수정
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { cn } from "../../utils/classname";
+import PhotoModal from "./PhotoModal"; // 경로는 실제 위치에 맞게 수정
+import PhotoUpload from "./PhotoUpload";
 
 export type ProfileSetupStepHandle = {
   triggerComplete: () => boolean;
@@ -51,7 +51,7 @@ const ProfileSetupStep = forwardRef<
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-6 font-black text-2xl text-extraBlack-1">
+      <div className="mt-6 text-2xl font-black text-extraBlack-1">
         프로필 설정
       </div>
       <div className="mt-1 text-base text-gray-500">
@@ -80,5 +80,7 @@ const ProfileSetupStep = forwardRef<
     </div>
   );
 });
+
+ProfileSetupStep.displayName = "ProfileSetupStep";
 
 export default ProfileSetupStep;

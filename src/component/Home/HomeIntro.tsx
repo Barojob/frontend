@@ -11,12 +11,12 @@ const HomeIntro: React.FC<Props> = ({ className, imgSrc, introText }) => {
   return (
     <div
       className={cn(
-        "w-full flex flex-col justify-center items-center ",
-        className
+        "flex w-full flex-col items-center justify-center",
+        className,
       )}
     >
       <img src={imgSrc} className="w-full max-w-[60%]" />
-      <p className="text-center font-brand mt-6 font-semibold text-[1.125rem]">
+      <p className="mt-6 text-center font-brand text-[1.125rem] font-semibold">
         {introText}
       </p>
     </div>

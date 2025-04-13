@@ -7,9 +7,9 @@ import "./index.css";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <div className="h-full opacity-100 m-auto flex flex-row justify-center">
+      <div className="m-auto flex h-full flex-row justify-center opacity-100">
         <App />
       </div>
     </BrowserRouter>
-  </StrictMode>
+  </StrictMode>,
 );

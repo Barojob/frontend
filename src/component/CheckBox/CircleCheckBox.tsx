@@ -16,15 +16,15 @@ const CircleCheckBox: React.FC<Props> = ({
 }) => {
   return (
     <div
-      className="w-full flex flex-row items-center font-normal"
+      className="flex w-full flex-row items-center font-normal"
       onClick={onToggle}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         className={cn(
-          "size-7 transition-all duration-200 cursor-pointer",
-          className
+          "size-7 cursor-pointer transition-all duration-200",
+          className,
         )}
       >
         <circle
@@ -33,7 +33,7 @@ const CircleCheckBox: React.FC<Props> = ({
           r="10"
           className={cn(
             "duration-200",
-            isChecked ? "fill-extraBlack-1" : "fill-gray-300"
+            isChecked ? "fill-extraBlack-1" : "fill-gray-300",
           )}
         />
         <path
@@ -47,8 +47,8 @@ const CircleCheckBox: React.FC<Props> = ({
       </svg>
       <div
         className={cn(
-          "text-base ml-2 duration-200",
-          isChecked ? "text-black-1" : "text-gray-400"
+          "ml-2 text-base duration-200",
+          isChecked ? "text-black-1" : "text-gray-400",
         )}
       >
         {label}

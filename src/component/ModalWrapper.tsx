@@ -34,11 +34,11 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
   return (
     <div className={cn("fixed inset-0 z-50", className)} onClick={handleClose}>
       <div className="absolute inset-0 bg-black bg-opacity-80" />
-      <div className="absolute bottom-0 left-0 right-0 max-w-[460px] mx-auto">
+      <div className="absolute bottom-0 left-0 right-0 mx-auto max-w-[460px]">
         <div
           className={cn(
-            "bg-white rounded-t-[40px] py-8 px-6 w-full transition-transform duration-400 transform",
-            animate ? "animate-slide-up" : "animate-slide-down"
+            "duration-400 w-full transform rounded-t-[40px] bg-white px-6 py-8 transition-transform",
+            animate ? "animate-slide-up" : "animate-slide-down",
           )}
           onClick={(e) => e.stopPropagation()}
         >

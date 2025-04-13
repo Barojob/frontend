@@ -8,7 +8,7 @@ type Props = {
 
 const Board: React.FC<Props> = ({ children, className }) => {
   return (
-    <div className={cn("w-full bg-white rounded-[1.25rem] p-5", className)}>
+    <div className={cn("w-full rounded-[1.25rem] bg-white p-5", className)}>
       {children}
     </div>
   );

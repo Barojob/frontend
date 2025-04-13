@@ -1,3 +1,4 @@
+import React from "react";
 import { cn } from "../../utils/classname";
 
 type Props = {
@@ -15,16 +16,16 @@ const CheckBox: React.FC<Props> = ({
 }) => {
   return (
     <div
-      className="w-full flex flex-row items-center font-normal"
+      className="flex w-full flex-row items-center font-normal"
       onClick={onToggle}
     >
       <svg
         viewBox="0 0 24 23"
         xmlns="http://www.w3.org/2000/svg"
         className={cn(
-          "size-7 flex justify-center items-center transition-all duration-100 cursor-pointer",
+          "flex size-7 cursor-pointer items-center justify-center transition-all duration-100",
           isChecked ? "fill-extraBlack-1" : "fill-gray-300",
-          className // 클릭하면 색상 변경
+          className, // 클릭하면 색상 변경
         )}
       >
         <path
@@ -37,13 +38,13 @@ const CheckBox: React.FC<Props> = ({
       </svg>
       <div
         className={cn(
-          "text-sm ml-1 duration-100",
-          isChecked ? "text-black-1" : "text-gray-400"
+          "ml-1 text-sm duration-100",
+          isChecked ? "text-black-1" : "text-gray-400",
         )}
       >
         {label}
       </div>
-      <div className="ml-auto border-b leading-none text-gray-400 text-[12px] border-gray-400">
+      <div className="ml-auto border-b border-gray-400 text-[12px] leading-none text-gray-400">
         보기
       </div>
     </div>

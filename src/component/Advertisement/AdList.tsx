@@ -67,7 +67,7 @@ const AdList: React.FC<Props> = ({ className }) => {
   };
 
   return (
-    <div className={cn("w-full flex relative", className)}>
+    <div className={cn("relative flex w-full", className)}>
       <div
         className="relative flex-1 overflow-hidden"
         onTouchStart={onTouchStart}
@@ -81,7 +81,7 @@ const AdList: React.FC<Props> = ({ className }) => {
           {adList.map((ad, index) => (
             <div
               key={index}
-              className="w-full flex-shrink-0 flex justify-center items-center"
+              className="flex w-full flex-shrink-0 items-center justify-center"
             >
               <Ad img={ad.imgSrc} />
             </div>

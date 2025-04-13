@@ -9,7 +9,7 @@ type AlreadyRegisteredProps = {
 const AlreadyRegistered: React.FC<AlreadyRegisteredProps> = ({ className }) => {
   return (
     <div className={cn("flex flex-col justify-center p-4", className)}>
-      <div className="text-2xl font-bold text-center m-6">
+      <div className="m-6 text-center text-2xl font-bold">
         이미 가입된 회원입니다.
       </div>
       <p className="mb-4 text-center">

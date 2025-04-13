@@ -12,10 +12,10 @@ const AdIndicator: React.FC<Props> = ({ className, currentIndex, length }) => {
     <div
       className={cn(
         "w-fit rounded-[0.625rem] bg-black/30 px-1.5 py-0.5",
-        className
+        className,
       )}
     >
-      <div className="text-white text-center text-[0.625rem] font-medium">
+      <div className="text-center text-[0.625rem] font-medium text-white">
         {currentIndex}
         <span className="text-white/50">
           {" / "}

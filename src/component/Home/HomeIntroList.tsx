@@ -77,7 +77,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
           {intros.map((intro, index) => (
             <div
               key={index}
-              className="w-full flex-shrink-0 flex justify-center items-center"
+              className="flex w-full flex-shrink-0 items-center justify-center"
             >
               <HomeIntro imgSrc={intro.imgSrc} introText={intro.introText} />
             </div>
@@ -87,7 +87,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
         {/* 왼쪽 화살표 */}
         {currentIndex > 0 && (
           <div
-            className="absolute left-5 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            className="absolute left-5 top-1/2 -translate-y-1/2 transform cursor-pointer"
             onClick={handlePrev}
           >
             <svg
@@ -110,7 +110,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
         {/* 오른쪽 화살표 */}
         {currentIndex < intros.length - 1 && (
           <div
-            className="absolute right-5 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            className="absolute right-5 top-1/2 -translate-y-1/2 transform cursor-pointer"
             onClick={handleNext}
           >
             <svg
@@ -131,11 +131,11 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
         )}
       </div>
 
-      <div className="flex justify-center items-center pt-[17%] pb-5">
+      <div className="flex items-center justify-center pb-5 pt-[17%]">
         {intros.map((_, index) => (
           <div
             key={index}
-            className={`w-2 h-2 rounded-full mx-1 ${
+            className={`mx-1 h-2 w-2 rounded-full ${
               index === currentIndex ? "bg-gray-500" : "bg-gray-300"
             }`}
           ></div>

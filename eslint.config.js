@@ -15,6 +15,8 @@ export default tsEslint.config(
   storybookPlugin.configs["flat/recommended"],
   eslintPluginPrettierRecommended,
   {
-    ignores: ["node_modules", "dist", "!.storybook"],
+    rules: {
+      "react/react-in-jsx-scope": "off",
+    },
   },
 );
