@@ -14,4 +14,9 @@ export default tsEslint.config(
   reactRefreshPlugin.configs.recommended,
   storybookPlugin.configs["flat/recommended"],
   eslintPluginPrettierRecommended,
+  {
+    rules: {
+      "react/react-in-jsx-scope": "off",
+    },
+  },
 );

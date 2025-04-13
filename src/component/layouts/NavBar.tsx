@@ -12,21 +12,21 @@ const NavBar: React.FC<Props> = ({ className }) => {
   return (
     <div
       className={cn(
-        "grid grid-cols-3 gap-[5.625rem] justify-between px-[3.25rem] py-3 bg-white w-full rounded-t-[1.25rem]",
-        className
+        "grid w-full grid-cols-3 justify-between gap-[5.625rem] rounded-t-[1.25rem] bg-white px-[3.25rem] py-3",
+        className,
       )}
     >
-      <button className="flex flex-col justify-center items-center">
+      <button className="flex flex-col items-center justify-center">
         <HomeIcon />
-        <div className="text-xs text-gray-1 text-nowrap mt-1">홈</div>
+        <div className="mt-1 text-nowrap text-xs text-gray-1">홈</div>
       </button>
-      <button className="flex flex-col justify-center items-center">
+      <button className="flex flex-col items-center justify-center">
         <MatchIcon />
-        <div className="text-xs text-gray-2 text-nowrap mt-1">매칭내역</div>
+        <div className="mt-1 text-nowrap text-xs text-gray-2">매칭내역</div>
       </button>
-      <button className="flex flex-col justify-center items-center">
+      <button className="flex flex-col items-center justify-center">
         <TotalIcon />
-        <div className="text-xs text-gray-2 text-nowrap mt-1">전체</div>
+        <div className="mt-1 text-nowrap text-xs text-gray-2">전체</div>
       </button>
     </div>
   );

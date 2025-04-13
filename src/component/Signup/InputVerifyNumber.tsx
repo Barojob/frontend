@@ -33,16 +33,16 @@ const InputVerifyNumber: React.FC<Props> = ({
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-6 font-black text-2xl text-extraBlack-1">
+      <div className="mt-6 text-2xl font-black text-extraBlack-1">
         인증번호 확인
       </div>
       <div className="mt-1 text-base text-gray-500">
         휴대폰으로 발송한 인증번호를 입력해주세요
       </div>
       {/* 인증번호 입력 필드 컨테이너 */}
-      <div className="mt-5 relative">
-        <div className="flex flex-col border border-gray-200 focus-within:border-gray-500 rounded-md p-2">
-          <label className="bg-white px-1 font-normal text-xs text-gray-400">
+      <div className="relative mt-5">
+        <div className="flex flex-col rounded-md border border-gray-200 p-2 focus-within:border-gray-500">
+          <label className="bg-white px-1 text-xs font-normal text-gray-400">
             인증번호
           </label>
           <input
@@ -50,20 +50,20 @@ const InputVerifyNumber: React.FC<Props> = ({
             placeholder="인증번호를 입력하세요"
             value={verifyNumber}
             onChange={(e) => setVerifyNumber(e.target.value)}
-            className="w-full px-1 pt-0.5 pb-0 border-none outline-none"
+            className="w-full border-none px-1 pb-0 pt-0.5 outline-none"
             inputMode="numeric"
           />
           {/* 타이머를 오른쪽에 절대 위치로 배치 (입력 필드 내부) */}
-          <div className="absolute top-6 right-3 text-xs font-normal text-blue-500">
+          <div className="absolute right-3 top-6 text-xs font-normal text-blue-500">
             {formatTime(timer)}
           </div>
         </div>
       </div>
-      <p className="mt-6 text-sm text-center font-light text-gray-500">
+      <p className="mt-6 text-center text-sm font-light text-gray-500">
         인증번호가 오지 않는다면?{" "}
         <span
           onClick={() => setTimer(180)}
-          className="leading-none font-bold border-b border-extraBlack-1"
+          className="border-b border-extraBlack-1 font-bold leading-none"
         >
           재발송
         </span>

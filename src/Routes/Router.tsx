@@ -1,8 +1,9 @@
+import React from "react";
 import { useLocation, useRoutes } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import routes from "./routes";
 
-const Router = () => {
+const Router: React.FC = () => {
   const renderedRoutes = useRoutes(routes);
 
   const location = useLocation();

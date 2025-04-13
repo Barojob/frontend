@@ -1,4 +1,5 @@
 import { cn } from "@/utils/classname";
+import React from "react";
 import Chip from "../Chip";
 
 type Props = {
@@ -19,20 +20,20 @@ const NoticeCard: React.FC<Props> = ({
   return (
     <div
       className={cn(
-        "w-full bg-gray-0 rounded-[1.25rem] px-6 py-1.5",
-        className
+        "w-full rounded-[1.25rem] bg-gray-0 px-6 py-1.5",
+        className,
       )}
     >
-      <div className="flex flex-col relative font-semibold pt-1.5">
-        <p className="text-gray-3 text-xs text-left">{date}</p>
-        <p className="text-gray-3 text-xs text-left">{location}</p>
-        <div className="flex gap-1.5 mt-3.5 pb-1">
-          <Chip children="점심제공" className="bg-blue-5" />
-          <Chip children="무료주차" className="bg-blue-5" />
+      <div className="relative flex flex-col pt-1.5 font-semibold">
+        <p className="text-left text-xs text-gray-3">{date}</p>
+        <p className="text-left text-xs text-gray-3">{location}</p>
+        <div className="mt-3.5 flex gap-1.5 pb-1">
+          <Chip className="bg-blue-5">점심제공</Chip>
+          <Chip className="bg-blue-5">무료주차</Chip>
         </div>
-        <div className="absolute bottom-0 right-0 text-right gap-1">
-          <p className="text-gray-2 text-[0.625rem] leading-1">{workerType}</p>
-          <p className="text-gray-3 text-[1.063rem] leading-none">{wage}원</p>
+        <div className="absolute bottom-0 right-0 gap-1 text-right">
+          <p className="leading-1 text-[0.625rem] text-gray-2">{workerType}</p>
+          <p className="text-[1.063rem] leading-none text-gray-3">{wage}원</p>
         </div>
       </div>
     </div>

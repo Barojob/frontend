@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "../../utils/classname";
 import CheckBox from "./CheckBox";
 import CircleCheckBox from "./CircleCheckBox";
@@ -69,8 +69,8 @@ const CheckList: React.FC<Props> = ({ className, onAllCheckedChange }) => {
   const toggleItem = (id: number) => {
     setItems(
       items.map((item) =>
-        item.id === id ? { ...item, checked: !item.checked } : item
-      )
+        item.id === id ? { ...item, checked: !item.checked } : item,
+      ),
     );
   };
 

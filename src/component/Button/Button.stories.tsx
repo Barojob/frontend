@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
 import Button from "./Button";
 
 const meta: Meta<typeof Button> = {
@@ -20,7 +21,7 @@ const meta: Meta<typeof Button> = {
     },
   },
   decorators: [
-    (Story) => (
+    (Story: React.FC) => (
       <div className="w-full max-w-[15rem]">
         <Story />
       </div>

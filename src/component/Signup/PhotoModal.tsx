@@ -30,24 +30,24 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
 
   return (
     <ModalWrapper onClose={onProceed} className={className}>
-      <div className="text-xl pb-7 pt-5 text-center font-black">
+      <div className="pb-7 pt-5 text-center text-xl font-black">
         {missingMessage}
         <br />
         나중에 설정할까요?
       </div>
-      <div className="text-sm mb-14 text-center text-gray-500">
+      <div className="mb-14 text-center text-sm text-gray-500">
         인증 미등록시 매칭이 불가합니다.
       </div>
-      <div className="grid grid-cols-2 w-full absolute bottom-0 left-0">
+      <div className="absolute bottom-0 left-0 grid w-full grid-cols-2">
         <Button
           onClick={onClose}
-          className="w-full rounded-none py-4 bg-gray-400 border-gray-400 text-white font-normal"
+          className="w-full rounded-none border-gray-400 bg-gray-400 py-4 font-normal text-white"
         >
           지금 할게요
         </Button>
         <Button
           onClick={onProceed}
-          className="w-full rounded-none py-4 bg-blue-500 border-blue-500 text-white font-normal"
+          className="w-full rounded-none border-blue-500 bg-blue-500 py-4 font-normal text-white"
         >
           나중에 할게요
         </Button>

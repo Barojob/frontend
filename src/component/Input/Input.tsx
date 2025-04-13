@@ -40,7 +40,7 @@ const InputVariant = cva(
       rounded: "lg",
       size: "md",
     },
-  }
+  },
 );
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -54,11 +54,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       autoFocus,
       readOnly,
       inputMode,
-      maxLength,
       pattern,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [showPassword, setShowPassword] = React.useState(false);
 
@@ -76,7 +75,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         return `${onlyNumbers.slice(0, 3)}-${onlyNumbers.slice(3)}`;
       return `${onlyNumbers.slice(0, 3)}-${onlyNumbers.slice(
         3,
-        7
+        7,
       )}-${onlyNumbers.slice(7, 11)}`;
     };
 
@@ -126,16 +125,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             onClick={handlePasswordVisibility}
           >
             {showPassword ? (
-              <EyeIcon className="w-5 h-5" />
+              <EyeIcon className="h-5 w-5" />
             ) : (
-              <EyeSlashIcon className="w-5 h-5" />
+              <EyeSlashIcon className="h-5 w-5" />
             )}
           </button>
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";
+
 export default Input;

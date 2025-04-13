@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "../../utils/classname";
 import CheckList from "../CheckBox/CheckList";
 
@@ -16,7 +16,7 @@ const SignupTermsStep: React.FC<Props> = ({ className, onValidityChange }) => {
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-6 font-black text-2xl text-extraBlack-1">
+      <div className="mt-6 text-2xl font-black text-extraBlack-1">
         바로잡 회원가입
       </div>
       <div className="mt-1 text-base text-gray-500">

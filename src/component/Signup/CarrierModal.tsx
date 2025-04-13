@@ -27,11 +27,11 @@ const CarrierModal: React.FC<CarrierModalProps> = ({
 
   return (
     <ModalWrapper onClose={handleClose} className={className}>
-      <div className="mb-8 text-xl text-center font-black">통신사 선택</div>
+      <div className="mb-8 text-center text-xl font-black">통신사 선택</div>
       {carriersList.map((carrierOption) => (
         <div
           key={carrierOption.value}
-          className="py-3 text-left text-extraBlack-1 cursor-pointer hover:bg-gray-100"
+          className="cursor-pointer py-3 text-left text-extraBlack-1 hover:bg-gray-100"
           onClick={() => {
             setCarrier(carrierOption.label);
             handleClose();

@@ -1,8 +1,9 @@
+import React from "react";
 import Router from "./Routes/Router";
 
-const App = () => {
+const App: React.FC = () => {
   return (
-    <div className="h-full bg-white w-full max-w-[600px]">
+    <div className="h-full w-full max-w-[600px] bg-white">
       <Router />
     </div>
   );

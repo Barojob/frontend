@@ -29,37 +29,37 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
 
   return (
     <div className={cn("flex flex-col", className)}>
-      <div className="text-sm font-medium text-extraBlack-1 mb-1">{label}</div>
+      <div className="mb-1 text-sm font-medium text-extraBlack-1">{label}</div>
       <label
         className={cn(
-          "block relative w-full h-auto border-2 border-dashed border-gray-300 rounded-md py-6 px-8 text-center hover:border-blue-500 transition-colors"
+          "relative block h-auto w-full rounded-md border-2 border-dashed border-gray-300 px-8 py-6 text-center transition-colors hover:border-blue-500",
         )}
       >
         {file && (
           <button
             type="button"
             onClick={handleRemove}
-            className="absolute size-5 top-2 right-2 rounded-full shadow-md"
+            className="absolute right-2 top-2 size-5 rounded-full shadow-md"
           >
             <TiDelete className="size-full" />
           </button>
         )}
         {file ? (
-          <div className="flex justify-center items-center">
+          <div className="flex items-center justify-center">
             {file.type.startsWith("image/") ? (
               <img
                 src={URL.createObjectURL(file)}
                 alt="Uploaded preview"
-                className="max-h-52 items-center object-cover rounded-md"
+                className="max-h-52 items-center rounded-md object-cover"
               />
             ) : (
-              <div className="w-full flex items-center justify-center">
+              <div className="flex w-full items-center justify-center">
                 <span className="text-gray-500">파일 등록됨</span>
               </div>
             )}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center w-full p-6">
+          <div className="flex w-full flex-col items-center justify-center p-6">
             <div className="mb-2 size-7">
               <img src={CameraIcon} className="w-full" alt="Camera Icon" />
             </div>
