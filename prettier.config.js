@@ -5,5 +5,5 @@ export default {
   tabWidth: 2,
   semi: true,
   endOfLine: "lf",
-  plugins: [],
+  plugins: ["prettier-plugin-tailwindcss"],
 };
