@@ -8,5 +8,5 @@
   },
   "prettier.configPath": "./prettier.config.js",
   "tailwindCSS.classAttributes": ["class", "className", ".*ClassName"],
-  "typescript.preferences.importModuleSpecifier": "project-relative",
+  "typescript.preferences.importModuleSpecifier": "project-relative"
 }

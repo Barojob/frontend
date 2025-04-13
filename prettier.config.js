@@ -5,7 +5,7 @@ export default {
   tabWidth: 2,
   semi: true,
   endOfLine: "lf",
-  tailwindConfig: "./tailwind.config.js",
+  tailwindConfig: "./tailwind.config.ts",
   tailwindStylesheet: ".src/index.css",
   /**
    * @description
