@@ -4,6 +4,7 @@ import reactHooksPlugin from "eslint-plugin-react-hooks";
 import reactRefreshPlugin from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 import storybookPlugin from "eslint-plugin-storybook";
+import eslintConfigPrettier from "eslint-config-prettier/flat";
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -12,4 +13,5 @@ export default tseslint.config(
   reactHooksPlugin.configs["recommended-latest"],
   reactRefreshPlugin.configs.recommended,
   storybookPlugin.configs["flat/recommended"],
+  eslintConfigPrettier,
 );
