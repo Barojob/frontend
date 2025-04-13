@@ -1,0 +1,12 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.validate": ["typescript", "typescriptreact"],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit"
+  },
+  "prettier.configPath": "./prettier.config.js",
+  "tailwindCSS.classAttributes": ["class", "className", ".*ClassName"],
+  "typescript.preferences.importModuleSpecifier": "project-relative"
+}
