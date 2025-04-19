@@ -1,7 +1,7 @@
 import React from "react";
-import { cn } from "../../utils/classname";
-import CameraIcon from "../../assets/images/CamerIcon.png";
 import { TiDelete } from "react-icons/ti";
+import CameraIcon from "../../assets/images/CameraIcon.png";
+import { cn } from "../../utils/classname";
 
 type PhotoUploadProps = {
   className?: string;
@@ -61,6 +61,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
         ) : (
           <div className="flex w-full flex-col items-center justify-center p-6">
             <div className="mb-2 size-7">
+              {/* FIXME: set size to prevent layout shift */}
               <img src={CameraIcon} className="w-full" alt="Camera Icon" />
             </div>
             <span className="text-gray-500">업로드 하기</span>
