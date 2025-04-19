@@ -1,11 +1,13 @@
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
 import Router from "./Routes/Router";
+import "./index.css";
 
 const App: React.FC = () => {
   return (
-    <div className="h-full w-full max-w-[600px] bg-white">
+    <BrowserRouter>
       <Router />
-    </div>
+    </BrowserRouter>
   );
 };
 
