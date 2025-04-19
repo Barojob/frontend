@@ -103,7 +103,7 @@ const LoginPage: React.FC<Props> = () => {
           : "인증문자 받기"}
       </Button>
 
-      <AnimatedTransition key={verificationSent.toString()}>
+      <AnimatedTransition transitionKey={verificationSent.toString()}>
         <div className="mt-4">
           <Input
             ref={inputRef}

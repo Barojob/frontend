@@ -3,19 +3,19 @@ import React, { type PropsWithChildren } from "react";
 
 type Props = {
   className?: string;
-  key: React.Key;
+  transitionKey: React.Key;
 };
 
 const AnimatedTransition: React.FC<PropsWithChildren<Props>> = ({
   className,
-  key,
+  transitionKey,
   children,
 }) => {
   return (
     <AnimatePresence mode="wait">
       <motion.div
         className={className}
-        key={key}
+        key={transitionKey}
         variants={{
           hidden: { opacity: 0.5, scale: 0.98, y: -5 },
           visible: { opacity: 1, scale: 1, y: 0 },

@@ -16,7 +16,7 @@ const AnimatedRouteRenderer = () => {
   const element = useRoutes(routes);
 
   return (
-    <AnimatedTransition className="h-full" key={location.pathname}>
+    <AnimatedTransition className="h-full" transitionKey={location.pathname}>
       {element}
     </AnimatedTransition>
   );
