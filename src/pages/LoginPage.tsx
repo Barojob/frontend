@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
+import AnimatedTransition from "../component/AnimatedTransition";
 import Button from "../component/Button/Button";
 import Input from "../component/Input/Input";
 import LeftArrowIcon from "../svgs/LeftArrowIcon";
@@ -103,13 +103,7 @@ const LoginPage: React.FC<Props> = () => {
           : "인증문자 받기"}
       </Button>
 
-      <CSSTransition
-        in={verificationSent}
-        timeout={300}
-        classNames={"scale"}
-        unmountOnExit
-        mountOnEnter
-      >
+      <AnimatedTransition key={verificationSent.toString()}>
         <div className="mt-4">
           <Input
             ref={inputRef}
@@ -140,7 +134,7 @@ const LoginPage: React.FC<Props> = () => {
             <span className="border-b border-gray-600">이메일로 계정찾기</span>
           </div>
         </div>
-      </CSSTransition>
+      </AnimatedTransition>
     </div>
   );
 };

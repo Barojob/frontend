@@ -1,14 +1,9 @@
+import "@/index.css";
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import Router from "./Routes/Router";
-import "./index.css";
+import GlobalProvider from "./providers/GlobalProvider";
 
 const App: React.FC = () => {
-  return (
-    <BrowserRouter>
-      <Router />
-    </BrowserRouter>
-  );
+  return <GlobalProvider />;
 };
 
 export default App;
