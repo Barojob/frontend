@@ -1,8 +1,13 @@
 import React from "react";
 import RouterProvider from "./RouterProvider";
+import TanstackProvider from "./TanstackProvider";
 
 const RootProvider: React.FC = () => {
-  return <RouterProvider />;
+  return (
+    <TanstackProvider>
+      <RouterProvider />
+    </TanstackProvider>
+  );
 };
 
 export default RootProvider;
