@@ -1,6 +1,6 @@
 import "@/index.css";
+import GlobalProvider from "@/providers/GlobalProvider";
 import React from "react";
-import GlobalProvider from "./providers/GlobalProvider";
 
 const App: React.FC = () => {
   return <GlobalProvider />;

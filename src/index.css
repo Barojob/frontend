@@ -1,5 +1,3 @@
-@import url("./assets/css/transitions.css");
-
 /* FONT: Pretendard */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css");
 
@@ -9,4 +7,10 @@
 
 :root {
   --font-brand: "Pretendard", sans-serif;
+}
+
+html,
+body,
+#root {
+  @apply h-full;
 }

@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { type PropsWithChildren } from "react";
-import { cn } from "../utils/classname";
 
 type Props = {
   className?: string;
@@ -15,7 +14,7 @@ const AnimatedTransition: React.FC<PropsWithChildren<Props>> = ({
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        className={cn("absolute inset-0 size-full", className)}
+        className={className}
         key={key}
         variants={{
           hidden: { opacity: 0.5, scale: 0.98, y: -5 },
