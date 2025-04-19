@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../component/Button/Button";
-import AlreadyRegisteredStep from "../component/Signup/AlreadyRegistered";
-import InputVerifyNumber from "../component/Signup/InputVerifyNumber";
-import PhoneAgreeModal from "../component/Signup/PhoneAgreeModal";
-import PhoneVerificationStep from "../component/Signup/PhoneVerificationStep";
+import Button from "../components/Button/Button";
+import AlreadyRegisteredStep from "../components/Signup/AlreadyRegistered";
+import InputVerifyNumber from "../components/Signup/InputVerifyNumber";
+import PhoneAgreeModal from "../components/Signup/PhoneAgreeModal";
+import PhoneVerificationStep from "../components/Signup/PhoneVerificationStep";
 import ProfileSetupStep, {
   ProfileSetupStepHandle,
-} from "../component/Signup/ProfileSetupStep";
-import SignupTermsStep from "../component/Signup/SignupTermsStep";
+} from "../components/Signup/ProfileSetupStep";
+import SignupTermsStep from "../components/Signup/SignupTermsStep";
 import LeftArrowIcon from "../svgs/LeftArrowIcon";
 import { cn } from "../utils/classname";
 
@@ -104,7 +104,7 @@ const SignupPage: React.FC<Props> = () => {
         <Button
           disabled={!isStepValid}
           className={cn(
-            "my-[10%] w-full rounded-[4px] border-blue-500 bg-blue-500 py-3 font-normal text-white",
+            "border-blue-500 bg-blue-500 text-white my-[10%] w-full rounded-[4px] py-3 font-normal",
             isStepValid ? "" : "opacity-50",
           )}
           onClick={handleNext}

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { cn } from "../../utils/classname";
-import HomeIntro from "../Home/HomeIntro";
+import HomeIntro from "./HomeIntro";
 
-import img1 from "../../assets/images/HomeImage1.png";
-import img2 from "../../assets/images/HomeImage1.png";
-import img3 from "../../assets/images/HomeImage1.png";
-import img4 from "../../assets/images/HomeImage1.png";
+import {
+  default as img1,
+  default as img2,
+  default as img3,
+  default as img4,
+} from "../../../public/images/HomeImage1.png";
 
 export type Props = {
   className?: string;
@@ -77,7 +79,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
           {intros.map((intro, index) => (
             <div
               key={index}
-              className="flex w-full flex-shrink-0 items-center justify-center"
+              className="flex w-full shrink-0 items-center justify-center"
             >
               <HomeIntro imgSrc={intro.imgSrc} introText={intro.introText} />
             </div>
@@ -92,7 +94,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-500"
+              className="text-gray-500 size-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -115,7 +117,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-500"
+              className="text-gray-500 size-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

@@ -1,6 +1,6 @@
 import React from "react";
 import { TiDelete } from "react-icons/ti";
-import CameraIcon from "../../assets/images/CameraIcon.png";
+import CameraIcon from "../../../public/images/CameraIcon.png";
 import { cn } from "../../utils/classname";
 
 type PhotoUploadProps = {
@@ -32,7 +32,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
       <div className="mb-1 text-sm font-medium text-extraBlack-1">{label}</div>
       <label
         className={cn(
-          "relative block h-auto w-full rounded-md border-2 border-dashed border-gray-300 px-8 py-6 text-center transition-colors hover:border-blue-500",
+          "border-gray-300 hover:border-blue-500 relative block h-auto w-full rounded-md border-2 border-dashed px-8 py-6 text-center transition-colors",
         )}
       >
         {file && (

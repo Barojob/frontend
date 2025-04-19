@@ -1,5 +1,6 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, { useEffect, useImperativeHandle, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Nullable } from "../../types/misc";
 import { cn } from "../../utils/classname";
 import PhotoModal from "./PhotoModal"; // 경로는 실제 위치에 맞게 수정
 import PhotoUpload from "./PhotoUpload";
@@ -9,15 +10,18 @@ export type ProfileSetupStepHandle = {
 };
 
 type ProfileSetupStepProps = {
+  ref?: React.RefObject<Nullable<ProfileSetupStepHandle>>;
   className?: string;
   onValidityChange: (isValid: boolean) => void;
   onComplete?: () => void;
 };
 
-const ProfileSetupStep = forwardRef<
-  ProfileSetupStepHandle,
-  ProfileSetupStepProps
->(({ className, onValidityChange, onComplete }, ref) => {
+const ProfileSetupStep: React.FC<ProfileSetupStepProps> = ({
+  className,
+  ref,
+  onValidityChange,
+  onComplete,
+}) => {
   const [certificateFile, setCertificateFile] = useState<File | null>(null);
   const [bankAccountFile, setBankAccountFile] = useState<File | null>(null);
   const [showPhotoModal, setShowPhotoModal] = useState(false);
@@ -54,7 +58,7 @@ const ProfileSetupStep = forwardRef<
       <div className="mt-6 text-2xl font-black text-extraBlack-1">
         프로필 설정
       </div>
-      <div className="mt-1 text-base text-gray-500">
+      <div className="text-gray-500 mt-1 text-base">
         나중에 내 정보 탭에서 설정이 가능해요
       </div>
       <PhotoUpload
@@ -79,8 +83,6 @@ const ProfileSetupStep = forwardRef<
       )}
     </div>
   );
-});
-
-ProfileSetupStep.displayName = "ProfileSetupStep";
+};
 
 export default ProfileSetupStep;

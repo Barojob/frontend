@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, useLocation, useRoutes } from "react-router-dom";
-import AnimatedTransition from "../component/AnimatedTransition";
+import AnimatedTransition from "../components/AnimatedTransition";
 import { routes } from "../configs/routes";
 
 const RouterProvider: React.FC = () => {
