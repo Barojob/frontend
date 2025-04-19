@@ -4,7 +4,7 @@ export function assert(
   condition: Maybe<boolean> | (() => boolean),
   message: Error | Response | string = "Assertion failed",
 ): asserts condition {
-  if (condition) {
+  if (typeof condition === "function" ? condition() : condition) {
     return;
   }
 
