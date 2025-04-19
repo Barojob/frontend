@@ -81,7 +81,7 @@ const AdList: React.FC<Props> = ({ className }) => {
           {adList.map((ad, index) => (
             <div
               key={index}
-              className="flex w-full flex-shrink-0 items-center justify-center"
+              className="flex w-full shrink-0 items-center justify-center"
             >
               <Ad img={ad.imgSrc} />
             </div>

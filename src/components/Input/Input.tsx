@@ -4,7 +4,7 @@ import React from "react";
 import { cn } from "../../utils/classname";
 
 const InputVariant = cva(
-  "w-full text-left border border-gray-200 focus:outline-none",
+  "w-full text-left border border-gray-200 focus:outline-hidden",
   {
     variants: {
       variant: {

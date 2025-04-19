@@ -1,4 +1,4 @@
-import "@/index.css";
+import "@/globals-core.css";
 import RootProvider from "@/providers/RootProvider";
 import React from "react";
 

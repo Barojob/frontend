@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../component/Button/Button";
-import HomeIntroList from "../component/Home/HomeIntroList";
+import Button from "../components/Button/Button";
+import HomeIntroList from "../components/Home/HomeIntroList";
 
 export type Props = {
   className?: string;
@@ -34,7 +34,7 @@ const HomePage: React.FC<Props> = () => {
         <Button
           variant={"secondary"}
           size={"md"}
-          className="w-fit bg-gray-900"
+          className="bg-gray-900 w-fit"
           onClick={handleSignUp}
           onTouchStart={handleSignUp}
         >
@@ -43,7 +43,7 @@ const HomePage: React.FC<Props> = () => {
       </div>
       <div className="pt-5 text-[0.875rem] font-normal">
         계정이 기억나지 않나요?{" "}
-        <span className="border-b border-black font-bold">계정 찾기</span>
+        <span className="border-black border-b font-bold">계정 찾기</span>
       </div>
     </div>
   );
