@@ -1,4 +1,2 @@
 .github/** linguist-vendored
 .vscode/** linguist-vendored
-android/** linguist-vendored
-ios/** linguist-vendored
