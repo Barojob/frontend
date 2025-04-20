@@ -34,7 +34,7 @@ export type InputProps = {
   value: string;
   onValueChange: (value: string) => void;
 } & VariantProps<typeof InputVariant> &
-  React.ComponentPropsWithRef<"input">;
+  Omit<React.ComponentPropsWithRef<"input">, "size">;
 
 const Input: React.FC<InputProps> = ({
   className,

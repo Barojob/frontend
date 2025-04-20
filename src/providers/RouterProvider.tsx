@@ -11,7 +11,7 @@ const RouterProvider: React.FC = () => {
   );
 };
 
-const AnimatedRouteRenderer = () => {
+const AnimatedRouteRenderer: React.FC = () => {
   const location = useLocation();
   const element = useRoutes(routes);
 

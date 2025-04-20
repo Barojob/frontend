@@ -1,8 +1,8 @@
 import React from "react";
-import { cn } from "../../utils/classname";
-import Logo from "../../svgs/Logo";
-import { useNavigate } from "react-router-dom";
 import { IoPerson } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import Logo from "../../svgs/Logo";
+import { cn } from "../../utils/classname";
 
 type Props = {
   className?: string;
