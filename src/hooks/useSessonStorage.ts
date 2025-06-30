@@ -2,12 +2,12 @@ import React from "react";
 
 type UseSessionStorage = <T>(
   key: string,
-  initialValue: T
+  initialValue: T,
 ) => [T, React.Dispatch<React.SetStateAction<T>>];
 
 const useSessionStorage: UseSessionStorage = <T>(
   key: string,
-  initialValue: T
+  initialValue: T,
 ) => {
   const [storedValue, setStoredValue] = React.useState<T>(() => {
     try {
@@ -16,7 +16,7 @@ const useSessionStorage: UseSessionStorage = <T>(
     } catch (error) {
       console.error(
         `sessionStorage에서 key "${key}"를 읽는 중 에러 발생:`,
-        error
+        error,
       );
       return initialValue;
     }
@@ -28,7 +28,7 @@ const useSessionStorage: UseSessionStorage = <T>(
     } catch (error) {
       console.error(
         `sessionStorage에 key "${key}"를 쓰는 중 에러 발생:`,
-        error
+        error,
       );
     }
   }, [key, storedValue]);

@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/* FONT: Pretendard */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css")
+layer(base);
+
+@theme {
+  /* Colors */
+  --color-blue-2: #376fff;
+  --color-blue-3: #0900ff;
+  --color-blue-4: #374bff;
+  --color-blue-5: #6e83b7;
+  --color-extra-black-1: #242424;
+  --color-gray-0: #f0f0f0;
+  --color-gray-1: #615f5f;
+  --color-gray-2: #b3b3b3;
+  --color-gray-3: #494949;
+  --color-gray-4: #707070;
+  --color-gray-5: #e0e0e0;
+  --color-main-1: #e1e5ef;
+
+  /* Fonts */
+  --font-*: initial;
+  --font-brand: "Pretendard", sans-serif;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    @apply h-full;
+  }
+}

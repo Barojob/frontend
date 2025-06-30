@@ -1,16 +1,16 @@
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
-import { cn } from "../utils/classname";
-import LeftArrowIcon from "../svgs/LeftArrowIcon";
-import SignupTermsStep from "../component/Signup/SignupTermsStep";
-import PhoneVerificationStep from "../component/Signup/PhoneVerificationStep";
+import Button from "../components/Button/Button";
+import AlreadyRegisteredStep from "../components/Signup/AlreadyRegistered";
+import InputVerifyNumber from "../components/Signup/InputVerifyNumber";
+import PhoneAgreeModal from "../components/Signup/PhoneAgreeModal";
+import PhoneVerificationStep from "../components/Signup/PhoneVerificationStep";
 import ProfileSetupStep, {
   ProfileSetupStepHandle,
-} from "../component/Signup/ProfileSetupStep";
-import Button from "../component/Button/Button";
-import PhoneAgreeModal from "../component/Signup/PhoneAgreeModal";
-import InputVerifyNumber from "../component/Signup/InputVerifyNumber";
-import AlreadyRegisteredStep from "../component/Signup/AlreadyRegistered";
+} from "../components/Signup/ProfileSetupStep";
+import SignupTermsStep from "../components/Signup/SignupTermsStep";
+import LeftArrowIcon from "../svgs/LeftArrowIcon";
+import { cn } from "../utils/classname";
 
 type Props = {
   className?: string;
@@ -98,14 +98,14 @@ const SignupPage: React.FC<Props> = () => {
 
   return (
     <div className="px-[6%]">
-      <div className="w-full h-auto flex flex-1 mt-4 flex-col justify-start">
+      <div className="mt-4 flex h-auto w-full flex-1 flex-col justify-start">
         <LeftArrowIcon onClick={handleBack} />
         <div>{renderStep()}</div>
         <Button
           disabled={!isStepValid}
           className={cn(
-            "w-full py-3 my-[10%] rounded-[4px] bg-blue-500 border-blue-500 text-white font-normal",
-            isStepValid ? "" : "opacity-50"
+            "border-blue-500 bg-blue-500 text-white my-[10%] w-full rounded-[4px] py-3 font-normal",
+            isStepValid ? "" : "opacity-50",
           )}
           onClick={handleNext}
         >

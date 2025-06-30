@@ -1,11 +1,9 @@
-import Router from "./Routes/Router";
+import "@/globals-core.css";
+import RootProvider from "@/providers/RootProvider";
+import React from "react";
 
-const App = () => {
-  return (
-    <div className="h-full bg-white w-full max-w-[600px]">
-      <Router />
-    </div>
-  );
+const App: React.FC = () => {
+  return <RootProvider />;
 };
 
 export default App;
