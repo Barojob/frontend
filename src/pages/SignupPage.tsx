@@ -112,15 +112,22 @@ const SignupPage: React.FC<Props> = () => {
           {step < 4 ? "다음" : alreadyRegistered ? "로그인" : "완료"}
         </Button>
       </div>
-      {showPhoneAgreeModal && (
+
         <PhoneAgreeModal
-          setPhoneAgree={setPhoneAgree}
-          setShowPhoneAgreeModal={setShowPhoneAgreeModal}
-          onAllCheckedChange={() => {}}
+        visible={showPhoneAgreeModal}
+        onSuccess={handlePhoneAgressSuccess}
+        onClose={handlePhoneAgressClose}
         />
-      )}
     </div>
   );
+
+  function handlePhoneAgressSuccess() {
+    setPhoneAgree(true);
+  }
+
+  function handlePhoneAgressClose() {
+    setShowPhoneAgreeModal(false);
+  }
 };
 
 export default SignupPage;
