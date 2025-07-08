@@ -25,7 +25,10 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
           >
             <div className="flex min-h-full items-center justify-center">
               <section
-                className={cn("h-fit w-full rounded-[30px]", className)}
+                className={cn(
+                  "h-fit w-full rounded-[30px] bg-white drop-shadow-[0_4px_10px_#00000040]",
+                  className,
+                )}
                 role="dialog"
                 onClick={handleModalClick}
               >
