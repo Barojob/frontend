@@ -16,7 +16,7 @@ const SignupTermsStep: React.FC<Props> = ({ className, onValidityChange }) => {
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-6 text-2xl font-black text-extraBlack-1">
+      <div className="text-extraBlack-1 mt-6 text-2xl font-black">
         바로잡 회원가입
       </div>
       <div className="mt-1 text-base text-gray-500">

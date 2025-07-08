@@ -21,9 +21,9 @@ const LabelInput: React.FC<LabelInputProps> = ({
   return (
     <div className={cn("w-full", className)}>
       {/* border와 패딩을 가진 컨테이너 */}
-      <div className="border-gray-200 focus-within:border-gray-500 flex flex-col rounded-md border p-2">
+      <div className="flex flex-col rounded-md border border-gray-200 p-2 focus-within:border-gray-500">
         {/* Label을 border 상단에 배치 (배경색으로 컨테이너 배경을 덮음) */}
-        <label className="bg-white text-gray-400 px-1 text-xs font-normal">
+        <label className="bg-white px-1 text-xs font-normal text-gray-400">
           {label}
         </label>
         {/* Input에 ref 전달 */}
@@ -33,7 +33,7 @@ const LabelInput: React.FC<LabelInputProps> = ({
           className={cn("w-full border-none px-1 pb-0 pt-0.5", className)}
         />
       </div>
-      {error && <p className="text-red-500 mt-1 text-sm">{error}</p>}
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   );
 };

@@ -31,7 +31,7 @@ const CarrierModal: React.FC<CarrierModalProps> = ({
       {carriersList.map((carrierOption) => (
         <div
           key={carrierOption.value}
-          className="cursor-pointer py-3 text-left text-extraBlack-1 hover:bg-gray-100"
+          className="text-extraBlack-1 cursor-pointer py-3 text-left hover:bg-gray-100"
           onClick={() => {
             setCarrier(carrierOption.label);
             handleClose();

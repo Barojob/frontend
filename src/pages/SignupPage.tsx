@@ -104,7 +104,7 @@ const SignupPage: React.FC<Props> = () => {
         <Button
           disabled={!isStepValid}
           className={cn(
-            "border-blue-500 bg-blue-500 text-white my-[10%] w-full rounded-[4px] py-3 font-normal",
+            "my-[10%] w-full rounded-[4px] border-blue-500 bg-blue-500 py-3 font-normal text-white",
             isStepValid ? "" : "opacity-50",
           )}
           onClick={handleNext}

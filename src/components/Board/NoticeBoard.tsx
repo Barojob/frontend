@@ -42,12 +42,12 @@ const NoticeBoard: React.FC<Props> = ({ className }) => {
     >
       <div className="flex items-center justify-between">
         <div className="flex">
-          <div className="text-xl font-semibold leading-none text-gray-3">
+          <div className="text-gray-3 text-xl font-semibold leading-none">
             선착순 공고
           </div>
           <RightArrowIcon className="ml-3" />
         </div>
-        <button className="rounded-[0.625rem] border-gray-5 bg-gray-5 px-3 py-[0.313rem] text-[0.688rem] font-semibold leading-none text-gray-4">
+        <button className="border-gray-5 bg-gray-5 text-gray-4 rounded-[0.625rem] px-3 py-[0.313rem] text-[0.688rem] font-semibold leading-none">
           더보기
         </button>
       </div>

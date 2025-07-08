@@ -55,10 +55,10 @@ const ProfileSetupStep: React.FC<ProfileSetupStepProps> = ({
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-6 text-2xl font-black text-extraBlack-1">
+      <div className="text-extraBlack-1 mt-6 text-2xl font-black">
         프로필 설정
       </div>
-      <div className="text-gray-500 mt-1 text-base">
+      <div className="mt-1 text-base text-gray-500">
         나중에 내 정보 탭에서 설정이 가능해요
       </div>
       <PhotoUpload
