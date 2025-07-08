@@ -109,7 +109,7 @@ const Input: React.FC<InputProps> = ({
       />
       {type === "password" && (
         <button
-          className="text-gray-500 absolute inset-y-0 right-3 flex items-center"
+          className="absolute inset-y-0 right-3 flex items-center text-gray-500"
           type="button"
           aria-label={showPassword ? "Hide password" : "Show password"}
           onClick={handlePasswordVisibility}

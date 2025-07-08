@@ -33,16 +33,16 @@ const InputVerifyNumber: React.FC<Props> = ({
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-6 text-2xl font-black text-extraBlack-1">
+      <div className="text-extraBlack-1 mt-6 text-2xl font-black">
         인증번호 확인
       </div>
-      <div className="text-gray-500 mt-1 text-base">
+      <div className="mt-1 text-base text-gray-500">
         휴대폰으로 발송한 인증번호를 입력해주세요
       </div>
       {/* 인증번호 입력 필드 컨테이너 */}
       <div className="relative mt-5">
-        <div className="border-gray-200 focus-within:border-gray-500 flex flex-col rounded-md border p-2">
-          <label className="bg-white text-gray-400 px-1 text-xs font-normal">
+        <div className="flex flex-col rounded-md border border-gray-200 p-2 focus-within:border-gray-500">
+          <label className="bg-white px-1 text-xs font-normal text-gray-400">
             인증번호
           </label>
           <input
@@ -54,16 +54,16 @@ const InputVerifyNumber: React.FC<Props> = ({
             inputMode="numeric"
           />
           {/* 타이머를 오른쪽에 절대 위치로 배치 (입력 필드 내부) */}
-          <div className="text-blue-500 absolute right-3 top-6 text-xs font-normal">
+          <div className="absolute right-3 top-6 text-xs font-normal text-blue-500">
             {formatTime(timer)}
           </div>
         </div>
       </div>
-      <p className="text-gray-500 mt-6 text-center text-sm font-light">
+      <p className="mt-6 text-center text-sm font-light text-gray-500">
         인증번호가 오지 않는다면?{" "}
         <span
           onClick={() => setTimer(180)}
-          className="border-b border-extraBlack-1 font-bold leading-none"
+          className="border-extraBlack-1 border-b font-bold leading-none"
         >
           재발송
         </span>

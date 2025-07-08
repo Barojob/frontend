@@ -12,13 +12,13 @@ const SearchBoard: React.FC<Props> = ({ className }) => {
   return (
     <Board className={cn("flex flex-col justify-center", className)}>
       <div className="flex items-center">
-        <div className="text-xl font-semibold leading-none text-gray-3">
+        <div className="text-gray-3 text-xl font-semibold leading-none">
           경기 포천시
         </div>
         <RightArrowIcon className="ml-3" />
       </div>
       <div className="mt-4 flex items-center justify-center">
-        <div className="text-[1.563rem] font-normal leading-none text-blue-3">
+        <div className="text-blue-3 text-[1.563rem] font-normal leading-none">
           일자리 요청하기
         </div>
         <SearchIcon className="ml-3" />
