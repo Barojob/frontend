@@ -2,25 +2,24 @@ import React, { useState } from "react";
 import { cn } from "../../utils/classname";
 import HomeIntro from "./HomeIntro";
 
-import {
-  default as img1,
-  default as img2,
-  default as img3,
-  default as img4,
-} from "../../../public/images/HomeImage1.png";
-
 export type Props = {
   className?: string;
 };
 
 const intros = [
   {
-    imgSrc: img1,
+    imgSrc: "/pubilc/images/HomeImage1.png",
     introText: "우리 앱에 오신 것을 환영합니다!",
   },
-  { imgSrc: img2, introText: "새로운 기능을 만나보세요!" },
-  { imgSrc: img3, introText: "친구들과 함께 연결되어 있어요!" },
-  { imgSrc: img4, introText: "지금 시작해보세요!" },
+  {
+    imgSrc: "/pubilc/images/HomeImage1.png",
+    introText: "새로운 기능을 만나보세요!",
+  },
+  {
+    imgSrc: "/public/images/HomeImage1.png",
+    introText: "친구들과 함께 연결되어 있어요!",
+  },
+  { imgSrc: "/public/images/HomeImage1.png", introText: "지금 시작해보세요!" },
 ];
 
 const HomeIntroList: React.FC<Props> = ({ className }) => {
@@ -94,7 +93,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="text-gray-500 size-6"
+              className="size-6 text-gray-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -117,7 +116,7 @@ const HomeIntroList: React.FC<Props> = ({ className }) => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="text-gray-500 size-6"
+              className="size-6 text-gray-500"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
