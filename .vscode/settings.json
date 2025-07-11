@@ -6,7 +6,7 @@
     "source.organizeImports": "explicit",
     "source.fixAll": "explicit"
   },
-  "prettier.configPath": "./prettier.config.js",
+  //"prettier.configPath": "./prettier.config.js",
   "tailwindCSS.classAttributes": ["class", "className", ".*ClassName"],
   "typescript.preferences.importModuleSpecifier": "project-relative"
 }
