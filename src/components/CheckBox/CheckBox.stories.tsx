@@ -243,7 +243,7 @@ export const OptionCheckBox_Default: Story = {
           {...args}
           label="프론트엔드 개발자"
           isChecked={checked}
-          onToggle={() => setChecked(!checked)}
+          onChange={setChecked}
           onView={() => {
             setViewCount((prev) => prev + 1);
             alert("상세 정보를 확인합니다!");
@@ -259,7 +259,6 @@ export const OptionCheckBox_Default: Story = {
   args: {
     isChecked: false,
     disabled: false,
-    showViewButton: true,
   },
   parameters: {
     docs: {
@@ -281,10 +280,6 @@ export const OptionCheckBox_Variations: Story = {
       noLabel: false,
     });
 
-    const handleToggle = (key: keyof typeof states) => {
-      setStates((prev) => ({ ...prev, [key]: !prev[key] }));
-    };
-
     const handleView = (type: string) => {
       alert(`${type} 상세 정보 보기`);
     };
@@ -294,29 +289,34 @@ export const OptionCheckBox_Variations: Story = {
         <OptionCheckBox
           label="보기 버튼 포함"
           isChecked={states.withButton}
-          onToggle={() => handleToggle("withButton")}
+          onChange={(checked) =>
+            setStates((prev) => ({ ...prev, withButton: checked }))
+          }
           onView={() => handleView("보기 버튼 포함")}
-          showViewButton={true}
         />
         <OptionCheckBox
           label="보기 버튼 없음"
           isChecked={states.withoutButton}
-          onToggle={() => handleToggle("withoutButton")}
-          showViewButton={false}
+          onChange={(checked) =>
+            setStates((prev) => ({ ...prev, withoutButton: checked }))
+          }
         />
         <OptionCheckBox
           label="비활성화됨"
           isChecked={states.disabled}
-          onToggle={() => handleToggle("disabled")}
+          onChange={(checked) =>
+            setStates((prev) => ({ ...prev, disabled: checked }))
+          }
           onView={() => handleView("비활성화됨")}
           disabled={true}
-          showViewButton={true}
         />
         <OptionCheckBox
+          label="라벨이 있는 체크박스"
           isChecked={states.noLabel}
-          onToggle={() => handleToggle("noLabel")}
-          onView={() => handleView("라벨 없음")}
-          showViewButton={true}
+          onChange={(checked) =>
+            setStates((prev) => ({ ...prev, noLabel: checked }))
+          }
+          onView={() => handleView("라벨이 있는 체크박스")}
         />
       </div>
     );
@@ -369,9 +369,8 @@ export const OptionCheckBox_MultipleSelection: Story = {
               key={option.id}
               label={option.label}
               isChecked={option.checked}
-              onToggle={() => handleToggle(option.id)}
+              onChange={() => handleToggle(option.id)}
               onView={() => handleView(option.label)}
-              showViewButton={true}
             />
           ))}
         </div>
@@ -706,11 +705,10 @@ export const ComparisonGuide: Story = {
                 <OptionCheckBox
                   label="OptionCheckBox"
                   isChecked={examples.option}
-                  onToggle={() =>
+                  onChange={() =>
                     setExamples((prev) => ({ ...prev, option: !prev.option }))
                   }
                   onView={() => alert("OptionCheckBox 상세 정보 보기")}
-                  showViewButton={true}
                 />
               </div>
             </div>
@@ -820,6 +818,255 @@ export const ComparisonGuide: Story = {
       description: {
         story:
           "모든 체크박스 컴포넌트의 특징과 사용 가이드를 한눈에 볼 수 있습니다.",
+      },
+    },
+  },
+};
+
+// ===== Form Integration Examples =====
+export const FormIntegration: Story = {
+  name: "Form 통합 예제",
+  render: () => {
+    const [formData, setFormData] = useState({
+      terms: false,
+      privacy: false,
+      marketing: false,
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      const form = e.target as HTMLFormElement;
+      const formDataObj = new FormData(form);
+      const values = Object.fromEntries(formDataObj.entries());
+      alert(`Form submitted with values: ${JSON.stringify(values, null, 2)}`);
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className="space-y-4 rounded border p-4">
+        <h3 className="text-lg font-semibold">회원가입 약관 동의</h3>
+
+        <CheckBoxWithLabel
+          name="terms"
+          value="agreed"
+          id="terms-checkbox"
+          label="이용약관에 동의합니다 (필수)"
+          isChecked={formData.terms}
+          onChange={(checked) =>
+            setFormData((prev) => ({ ...prev, terms: checked }))
+          }
+        />
+
+        <CheckBoxWithLabel
+          name="privacy"
+          value="agreed"
+          id="privacy-checkbox"
+          label="개인정보 처리방침에 동의합니다 (필수)"
+          isChecked={formData.privacy}
+          onChange={(checked) =>
+            setFormData((prev) => ({ ...prev, privacy: checked }))
+          }
+        />
+
+        <CheckBoxWithLabel
+          name="marketing"
+          value="agreed"
+          id="marketing-checkbox"
+          label="마케팅 정보 수신에 동의합니다 (선택)"
+          isChecked={formData.marketing}
+          onChange={(checked) =>
+            setFormData((prev) => ({ ...prev, marketing: checked }))
+          }
+        />
+
+        <button
+          type="submit"
+          className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        >
+          제출
+        </button>
+      </form>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "실제 HTML form과 통합된 체크박스 사용 예제입니다. name, value, id props를 사용하여 form 제출 시 데이터가 포함됩니다.",
+      },
+    },
+  },
+};
+
+export const FormWithOptionCheckBox: Story = {
+  name: "Form + OptionCheckBox 예제",
+  render: () => {
+    const [formData, setFormData] = useState({
+      terms: false,
+      privacy: false,
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      const form = e.target as HTMLFormElement;
+      const formDataObj = new FormData(form);
+      const values = Object.fromEntries(formDataObj.entries());
+      alert(`Form submitted with values: ${JSON.stringify(values, null, 2)}`);
+    };
+
+    const showTerms = () => {
+      alert("이용약관 상세 내용을 표시합니다.");
+    };
+
+    const showPrivacy = () => {
+      alert("개인정보 처리방침 상세 내용을 표시합니다.");
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className="space-y-4 rounded border p-4">
+        <h3 className="text-lg font-semibold">약관 동의 (보기 버튼 포함)</h3>
+
+        <OptionCheckBox
+          name="terms"
+          value="agreed"
+          id="terms-option-checkbox"
+          label="이용약관에 동의합니다"
+          isChecked={formData.terms}
+          onChange={(checked) =>
+            setFormData((prev) => ({ ...prev, terms: checked }))
+          }
+          onView={showTerms}
+        />
+
+        <OptionCheckBox
+          name="privacy"
+          value="agreed"
+          id="privacy-option-checkbox"
+          label="개인정보 처리방침에 동의합니다"
+          isChecked={formData.privacy}
+          onChange={(checked) =>
+            setFormData((prev) => ({ ...prev, privacy: checked }))
+          }
+          onView={showPrivacy}
+        />
+
+        <button
+          type="submit"
+          className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        >
+          제출
+        </button>
+      </form>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "OptionCheckBox를 form과 함께 사용하는 예제입니다. 체크박스와 보기 버튼이 독립적으로 작동하며, form 데이터에 포함됩니다.",
+      },
+    },
+  },
+};
+
+export const FormWithCircleCheckBox: Story = {
+  name: "Form + CircleCheckBox 예제",
+  render: () => {
+    const [allAgreed, setAllAgreed] = useState(false);
+    const [individualTerms, setIndividualTerms] = useState({
+      terms: false,
+      privacy: false,
+      marketing: false,
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      const form = e.target as HTMLFormElement;
+      const formDataObj = new FormData(form);
+      const values = Object.fromEntries(formDataObj.entries());
+      alert(`Form submitted with values: ${JSON.stringify(values, null, 2)}`);
+    };
+
+    const handleAllAgreed = (checked: boolean) => {
+      setAllAgreed(checked);
+      setIndividualTerms({
+        terms: checked,
+        privacy: checked,
+        marketing: checked,
+      });
+    };
+
+    const handleIndividualChange = (
+      key: keyof typeof individualTerms,
+      checked: boolean,
+    ) => {
+      const newTerms = { ...individualTerms, [key]: checked };
+      setIndividualTerms(newTerms);
+
+      // 모든 항목이 체크되었는지 확인
+      const allChecked = Object.values(newTerms).every(Boolean);
+      setAllAgreed(allChecked);
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className="space-y-4 rounded border p-4">
+        <h3 className="text-lg font-semibold">전체 동의 + 개별 동의</h3>
+
+        <CircleCheckBoxWithLabel
+          name="all_agreed"
+          value="true"
+          id="all-agreed-checkbox"
+          label="전체 동의"
+          isChecked={allAgreed}
+          onChange={handleAllAgreed}
+          size="lg"
+        />
+
+        <div className="ml-6 space-y-2">
+          <CheckBoxWithLabel
+            name="terms"
+            value="agreed"
+            id="terms-individual-checkbox"
+            label="이용약관에 동의합니다 (필수)"
+            isChecked={individualTerms.terms}
+            onChange={(checked) => handleIndividualChange("terms", checked)}
+            size="sm"
+          />
+
+          <CheckBoxWithLabel
+            name="privacy"
+            value="agreed"
+            id="privacy-individual-checkbox"
+            label="개인정보 처리방침에 동의합니다 (필수)"
+            isChecked={individualTerms.privacy}
+            onChange={(checked) => handleIndividualChange("privacy", checked)}
+            size="sm"
+          />
+
+          <CheckBoxWithLabel
+            name="marketing"
+            value="agreed"
+            id="marketing-individual-checkbox"
+            label="마케팅 정보 수신에 동의합니다 (선택)"
+            isChecked={individualTerms.marketing}
+            onChange={(checked) => handleIndividualChange("marketing", checked)}
+            size="sm"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        >
+          제출
+        </button>
+      </form>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "원형 체크박스를 사용한 전체 동의와 개별 동의 form 예제입니다. 각 체크박스는 고유한 name과 id를 가져 form 데이터에 포함됩니다.",
       },
     },
   },

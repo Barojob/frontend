@@ -1,91 +1,72 @@
 import React from "react";
 import { cn } from "../../utils/classname";
-import BaseCheckBox from "./BaseCheckBox";
+import CheckBoxWithLabel from "./CheckBoxWithLabel";
 
 type OptionCheckBoxProps = {
   className?: string;
   isChecked?: boolean;
-  onToggle: () => void;
-  onView?: () => void;
-  label?: string;
+  onChange: (checked: boolean) => void;
+  label: string;
   disabled?: boolean;
-  showViewButton?: boolean;
+  size?: "sm" | "md" | "lg";
+  onView?: () => void;
+  name?: string;
+  value?: string;
+  id?: string;
 };
 
 const OptionCheckBox: React.FC<OptionCheckBoxProps> = ({
   className,
   isChecked = false,
-  onToggle,
-  onView,
+  onChange,
   label,
   disabled = false,
-  showViewButton = true,
+  size = "md",
+  onView,
+  name,
+  value,
+  id,
 }) => {
-  const handleCheckBoxToggle = () => {
-    if (!disabled) {
-      onToggle();
-    }
-  };
-
   const handleViewClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // 부모 요소로의 이벤트 전파 방지
+    e.preventDefault();
+    e.stopPropagation();
     if (onView) {
       onView();
-    }
-  };
-
-  const handleLabelClick = () => {
-    if (!disabled) {
-      onToggle();
     }
   };
 
   return (
     <div
       className={cn(
-        "flex w-full flex-row items-center font-normal",
+        "flex w-full items-center justify-between font-normal",
         disabled && "opacity-50",
         className,
       )}
     >
-      <div
-        className={cn(
-          "cursor-pointer",
-          disabled && "pointer-events-none cursor-not-allowed",
-        )}
-        onClick={handleCheckBoxToggle}
-      >
-        <BaseCheckBox
-          isChecked={isChecked}
-          onChange={handleCheckBoxToggle}
-          disabled={disabled}
-          size="md"
-        />
-      </div>
+      {/* 체크박스와 라벨 영역 */}
+      <CheckBoxWithLabel
+        isChecked={isChecked}
+        onChange={onChange}
+        label={label}
+        disabled={disabled}
+        size={size}
+        labelPosition="right"
+        name={name}
+        value={value}
+        id={id}
+        className="flex-1"
+      />
 
-      {label && (
-        <div
-          className={cn(
-            "ml-2 flex-1 cursor-pointer text-sm duration-100",
-            isChecked ? "text-black-1" : "text-gray-400",
-            disabled && "pointer-events-none cursor-not-allowed",
-          )}
-          onClick={handleLabelClick}
-        >
-          {label}
-        </div>
-      )}
-
-      {/* 보기 버튼 - 독립적으로 클릭 가능 */}
-      {showViewButton && (
+      {/* 보기 버튼 */}
+      {onView && (
         <button
           type="button"
-          className={cn(
-            "ml-auto border-b border-gray-400 text-[12px] leading-none text-gray-400 transition-colors hover:border-gray-600 hover:text-gray-600",
-            disabled && "pointer-events-none cursor-not-allowed opacity-50",
-          )}
           onClick={handleViewClick}
           disabled={disabled}
+          className={cn(
+            "ml-4 cursor-pointer text-sm text-gray-500 underline transition-colors hover:text-gray-700",
+            disabled && "cursor-not-allowed opacity-50",
+          )}
         >
           보기
         </button>

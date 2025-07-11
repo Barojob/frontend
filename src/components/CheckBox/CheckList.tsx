@@ -13,9 +13,14 @@ type CheckItem = {
 type Props = {
   className?: string;
   onAllCheckedChange: (allRequiredChecked: boolean) => void;
+  namePrefix?: string; // form에서 사용할 name prefix
 };
 
-const CheckList: React.FC<Props> = ({ className, onAllCheckedChange }) => {
+const CheckList: React.FC<Props> = ({
+  className,
+  onAllCheckedChange,
+  namePrefix = "agreement",
+}) => {
   const [items, setItems] = useState<CheckItem[]>([
     {
       id: 1,
@@ -95,6 +100,9 @@ const CheckList: React.FC<Props> = ({ className, onAllCheckedChange }) => {
         onChange={toggleAll}
         label="전체 동의하기"
         size="md"
+        name={`${namePrefix}_all`}
+        value="true"
+        id={`${namePrefix}-all-checkbox`}
       />
 
       {/* 개별 체크박스들 (옵션 형태 - 보기 버튼 포함) */}
@@ -103,12 +111,14 @@ const CheckList: React.FC<Props> = ({ className, onAllCheckedChange }) => {
           <OptionCheckBox
             key={item.id}
             isChecked={item.checked}
-            onToggle={() => toggleItem(item.id)}
+            onChange={() => toggleItem(item.id)}
             onView={() => handleViewItem(item)}
             label={
               item.required ? `[필수] ${item.label}` : `[선택] ${item.label}`
             }
-            showViewButton={true}
+            name={`${namePrefix}_${item.id}`}
+            value="agreed"
+            id={`${namePrefix}-${item.id}-checkbox`}
           />
         ))}
       </div>

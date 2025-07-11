@@ -7,6 +7,9 @@ type BaseCircleCheckBoxProps = {
   onChange: (checked: boolean) => void;
   disabled?: boolean;
   size?: "sm" | "md" | "lg";
+  name?: string;
+  value?: string;
+  id?: string;
 };
 
 export const BaseCircleCheckBox: React.FC<BaseCircleCheckBoxProps> = ({
@@ -15,6 +18,9 @@ export const BaseCircleCheckBox: React.FC<BaseCircleCheckBoxProps> = ({
   onChange,
   disabled = false,
   size = "md",
+  name,
+  value,
+  id,
 }) => {
   const sizeClasses = {
     sm: "size-5",
@@ -28,36 +34,56 @@ export const BaseCircleCheckBox: React.FC<BaseCircleCheckBoxProps> = ({
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.checked);
+  };
+
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      className={cn(
-        "cursor-pointer transition-all duration-200",
-        sizeClasses[size],
-        disabled && "cursor-not-allowed opacity-50",
-        className,
-      )}
-      onClick={handleClick}
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="10"
+    <div className="relative inline-block">
+      {/* 숨겨진 실제 input checkbox - form 제출 및 접근성을 위함 */}
+      <input
+        type="checkbox"
+        checked={isChecked}
+        onChange={handleInputChange}
+        disabled={disabled}
+        name={name}
+        value={value}
+        id={id}
+        className="pointer-events-none absolute opacity-0"
+        tabIndex={-1}
+      />
+
+      {/* 시각적 체크박스 */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
         className={cn(
-          "duration-200",
-          isChecked ? "fill-blue-600" : "fill-gray-100",
+          "cursor-pointer transition-all duration-200",
+          sizeClasses[size],
+          disabled && "cursor-not-allowed opacity-50",
+          className,
         )}
-      />
-      <path
-        d="M8.5 12L11 15L16.5 9"
-        fill="none"
-        stroke="#ffffff"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+        onClick={handleClick}
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+          className={cn(
+            "duration-200",
+            isChecked ? "fill-blue-600" : "fill-gray-100",
+          )}
+        />
+        <path
+          d="M8.5 12L11 15L16.5 9"
+          fill="none"
+          stroke="#ffffff"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
   );
 };
 
@@ -69,6 +95,9 @@ type CircleCheckBoxWithLabelProps = {
   disabled?: boolean;
   size?: "sm" | "md" | "lg";
   labelPosition?: "left" | "right";
+  name?: string;
+  value?: string;
+  id?: string;
 };
 
 export const CircleCheckBoxWithLabel: React.FC<
@@ -81,6 +110,9 @@ export const CircleCheckBoxWithLabel: React.FC<
   disabled = false,
   size = "md",
   labelPosition = "right",
+  name,
+  value,
+  id,
 }) => {
   const handleCheckBoxToggle = () => {
     if (!disabled) {
@@ -100,6 +132,9 @@ export const CircleCheckBoxWithLabel: React.FC<
       onChange={handleCheckBoxToggle}
       disabled={disabled}
       size={size}
+      name={name}
+      value={value}
+      id={id}
     />
   );
 

@@ -18,13 +18,18 @@ const CheckBox: React.FC<Props> = ({
   onToggle,
   label,
 }) => {
+  if (!label) {
+    // label이 없으면 빈 문자열로 처리
+    return null;
+  }
+
   return (
     <OptionCheckBox
       className={className}
       isChecked={isChecked}
-      onToggle={onToggle}
+      onChange={() => onToggle()}
       label={label}
-      showViewButton={true}
+      onView={() => {}} // 기본 보기 버튼 기능
     />
   );
 };

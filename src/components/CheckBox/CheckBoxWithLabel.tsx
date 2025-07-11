@@ -10,6 +10,9 @@ type CheckBoxWithLabelProps = {
   disabled?: boolean;
   size?: "sm" | "md" | "lg";
   labelPosition?: "left" | "right";
+  name?: string;
+  value?: string;
+  id?: string;
 };
 
 const CheckBoxWithLabel: React.FC<CheckBoxWithLabelProps> = ({
@@ -20,42 +23,58 @@ const CheckBoxWithLabel: React.FC<CheckBoxWithLabelProps> = ({
   disabled = false,
   size = "md",
   labelPosition = "right",
+  name,
+  value,
+  id,
 }) => {
-  const handleClick = () => {
+  const handleCheckBoxToggle = () => {
     if (!disabled) {
       onChange(!isChecked);
     }
   };
 
+  const handleLabelClick = () => {
+    if (!disabled) {
+      onChange(!isChecked);
+    }
+  };
+
+  const checkboxElement = (
+    <BaseCheckBox
+      isChecked={isChecked}
+      onChange={handleCheckBoxToggle}
+      disabled={disabled}
+      size={size}
+      name={name}
+      value={value}
+      id={id}
+    />
+  );
+
   const labelElement = (
-    <span
+    <div
       className={cn(
-        "cursor-pointer text-sm duration-100",
+        "cursor-pointer text-base duration-200",
         isChecked ? "text-black-1" : "text-gray-400",
         disabled && "cursor-not-allowed opacity-50",
-        labelPosition === "right" ? "ml-2" : "mr-2",
+        labelPosition === "left" ? "mr-2" : "ml-2",
       )}
-      onClick={handleClick}
+      onClick={handleLabelClick}
     >
       {label}
-    </span>
+    </div>
   );
 
   return (
     <div
       className={cn(
-        "flex items-center font-normal",
-        disabled && "pointer-events-none",
+        "flex w-full flex-row items-center font-normal",
+        disabled && "opacity-50",
         className,
       )}
     >
       {labelPosition === "left" && labelElement}
-      <BaseCheckBox
-        isChecked={isChecked}
-        onChange={onChange}
-        disabled={disabled}
-        size={size}
-      />
+      {checkboxElement}
       {labelPosition === "right" && labelElement}
     </div>
   );
