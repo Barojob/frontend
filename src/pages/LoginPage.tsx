@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AnimatedTransition from "../components/AnimatedTransition";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
+import PresenceTransition from "../components/PresenceTransition";
 import LeftArrowIcon from "../svgs/LeftArrowIcon";
 import { cn } from "../utils/classname";
 
@@ -103,7 +103,10 @@ const LoginPage: React.FC<Props> = () => {
           : "인증문자 받기"}
       </Button>
 
-      <AnimatedTransition transitionKey={verificationSent.toString()}>
+      <PresenceTransition
+        transitionKey={verificationSent.toString()}
+        variant="subtleRise"
+      >
         <div className="mt-4">
           <Input
             ref={inputRef}
@@ -134,7 +137,7 @@ const LoginPage: React.FC<Props> = () => {
             <span className="border-b border-gray-600">이메일로 계정찾기</span>
           </div>
         </div>
-      </AnimatedTransition>
+      </PresenceTransition>
     </div>
   );
 };
