@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button/Button";
+import NavigationHeader from "../components/layouts/NavigationHeader";
 import AlreadyRegisteredStep from "../components/Signup/AlreadyRegistered";
 import InputVerifyNumber from "../components/Signup/InputVerifyNumber";
 import PhoneAgreeModal from "../components/Signup/PhoneAgreeModal";
@@ -9,7 +10,6 @@ import ProfileSetupStep, {
   ProfileSetupStepHandle,
 } from "../components/Signup/ProfileSetupStep";
 import SignupTermsStep from "../components/Signup/SignupTermsStep";
-import LeftArrowIcon from "../svgs/LeftArrowIcon";
 import { cn } from "../utils/classname";
 
 type Props = {
@@ -96,10 +96,32 @@ const SignupPage: React.FC<Props> = () => {
     }
   };
 
+  const getPageTitle = () => {
+    switch (step) {
+      case 1:
+        return "회원가입";
+      case 2:
+      case 3:
+        return "휴대폰 인증";
+      case 4:
+        return alreadyRegistered ? "회원가입" : "회원가입";
+      default:
+        return "회원가입";
+    }
+  };
+
+  const shouldShowBackButton = () => {
+    return step !== 1;
+  };
+
   return (
     <div className="px-[6%]">
       <div className="mt-4 flex h-auto w-full flex-1 flex-col justify-start">
-        <LeftArrowIcon onClick={handleBack} />
+        <NavigationHeader
+          title={getPageTitle()}
+          onBack={handleBack}
+          showBackButton={shouldShowBackButton()}
+        />
         <div>{renderStep()}</div>
         <Button
           disabled={!isStepValid}
