@@ -16,13 +16,10 @@ const SignupTermsStep: React.FC<Props> = ({ className, onValidityChange }) => {
 
   return (
     <div className={cn("", className)}>
-      <div className="text-extraBlack-1 mt-6 text-2xl font-black">
-        바로잡 회원가입
-      </div>
       <div className="mt-1 text-base text-gray-500">
         서비스를 이용하려면 약관 동의가 필요합니다.
       </div>
-      <CheckList className="mt-5" onAllCheckedChange={setAllChecked} />
+      <CheckList className="mt-12" onAllCheckedChange={setAllChecked} />
     </div>
   );
 };
