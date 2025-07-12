@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, useLocation, useRoutes } from "react-router-dom";
-import AnimatedTransition from "../components/AnimatedTransition";
+import PresenceTransition from "../components/PresenceTransition";
 import { routes } from "../configs/routes";
 
 const RouterProvider: React.FC = () => {
@@ -16,9 +16,13 @@ const AnimatedRouteRenderer: React.FC = () => {
   const element = useRoutes(routes);
 
   return (
-    <AnimatedTransition className="h-full" transitionKey={location.pathname}>
+    <PresenceTransition
+      className="h-full"
+      transitionKey={location.pathname}
+      variant="subtleRise"
+    >
       {element}
-    </AnimatedTransition>
+    </PresenceTransition>
   );
 };
 

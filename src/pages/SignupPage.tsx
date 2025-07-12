@@ -160,15 +160,21 @@ const SignupPage: React.FC<Props> = () => {
         </Button>
       </div>
 
-      {showPhoneAgreeModal && (
-        <PhoneAgreeModal
-          setPhoneAgree={setPhoneAgree}
-          setShowPhoneAgreeModal={setShowPhoneAgreeModal}
-          onAllCheckedChange={() => {}}
-        />
-      )}
+      <PhoneAgreeModal
+        visible={showPhoneAgreeModal}
+        onSuccess={handlePhoneAgressSuccess}
+        onClose={handlePhoneAgressClose}
+      />
     </div>
   );
+
+  function handlePhoneAgressSuccess() {
+    setPhoneAgree(true);
+  }
+
+  function handlePhoneAgressClose() {
+    setShowPhoneAgreeModal(false);
+  }
 };
 
 export default SignupPage;

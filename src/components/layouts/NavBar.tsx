@@ -18,15 +18,15 @@ const NavBar: React.FC<Props> = ({ className }) => {
     >
       <button className="flex flex-col items-center justify-center">
         <HomeIcon />
-        <div className="mt-1 text-nowrap text-xs text-gray-1">홈</div>
+        <div className="text-gray-1 mt-1 text-nowrap text-xs">홈</div>
       </button>
       <button className="flex flex-col items-center justify-center">
         <MatchIcon />
-        <div className="mt-1 text-nowrap text-xs text-gray-2">매칭내역</div>
+        <div className="text-gray-2 mt-1 text-nowrap text-xs">매칭내역</div>
       </button>
       <button className="flex flex-col items-center justify-center">
         <TotalIcon />
-        <div className="mt-1 text-nowrap text-xs text-gray-2">전체</div>
+        <div className="text-gray-2 mt-1 text-nowrap text-xs">전체</div>
       </button>
     </div>
   );

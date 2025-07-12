@@ -21,7 +21,7 @@ const Header: React.FC<Props> = ({ className }) => {
       <Logo />
       <div
         onClick={() => navigate("/home")}
-        className="flex w-fit items-center gap-0.5 rounded-lg border bg-white px-2.5 py-1.5 text-xs text-gray-1"
+        className="text-gray-1 flex w-fit items-center gap-0.5 rounded-lg border bg-white px-2.5 py-1.5 text-xs"
       >
         <div className="rounded-full p-1">
           <IoPerson className="text-[10px] text-gray-400" />
