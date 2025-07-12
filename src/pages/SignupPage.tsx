@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { BsChevronLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button/Button";
 import AlreadyRegisteredStep from "../components/Signup/AlreadyRegistered";
@@ -9,7 +10,6 @@ import ProfileSetupStep, {
   ProfileSetupStepHandle,
 } from "../components/Signup/ProfileSetupStep";
 import SignupTermsStep from "../components/Signup/SignupTermsStep";
-import LeftArrowIcon from "../svgs/LeftArrowIcon";
 import { cn } from "../utils/classname";
 
 type Props = {
@@ -29,7 +29,7 @@ const SignupPage: React.FC<Props> = () => {
 
   const handleBack = () => {
     if (step === 1) {
-      navigate("/");
+      return;
     } else {
       if (step === 3) {
         setPhoneAgree(false);
@@ -74,6 +74,41 @@ const SignupPage: React.FC<Props> = () => {
     }
   }, [phoneAgree, step]);
 
+  const getStepTitle = () => {
+    switch (step) {
+      case 1:
+        return "회원가입";
+      case 2:
+        return (
+          <div className="flex items-center gap-1">
+            <BsChevronLeft />
+            <span>휴대폰 인증</span>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="flex items-center gap-1">
+            <BsChevronLeft />
+            <span>인증번호 입력</span>
+          </div>
+        );
+      case 4:
+        return alreadyRegistered ? (
+          <div className="flex items-center gap-1">
+            <BsChevronLeft />
+            <span>이미 가입된 회원</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-1">
+            <BsChevronLeft />
+            <span>프로필 설정</span>
+          </div>
+        );
+      default:
+        return "회원가입";
+    }
+  };
+
   const renderStep = () => {
     switch (step) {
       case 1:
@@ -97,14 +132,26 @@ const SignupPage: React.FC<Props> = () => {
   };
 
   return (
-    <div className="px-[6%]">
-      <div className="mt-4 flex h-auto w-full flex-1 flex-col justify-start">
-        <LeftArrowIcon onClick={handleBack} />
-        <div>{renderStep()}</div>
+    <div className="flex min-h-screen flex-col px-[6%]">
+      {/* 상단 헤더 영역 */}
+      <div className="mb-7 mt-6">
+        <div
+          className={cn("cursor-pointer text-base text-gray-500")}
+          onClick={handleBack}
+        >
+          {getStepTitle()}
+        </div>
+      </div>
+
+      {/* 메인 컨텐츠 영역 - 스크롤 가능 */}
+      <div className="flex-1 overflow-y-auto">{renderStep()}</div>
+
+      {/* 하단 고정 버튼 */}
+      <div className="pb-safe sticky bottom-10 bg-white pt-4">
         <Button
           disabled={!isStepValid}
           className={cn(
-            "my-[10%] w-full rounded-[4px] border-blue-500 bg-blue-500 py-3 font-normal text-white",
+            "w-full rounded-[10px] border-blue-500 bg-blue-500 py-3 font-normal text-white",
             isStepValid ? "" : "opacity-50",
           )}
           onClick={handleNext}
@@ -113,11 +160,11 @@ const SignupPage: React.FC<Props> = () => {
         </Button>
       </div>
 
-        <PhoneAgreeModal
+      <PhoneAgreeModal
         visible={showPhoneAgreeModal}
         onSuccess={handlePhoneAgressSuccess}
         onClose={handlePhoneAgressClose}
-        />
+      />
     </div>
   );
 
