@@ -22,6 +22,23 @@ const MainPage: React.FC<Props> = () => {
           <div className="mb-8 flex flex-col gap-6 px-6">
             <SearchBoard />
             <NoticeBoard />
+        
+            {/* <div className="flex flex-col gap-4 items-center">
+              <h3 className="text-lg font-semibold">컴포넌트 테스트</h3>
+              
+              
+              <div className="w-full max-w-xs">
+                <Button variant="blue">
+                  다음
+                </Button>
+              </div>
+              
+              <BoxButton 
+                name="근로자"
+                variant="primary"
+              />
+            </div>  */}
+
           </div>
         </div>
       </main>
