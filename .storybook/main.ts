@@ -1,5 +1,5 @@
 import type { StorybookConfig } from "@storybook/react-vite";
-import postcss from "@tailwindcss/postcss";
+import { default as postcss } from "@tailwindcss/postcss";
 import { mergeConfig } from "vite";
 
 const config: StorybookConfig = {

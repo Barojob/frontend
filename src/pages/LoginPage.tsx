@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
+import NavigationHeader from "../components/layouts/NavigationHeader";
 import PresenceTransition from "../components/PresenceTransition";
-import LeftArrowIcon from "../svgs/LeftArrowIcon";
 import { cn } from "../utils/classname";
 
 type Props = {
@@ -71,7 +71,11 @@ const LoginPage: React.FC<Props> = () => {
 
   return (
     <div className="mt-4 flex w-full flex-1 flex-col justify-start px-[6%]">
-      <LeftArrowIcon onClick={handleBack} onTouchStart={handleBack} />
+      <NavigationHeader
+        title="로그인"
+        onBack={handleBack}
+        showBackButton={false}
+      />
       <div className="mt-6 text-2xl font-black">
         안녕하세요!
         <br />

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { BsChevronLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button/Button";
+import NavigationHeader from "../components/layouts/NavigationHeader";
 import AlreadyRegisteredStep from "../components/Signup/AlreadyRegistered";
 import InputVerifyNumber from "../components/Signup/InputVerifyNumber";
 import PhoneAgreeModal from "../components/Signup/PhoneAgreeModal";
@@ -131,23 +132,33 @@ const SignupPage: React.FC<Props> = () => {
     }
   };
 
+  const getPageTitle = () => {
+    switch (step) {
+      case 1:
+        return "회원가입";
+      case 2:
+      case 3:
+        return "휴대폰 인증";
+      case 4:
+        return alreadyRegistered ? "회원가입" : "회원가입";
+      default:
+        return "회원가입";
+    }
+  };
+
+  const shouldShowBackButton = () => {
+    return step !== 1;
+  };
+
   return (
-    <div className="flex min-h-screen flex-col px-[6%]">
-      {/* 상단 헤더 영역 */}
-      <div className="mb-7 mt-6">
-        <div
-          className={cn("cursor-pointer text-base text-gray-500")}
-          onClick={handleBack}
-        >
-          {getStepTitle()}
-        </div>
-      </div>
-
-      {/* 메인 컨텐츠 영역 - 스크롤 가능 */}
-      <div className="flex-1 overflow-y-auto">{renderStep()}</div>
-
-      {/* 하단 고정 버튼 */}
-      <div className="pb-safe sticky bottom-10 bg-white pt-4">
+    <div className="px-[6%]">
+      <div className="mt-4 flex h-auto w-full flex-1 flex-col justify-start">
+        <NavigationHeader
+          title={getPageTitle()}
+          onBack={handleBack}
+          showBackButton={shouldShowBackButton()}
+        />
+        <div>{renderStep()}</div>
         <Button
           disabled={!isStepValid}
           className={cn(
