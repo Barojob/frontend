@@ -13,7 +13,7 @@ const ButtonVariant = cva("w-full text-center font-[16px] inline-block transitio
       info: "text-white bg-blue-500 border border-blue-500 hover:bg-blue-600 active:bg-blue-700",
     },
     size: {
-      md: "px-12 py-2 rounded-md",
+      md: "w-[328px] h-[42px] rounded-md",
     },
   },
   defaultVariants: {
@@ -25,7 +25,7 @@ const ButtonVariant = cva("w-full text-center font-[16px] inline-block transitio
 export type ButtonProps = VariantProps<typeof ButtonVariant> & {
   className?: string;
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "danger" | "ghost" | "outline" | "success";
+  variant?: "primary" | "secondary" | "success" | "blue" | "warning" | "info" | "danger" | "ghost" | "outline";
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   loading?: boolean;
@@ -45,17 +45,19 @@ export type ButtonProps = VariantProps<typeof ButtonVariant> & {
     const variantStyles = {
       primary: "text-black bg-white border border-gray-300 hover:bg-gray-50 active:bg-gray-100 focus:ring-gray-500",
       secondary: "text-white bg-black border border-black hover:bg-gray-800 active:bg-gray-900 focus:ring-gray-700",
+      success: "text-white bg-green-600 border border-green-600 hover:bg-green-700 active:bg-green-800 focus:ring-green-500",
+      blue: "text-white bg-blue-500 border border-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:ring-blue-500",
+      warning: "text-white bg-yellow-500 border border-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 focus:ring-yellow-500",
+      info: "text-white bg-blue-500 border border-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:ring-blue-500",
       danger: "text-white bg-red-600 border border-red-600 hover:bg-red-700 active:bg-red-800 focus:ring-red-500",
       ghost: "text-gray-700 hover:bg-gray-100 active:bg-gray-200 focus:ring-gray-500",
       outline: "text-gray-700 border border-gray-300 hover:bg-gray-50 active:bg-gray-100 focus:ring-gray-500",
-      success: "text-white bg-green-600 border border-green-600 hover:bg-green-700 active:bg-green-800 focus:ring-green-500",
     };
 
     // size별 스타일
     const sizeStyles = {
       sm: "px-8 py-2 text-sm rounded min-h-[36px]",
-      md: "px-12 py-3 text-base rounded-md min-h-[44px]",
-      lg: "px-16 py-4 text-lg rounded-lg min-h-[52px]",
+      md: "w-[328px] h-[42px] text-base rounded-md",
     };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
