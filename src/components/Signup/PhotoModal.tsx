@@ -1,22 +1,25 @@
 import React from "react";
-import ModalWrapper from "../ModalWrapper";
 import Button from "../Button/Button";
+import Modal from "../Modal";
 
 type PhotoModalProps = {
-  onProceed: () => void;
-  onClose: () => void;
+  className?: string;
   missingCertificate: boolean;
   missingBankAccount: boolean;
-  className?: string;
+  visible: boolean;
+  onProceed: () => void;
+  onClose: () => void;
 };
 
 const PhotoModal: React.FC<PhotoModalProps> = ({
   className,
-  onProceed,
-  onClose,
   missingCertificate,
   missingBankAccount,
+  visible,
+  onProceed,
+  onClose,
 }) => {
+  // FIXME: replace this with react use-state
   const missingItems: string[] = [];
   if (missingCertificate) missingItems.push("이수증");
   if (missingBankAccount) missingItems.push("통장 사본");
@@ -29,7 +32,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
   }
 
   return (
-    <ModalWrapper onClose={onProceed} className={className}>
+    <Modal className={className} visible={visible} onClose={onClose}>
       <div className="pb-7 pt-5 text-center text-xl font-black">
         {missingMessage}
         <br />
@@ -40,19 +43,19 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
       </div>
       <div className="absolute bottom-0 left-0 grid w-full grid-cols-2">
         <Button
-          onClick={onClose}
+          onClick={onProceed}
           className="w-full rounded-none border-gray-400 bg-gray-400 py-4 font-normal text-white"
         >
           지금 할게요
         </Button>
         <Button
-          onClick={onProceed}
+          onClick={onClose}
           className="w-full rounded-none border-blue-500 bg-blue-500 py-4 font-normal text-white"
         >
           나중에 할게요
         </Button>
       </div>
-    </ModalWrapper>
+    </Modal>
   );
 };
 

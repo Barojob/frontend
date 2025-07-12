@@ -209,17 +209,18 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
         />
       </div>
 
-      {/* 통신사 모달 (하단에서 슬라이드업, 외부 클릭 시 닫힘) */}
-      {showCarrierModal && (
-        <CarrierModal
-          setCarrier={(selectedCarrier) => {
-            setCarrier(selectedCarrier);
-          }}
-          setShowCarrierModal={setShowCarrierModal}
-        />
-      )}
+      {/* FIXME: replace this with <Drawer /> when it's implemented */}
+      <CarrierModal
+        onSelect={setCarrier}
+        visible={showCarrierModal}
+        onClose={handleCarrierModalClose}
+      />
     </div>
   );
+
+  function handleCarrierModalClose() {
+    setShowCarrierModal(false);
+  }
 };
 
 export default PhoneVerificationStep;

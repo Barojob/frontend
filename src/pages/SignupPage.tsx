@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { BsChevronLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button/Button";
 import NavigationHeader from "../components/layouts/NavigationHeader";
@@ -29,7 +30,7 @@ const SignupPage: React.FC<Props> = () => {
 
   const handleBack = () => {
     if (step === 1) {
-      navigate("/");
+      return;
     } else {
       if (step === 3) {
         setPhoneAgree(false);
@@ -73,6 +74,41 @@ const SignupPage: React.FC<Props> = () => {
       setStep(3);
     }
   }, [phoneAgree, step]);
+
+  const getStepTitle = () => {
+    switch (step) {
+      case 1:
+        return "회원가입";
+      case 2:
+        return (
+          <div className="flex items-center gap-1">
+            <BsChevronLeft />
+            <span>휴대폰 인증</span>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="flex items-center gap-1">
+            <BsChevronLeft />
+            <span>인증번호 입력</span>
+          </div>
+        );
+      case 4:
+        return alreadyRegistered ? (
+          <div className="flex items-center gap-1">
+            <BsChevronLeft />
+            <span>이미 가입된 회원</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-1">
+            <BsChevronLeft />
+            <span>프로필 설정</span>
+          </div>
+        );
+      default:
+        return "회원가입";
+    }
+  };
 
   const renderStep = () => {
     switch (step) {
@@ -126,7 +162,7 @@ const SignupPage: React.FC<Props> = () => {
         <Button
           disabled={!isStepValid}
           className={cn(
-            "my-[10%] w-full rounded-[4px] border-blue-500 bg-blue-500 py-3 font-normal text-white",
+            "w-full rounded-[10px] border-blue-500 bg-blue-500 py-3 font-normal text-white",
             isStepValid ? "" : "opacity-50",
           )}
           onClick={handleNext}
@@ -134,15 +170,22 @@ const SignupPage: React.FC<Props> = () => {
           {step < 4 ? "다음" : alreadyRegistered ? "로그인" : "완료"}
         </Button>
       </div>
-      {showPhoneAgreeModal && (
-        <PhoneAgreeModal
-          setPhoneAgree={setPhoneAgree}
-          setShowPhoneAgreeModal={setShowPhoneAgreeModal}
-          onAllCheckedChange={() => {}}
-        />
-      )}
+
+      <PhoneAgreeModal
+        visible={showPhoneAgreeModal}
+        onSuccess={handlePhoneAgressSuccess}
+        onClose={handlePhoneAgressClose}
+      />
     </div>
   );
+
+  function handlePhoneAgressSuccess() {
+    setPhoneAgree(true);
+  }
+
+  function handlePhoneAgressClose() {
+    setShowPhoneAgreeModal(false);
+  }
 };
 
 export default SignupPage;
