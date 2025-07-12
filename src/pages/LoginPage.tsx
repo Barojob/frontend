@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AnimatedTransition from "../components/AnimatedTransition";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
-import LeftArrowIcon from "../svgs/LeftArrowIcon";
+import NavigationHeader from "../components/layouts/NavigationHeader";
+import PresenceTransition from "../components/PresenceTransition";
 import { cn } from "../utils/classname";
 
 type Props = {
@@ -71,13 +71,17 @@ const LoginPage: React.FC<Props> = () => {
 
   return (
     <div className="mt-4 flex w-full flex-1 flex-col justify-start px-[6%]">
-      <LeftArrowIcon onClick={handleBack} onTouchStart={handleBack} />
+      <NavigationHeader
+        title="로그인"
+        onBack={handleBack}
+        showBackButton={false}
+      />
       <div className="mt-6 text-2xl font-black">
         안녕하세요!
         <br />
         휴대폰 번호로 로그인해주세요.
       </div>
-      <div className="text-gray-500 mt-2 text-sm">
+      <div className="mt-2 text-sm text-gray-500">
         휴대폰 번호는 안전하게 보관되며 다른 용도로 사용되지 않아요.
       </div>
       <Input
@@ -86,7 +90,7 @@ const LoginPage: React.FC<Props> = () => {
         value={phoneNumber}
         onValueChange={setPhoneNumber}
         rounded={"md"}
-        className="text-black-1 placeholder-gray-300 focus:border-gray-400 mt-2 focus:border"
+        className="text-black-1 mt-2 placeholder-gray-300 focus:border focus:border-gray-400"
       />
       <Button
         onClick={handleRequestVerification}
@@ -95,7 +99,7 @@ const LoginPage: React.FC<Props> = () => {
           "mt-4 border text-base font-normal transition-colors",
           isPhoneNumberValid
             ? "border-gray-900 bg-gray-900 text-white"
-            : "border-gray-900 bg-gray-900 text-white cursor-not-allowed opacity-30",
+            : "cursor-not-allowed border-gray-900 bg-gray-900 text-white opacity-30",
         )}
       >
         {verificationSent
@@ -103,7 +107,10 @@ const LoginPage: React.FC<Props> = () => {
           : "인증문자 받기"}
       </Button>
 
-      <AnimatedTransition transitionKey={verificationSent.toString()}>
+      <PresenceTransition
+        transitionKey={verificationSent.toString()}
+        variant="subtleRise"
+      >
         <div className="mt-4">
           <Input
             ref={inputRef}
@@ -112,9 +119,9 @@ const LoginPage: React.FC<Props> = () => {
             value={verificationCode}
             onValueChange={setVerificationCode}
             rounded={"md"}
-            className="text-black-1 placeholder-gray-300 focus:border-blue-500 mt-2"
+            className="text-black-1 mt-2 placeholder-gray-300 focus:border-blue-500"
           />
-          <div className="text-gray-500 p-1 text-sm">
+          <div className="p-1 text-sm text-gray-500">
             어떤 경우에도 타인과 공유하지 마세요!
           </div>
           <Button
@@ -123,18 +130,18 @@ const LoginPage: React.FC<Props> = () => {
               "mt-3 border-2 text-base font-normal transition-colors",
               isVerificationCodeValid
                 ? "border-blue-500 bg-blue-500 text-gray-100"
-                : "border-gray-300 text-gray-400 cursor-not-allowed",
+                : "cursor-not-allowed border-gray-300 text-gray-400",
               { "pointer-events-none opacity-50": !isVerificationCodeValid }, // 6자리 입력 안 되면 비활성화
             )}
           >
             인증번호 확인
           </Button>
-          <div className="text-gray-600 mt-4 text-center text-[0.8125rem] font-normal">
+          <div className="mt-4 text-center text-[0.8125rem] font-normal text-gray-600">
             휴대폰 번호가 변경되었나요?{" "}
-            <span className="border-gray-600 border-b">이메일로 계정찾기</span>
+            <span className="border-b border-gray-600">이메일로 계정찾기</span>
           </div>
         </div>
-      </AnimatedTransition>
+      </PresenceTransition>
     </div>
   );
 };

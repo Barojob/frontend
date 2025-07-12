@@ -1,6 +1,5 @@
 import React from "react";
 import { TiDelete } from "react-icons/ti";
-import CameraIcon from "../../../public/images/CameraIcon.png";
 import { cn } from "../../utils/classname";
 
 type PhotoUploadProps = {
@@ -29,10 +28,10 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
 
   return (
     <div className={cn("flex flex-col", className)}>
-      <div className="mb-1 text-sm font-medium text-extraBlack-1">{label}</div>
+      <div className="text-extraBlack-1 mb-1 text-sm font-medium">{label}</div>
       <label
         className={cn(
-          "border-gray-300 hover:border-blue-500 relative block h-auto w-full rounded-md border-2 border-dashed px-8 py-6 text-center transition-colors",
+          "relative block h-auto w-full rounded-md border-2 border-dashed border-gray-300 px-8 py-6 text-center transition-colors hover:border-blue-500",
         )}
       >
         {file && (
@@ -62,7 +61,11 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
           <div className="flex w-full flex-col items-center justify-center p-6">
             <div className="mb-2 size-7">
               {/* FIXME: set size to prevent layout shift */}
-              <img src={CameraIcon} className="w-full" alt="Camera Icon" />
+              <img
+                src="/public/images/CameraIcon.png"
+                className="w-full"
+                alt="Camera Icon"
+              />
             </div>
             <span className="text-gray-500">업로드 하기</span>
           </div>

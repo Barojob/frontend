@@ -34,7 +34,7 @@ const HomePage: React.FC<Props> = () => {
         <Button
           variant={"secondary"}
           size={"md"}
-          className="bg-gray-900 w-fit"
+          className="w-fit bg-gray-900"
           onClick={handleSignUp}
           onTouchStart={handleSignUp}
         >
@@ -43,7 +43,7 @@ const HomePage: React.FC<Props> = () => {
       </div>
       <div className="pt-5 text-[0.875rem] font-normal">
         계정이 기억나지 않나요?{" "}
-        <span className="border-black border-b font-bold">계정 찾기</span>
+        <span className="border-b border-black font-bold">계정 찾기</span>
       </div>
     </div>
   );

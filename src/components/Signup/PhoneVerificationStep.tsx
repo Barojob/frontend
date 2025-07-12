@@ -115,10 +115,10 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
 
   return (
     <div className={cn("", className)}>
-      <div className="mt-7 text-2xl font-black text-extraBlack-1">
+      <div className="text-extraBlack-1 mt-7 text-2xl font-black">
         휴대폰 인증
       </div>
-      <div className="text-gray-500 mb-5 mt-1 text-base">
+      <div className="mb-5 mt-1 text-base text-gray-500">
         최초 1회 휴대폰 인증이 필요합니다.
       </div>
 
@@ -134,19 +134,19 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
               value={name}
               onValueChange={setName}
               rounded="md"
-              className="placeholder-gray-300 focus:border-gray-500 font-normal text-extraBlack-1"
+              className="text-extraBlack-1 font-normal placeholder-gray-300 focus:border-gray-500"
             />
           </div>
         )}
 
         {showBirthDateField && (
-          <div className="input-slide-up border-gray-200 focus-within:border-gray-500 flex flex-col rounded-md border p-2 pr-5">
-            <div className="text-gray-400 px-1 text-xs font-normal">
+          <div className="input-slide-up flex flex-col rounded-md border border-gray-200 p-2 pr-5 focus-within:border-gray-500">
+            <div className="px-1 text-xs font-normal text-gray-400">
               생년월일 및 성별
             </div>
             <div className="flex">
               <Input
-                className="placeholder:text-gray-300 border-none px-1 pb-0 pt-0.5 text-extraBlack-1 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="text-extraBlack-1 border-none px-1 pb-0 pt-0.5 [appearance:textfield] placeholder:text-gray-300 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 placeholder="생년월일"
                 type="number"
                 ref={birthDateRef}
@@ -158,7 +158,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
               />
               <div className="text-extraBlack-1">-</div>
               <Input
-                className="placeholder:text-gray-300 w-9 border-none pb-0 pl-3 pt-0.5 text-left text-extraBlack-1 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="text-extraBlack-1 w-9 border-none pb-0 pl-3 pt-0.5 text-left [appearance:textfield] placeholder:text-gray-300 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 placeholder="0"
                 type="number"
                 ref={genderRef}
@@ -187,7 +187,7 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
               value={carrier}
               onValueChange={setCarrier}
               rounded="md"
-              className="placeholder-text-gray-300 focus:border-gray-500 text-extraBlack-1"
+              className="placeholder-text-gray-300 text-extraBlack-1 focus:border-gray-500"
               readOnly
               inputMode="none"
             />
@@ -205,21 +205,22 @@ const PhoneVerificationStep: React.FC<PhoneVerificationStepProps> = ({
           value={phoneNumber}
           onValueChange={setPhoneNumber}
           rounded="md"
-          className="placeholder:text-gray-300 focus:border-gray-500 text-extraBlack-1"
+          className="text-extraBlack-1 placeholder:text-gray-300 focus:border-gray-500"
         />
       </div>
 
-      {/* 통신사 모달 (하단에서 슬라이드업, 외부 클릭 시 닫힘) */}
-      {showCarrierModal && (
-        <CarrierModal
-          setCarrier={(selectedCarrier) => {
-            setCarrier(selectedCarrier);
-          }}
-          setShowCarrierModal={setShowCarrierModal}
-        />
-      )}
+      {/* FIXME: replace this with <Drawer /> when it's implemented */}
+      <CarrierModal
+        onSelect={setCarrier}
+        visible={showCarrierModal}
+        onClose={handleCarrierModalClose}
+      />
     </div>
   );
+
+  function handleCarrierModalClose() {
+    setShowCarrierModal(false);
+  }
 };
 
 export default PhoneVerificationStep;
