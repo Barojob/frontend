@@ -31,4 +31,12 @@ layer(base);
   #root {
     @apply h-full;
   }
+
+  button:hover:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@utility absolute-center {
+  @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
 }
