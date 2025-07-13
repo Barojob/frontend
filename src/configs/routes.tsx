@@ -1,4 +1,3 @@
-import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import MainPage from "@/pages/MainPage";
 import SignupPage from "@/pages/SignupPage";
@@ -10,10 +9,7 @@ export const routes = [
     path: "/",
     element: <MainPage />,
   },
-  {
-    path: "/home",
-    element: <HomePage />,
-  },
+
   {
     path: "/intro",
     element: <IntroPage />,
