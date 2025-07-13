@@ -1,6 +1,6 @@
 import React from "react";
 import { IoPerson } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Logo from "../../svgs/Logo";
 import { cn } from "../../utils/classname";
 
@@ -9,8 +9,6 @@ type Props = {
 };
 
 const Header: React.FC<Props> = ({ className }) => {
-  const navigate = useNavigate();
-
   return (
     <div
       className={cn(
@@ -19,15 +17,15 @@ const Header: React.FC<Props> = ({ className }) => {
       )}
     >
       <Logo />
-      <div
-        onClick={() => navigate("/home")}
+      <Link
+        to="/intro"
         className="text-gray-1 flex w-fit items-center gap-0.5 rounded-lg border bg-white px-2.5 py-1.5 text-xs"
       >
         <div className="rounded-full p-1">
           <IoPerson className="text-[10px] text-gray-400" />
         </div>
         로그인
-      </div>
+      </Link>
     </div>
   );
 };

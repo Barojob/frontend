@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "swiper/css";
 
 /* FONT: Pretendard */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css")
@@ -30,4 +31,12 @@ layer(base);
   #root {
     @apply h-full;
   }
+
+  button:hover:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@utility absolute-center {
+  @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
 }
