@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "swiper/css";
 
 /* FONT: Pretendard */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css")
