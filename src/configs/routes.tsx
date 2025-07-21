@@ -1,4 +1,5 @@
 import LoginPage from "@/pages/LoginPage";
+import LoginSuccessPage from "@/pages/LoginSuccessPage";
 import MainPage from "@/pages/MainPage";
 import SignupPage from "@/pages/SignupPage";
 import { type RouteObject } from "react-router-dom";
@@ -17,6 +18,10 @@ export const routes = [
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/login-success",
+    element: <LoginSuccessPage />,
   },
   {
     path: "/signup",

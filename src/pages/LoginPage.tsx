@@ -60,7 +60,7 @@ const LoginPage: React.FC<Props> = () => {
           setShowErrorModal(true);
           return;
         }
-        navigate("/"); // 홈으로 이동
+        navigate("/login-success"); // 로그인 성공 페이지로 이동
       }
     }
   };
