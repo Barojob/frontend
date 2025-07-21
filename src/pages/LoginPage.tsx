@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
 import NavigationHeader from "../components/layouts/NavigationHeader";
-import PresenceTransition from "../components/PresenceTransition";
 import { cn } from "../utils/classname";
 
 type Props = {
@@ -20,7 +19,15 @@ const LoginPage: React.FC<Props> = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate("/");
+    if (verificationSent) {
+      // 인증 상태를 초기화하여 휴대폰 번호 입력 화면으로 돌아감
+      setVerificationSent(false);
+      setVerificationCode("");
+      setTimer(300);
+    } else {
+      // 초기 상태에서는 홈으로 이동
+      navigate("/");
+    }
   };
 
   useEffect(() => {
@@ -35,11 +42,19 @@ const LoginPage: React.FC<Props> = () => {
     return () => clearInterval(countdown);
   }, [verificationSent, timer]);
 
-  const handleRequestVerification = () => {
-    if (phoneNumber.length !== 13) return; // 버튼 비활성화된 상태에서 눌릴 경우 방지
-    setVerificationSent(true);
-    setTimer(60);
-    setVerificationCode("");
+  const handleLogin = () => {
+    if (!verificationSent) {
+      // 첫 번째 클릭: 인증문자 발송
+      if (phoneNumber.length !== 13) return; // 버튼 비활성화된 상태에서 눌릴 경우 방지
+      setVerificationSent(true);
+      setTimer(60); // 인증번호 타이머는 60초로 시작
+      setVerificationCode("");
+    } else {
+      // 두 번째 클릭: 로그인 처리 (인증번호 확인)
+      if (verificationCode.length >= 4) {
+        navigate("/"); // 홈으로 이동
+      }
+    }
   };
 
   const formatTime = (time: number) => {
@@ -49,7 +64,10 @@ const LoginPage: React.FC<Props> = () => {
   };
 
   const isPhoneNumberValid = phoneNumber.length === 13;
-  const isVerificationCodeValid = verificationCode.length >= 6;
+  const isVerificationCodeValid = verificationCode.length >= 4;
+  const isLoginButtonEnabled = !verificationSent
+    ? isPhoneNumberValid
+    : isVerificationCodeValid;
 
   // 입력 필드가 focus될 때 자동 스크롤
   useEffect(() => {
@@ -57,91 +75,144 @@ const LoginPage: React.FC<Props> = () => {
       setTimeout(() => {
         inputRef.current?.scrollIntoView({
           behavior: "smooth",
-          block: "center",
+          block: "center", // 중앙으로 스크롤
         });
-      }, 300);
+      }, 300); // 약간의 딜레이를 주어 부드럽게 스크롤
     };
 
-    inputRef.current?.addEventListener("focus", handleFocus);
+    // inputRef.current가 null이 아닐 때만 이벤트 리스너 추가
+    const currentInput = inputRef.current;
+    if (currentInput) {
+      currentInput.addEventListener("focus", handleFocus);
+    }
 
     return () => {
-      inputRef.current?.removeEventListener("focus", handleFocus);
+      // 컴포넌트 언마운트 시 이벤트 리스너 제거
+      if (currentInput) {
+        currentInput.removeEventListener("focus", handleFocus);
+      }
     };
-  }, []);
+  }, [verificationSent]); // verificationSent가 바뀔 때 리스너 다시 설정 (inputRef가 나타날 때)
 
   return (
-    <div className="mt-4 flex w-full flex-1 flex-col justify-start px-[6%]">
+    <div className="flex w-full flex-col justify-start px-6">
+      {/* NavigationHeader는 그대로 유지 */}
       <NavigationHeader
-        title="로그인"
+        title={!verificationSent ? "로그인" : "휴대폰 인증"}
         onBack={handleBack}
-        showBackButton={false}
+        showBackButton={verificationSent}
       />
-      <div className="mt-6 text-2xl font-black">
-        안녕하세요!
-        <br />
-        휴대폰 번호로 로그인해주세요.
-      </div>
-      <div className="mt-2 text-sm text-gray-500">
-        휴대폰 번호는 안전하게 보관되며 다른 용도로 사용되지 않아요.
-      </div>
-      <Input
-        type="tel"
-        placeholder="휴대폰번호( - 없이 숫자만 입력)"
-        value={phoneNumber}
-        onValueChange={setPhoneNumber}
-        rounded={"md"}
-        className="text-black-1 mt-2 placeholder-gray-300 focus:border focus:border-gray-400"
-      />
-      <Button
-        onClick={handleRequestVerification}
-        disabled={!isPhoneNumberValid} // 입력값이 13자리 아니면 비활성화
-        className={cn(
-          "mt-4 border text-base font-normal transition-colors",
-          isPhoneNumberValid
-            ? "border-gray-900 bg-gray-900 text-white"
-            : "cursor-not-allowed border-gray-900 bg-gray-900 text-white opacity-30",
-        )}
-      >
-        {verificationSent
-          ? `인증문자 다시 받기 (${formatTime(timer)})`
-          : "인증문자 받기"}
-      </Button>
 
-      <PresenceTransition
-        transitionKey={verificationSent.toString()}
-        variant="subtleRise"
-      >
-        <div className="mt-4">
-          <Input
-            ref={inputRef}
-            type="text"
-            placeholder="인증번호 입력"
-            value={verificationCode}
-            onValueChange={setVerificationCode}
-            rounded={"md"}
-            className="text-black-1 mt-2 placeholder-gray-300 focus:border-blue-500"
-          />
-          <div className="p-1 text-sm text-gray-500">
-            어떤 경우에도 타인과 공유하지 마세요!
-          </div>
-          <Button
-            onClick={() => navigate("/")}
-            className={cn(
-              "mt-3 border-2 text-base font-normal transition-colors",
-              isVerificationCodeValid
-                ? "border-blue-500 bg-blue-500 text-gray-100"
-                : "cursor-not-allowed border-gray-300 text-gray-400",
-              { "pointer-events-none opacity-50": !isVerificationCodeValid }, // 6자리 입력 안 되면 비활성화
-            )}
-          >
-            인증번호 확인
-          </Button>
-          <div className="mt-4 text-center text-[0.8125rem] font-normal text-gray-600">
-            휴대폰 번호가 변경되었나요?{" "}
-            <span className="border-b border-gray-600">이메일로 계정찾기</span>
-          </div>
+      <div className={cn("flex-1")}>
+        <div className="mt-6 text-2xl font-bold text-neutral-600">
+          {!verificationSent ? (
+            <>
+              휴대폰 번호로
+              <br />
+              로그인해주세요.
+            </>
+          ) : (
+            <>
+              문자로 온
+              <br />
+              인증번호를 입력해주세요.
+            </>
+          )}
         </div>
-      </PresenceTransition>
+
+        {/* 휴대폰 번호 입력란 - 인증번호 입력 단계에서는 숨김 */}
+        {!verificationSent && (
+          <div className="mt-14">
+            <div className="text-sm font-semibold text-neutral-600">
+              휴대폰 번호 <span className="text-red-400">*</span>
+            </div>
+            <Input
+              type="tel"
+              placeholder=" - 없이 숫자만 입력"
+              value={phoneNumber}
+              onValueChange={setPhoneNumber}
+              rounded={"lg"}
+              className="mt-1 border border-gray-100 bg-gray-100 font-normal placeholder-gray-500 focus:border-gray-100"
+            />
+          </div>
+        )}
+
+        {/* 인증번호 입력 단계 */}
+        {verificationSent && (
+          <div className="mt-14 flex flex-col items-center">
+            {/* 4자리 인증번호 입력칸 */}
+            <div className="mb-3 flex justify-center gap-3">
+              {[0, 1, 2, 3].map((index) => (
+                <input
+                  key={index}
+                  type="text"
+                  maxLength={1}
+                  value={verificationCode[index] || ""}
+                  onChange={(e) => {
+                    const newCode = verificationCode.split("");
+                    newCode[index] = e.target.value;
+                    const updatedCode = newCode.join("");
+                    setVerificationCode(updatedCode);
+
+                    // 자동으로 다음 칸으로 이동
+                    if (e.target.value && index < 3) {
+                      const target = e.target as HTMLInputElement;
+                      const nextInput = target.parentElement?.children[
+                        index + 1
+                      ] as HTMLInputElement;
+                      nextInput?.focus();
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    // 백스페이스 시 이전 칸으로 이동
+                    if (
+                      e.key === "Backspace" &&
+                      !verificationCode[index] &&
+                      index > 0
+                    ) {
+                      const target = e.target as HTMLInputElement;
+                      const prevInput = target.parentElement?.children[
+                        index - 1
+                      ] as HTMLInputElement;
+                      prevInput?.focus();
+                    }
+                  }}
+                  className="w-17 h-19 rounded-[0.625rem] border border-gray-100 bg-gray-100 text-center text-2xl font-bold focus:border-blue-500 focus:outline-none"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                />
+              ))}
+            </div>
+
+            {/* 인증번호 다시 받기 - 작은 텍스트 형식 */}
+            <button
+              onClick={() => {
+                setVerificationSent(true);
+                setTimer(120);
+                setVerificationCode("");
+              }}
+              className="text-xs text-neutral-500 underline"
+            >
+              인증번호 다시 받기 ({formatTime(timer)})
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-10 w-full bg-white px-6 pb-10 pt-4 shadow-md">
+        <Button
+          onClick={handleLogin}
+          disabled={!isLoginButtonEnabled}
+          className={cn(
+            "w-full rounded-[0.625rem] border text-base font-normal transition-colors",
+            isLoginButtonEnabled
+              ? "border-blue-600 bg-blue-600 text-white"
+              : "cursor-not-allowed border-blue-600 bg-blue-600 text-white opacity-30",
+          )}
+        >
+          {!verificationSent ? "로그인" : "다음 단계"}
+        </Button>
+      </div>
     </div>
   );
 };
