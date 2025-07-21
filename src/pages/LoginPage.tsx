@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
 import NavigationHeader from "../components/layouts/NavigationHeader";
+import Modal from "../components/Modal";
+import WarningIcon from "../svgs/WarningIcon";
 import { cn } from "../utils/classname";
 
 type Props = {
@@ -14,6 +16,7 @@ const LoginPage: React.FC<Props> = () => {
   const [verificationSent, setVerificationSent] = useState(false);
   const [timer, setTimer] = useState(300);
   const [verificationCode, setVerificationCode] = useState("");
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
@@ -47,11 +50,16 @@ const LoginPage: React.FC<Props> = () => {
       // 첫 번째 클릭: 인증문자 발송
       if (phoneNumber.length !== 13) return; // 버튼 비활성화된 상태에서 눌릴 경우 방지
       setVerificationSent(true);
-      setTimer(60); // 인증번호 타이머는 60초로 시작
+      setTimer(120); // 인증번호 타이머는 2분(120초)으로 시작
       setVerificationCode("");
     } else {
       // 두 번째 클릭: 로그인 처리 (인증번호 확인)
       if (verificationCode.length >= 4) {
+        // 임시로 인증번호가 "1234"가 아니면 에러 모달 표시
+        if (verificationCode !== "1234") {
+          setShowErrorModal(true);
+          return;
+        }
         navigate("/"); // 홈으로 이동
       }
     }
@@ -213,6 +221,37 @@ const LoginPage: React.FC<Props> = () => {
           {!verificationSent ? "로그인" : "다음 단계"}
         </Button>
       </div>
+
+      {/* 인증번호 오류 모달 */}
+      <Modal
+        visible={showErrorModal}
+        onClose={() => setShowErrorModal(false)}
+        className="flex flex-col items-center px-5 py-8"
+      >
+        <WarningIcon />
+
+        <div className="mb-4 text-center text-[1.375rem] font-bold text-neutral-600">
+          앗!
+          <br />
+          인증번호가 올바르지 않아요
+        </div>
+
+        <div className="mb-4 text-center text-xs text-neutral-400">
+          인증번호가 맞지 않아요.
+          <br />
+          다시 보내드릴까요?
+        </div>
+
+        <Button
+          onClick={() => {
+            setShowErrorModal(false);
+            setVerificationCode("");
+          }}
+          className="w-fit rounded-[0.625rem] border-blue-600 bg-violet-200 px-5 text-sm text-blue-600"
+        >
+          다시 입력하기
+        </Button>
+      </Modal>
     </div>
   );
 };
