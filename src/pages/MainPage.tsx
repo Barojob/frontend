@@ -20,9 +20,13 @@ const MainPage: React.FC<Props> = () => {
             <MdImage className="text-xl text-gray-400" />
           </div>
           <div className="mb-8 flex flex-col gap-6 px-6">
-            <SearchBoard />
+            <SearchBoard
+              title="일자리 요청하기"
+              time="3시간"
+              onClick={() => {}}
+            />
             <NoticeBoard />
-        
+
             {/* <div className="flex flex-col gap-4 items-center">
               <h3 className="text-lg font-semibold">컴포넌트 테스트</h3>
               
@@ -38,7 +42,6 @@ const MainPage: React.FC<Props> = () => {
                 variant="primary"
               />
             </div>  */}
-
           </div>
         </div>
       </main>
