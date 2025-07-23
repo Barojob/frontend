@@ -103,6 +103,7 @@ const SignupLicensePage: React.FC = () => {
                     name="카메라"
                     variant="primary"
                     className="!w-full !h-36"
+                    image="/images/CameraIcon.png"
                     onClick={handleCameraSelect}
                   />
                   <BoxButton
