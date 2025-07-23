@@ -20,9 +20,6 @@ const WorkTimeSelector: React.FC<WorkTimeSelectorProps> = ({
   const timeOptions = [];
   for (let hour = 0; hour <= 23; hour++) {
     timeOptions.push(`${hour.toString().padStart(2, "0")}:00`);
-    if (hour < 24) {
-      timeOptions.push(`${hour.toString().padStart(2, "0")}:30`);
-    }
   }
 
   const handleStartTimeSelect = (time: string) => {
