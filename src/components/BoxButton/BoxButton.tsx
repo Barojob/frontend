@@ -2,22 +2,28 @@ import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
 import { cn } from "../../utils/classname";
 
-const BoxButtonVariant = cva("flex flex-col items-center justify-center text-center border-2 rounded-lg transition-all duration-200 cursor-pointer transform-gpu active:scale-95 active:shadow-lg", {
-  variants: {
-    variant: {
-      primary: "border-gray-300 bg-white text-black hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100",
-      secondary: "border-black bg-black text-white hover:bg-gray-800 active:bg-gray-700",
-      selected: "border-blue-500 bg-blue-50 text-blue-700 hover:bg-blue-100 active:bg-blue-200",
+const BoxButtonVariant = cva(
+  "flex flex-col items-center justify-center text-center border-2 rounded-lg transition-all duration-200 cursor-pointer transform-gpu active:scale-95 active:shadow-lg",
+  {
+    variants: {
+      variant: {
+        primary:
+          "border-gray-300 bg-white text-black hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100",
+        secondary:
+          "border-black bg-black text-white hover:bg-gray-800 active:bg-gray-700",
+        selected:
+          "border-blue-500 bg-blue-50 text-blue-700 hover:bg-blue-100 active:bg-blue-200",
+      },
+      size: {
+        default: "w-[155px] h-[178px]",
+      },
     },
-    size: {
-      default: "w-[155px] h-[178px]",
+    defaultVariants: {
+      variant: "primary",
+      size: "default",
     },
   },
-  defaultVariants: {
-    variant: "primary",
-    size: "default",
-  },
-});
+);
 
 export type BoxButtonProps = VariantProps<typeof BoxButtonVariant> & {
   className?: string;
@@ -63,25 +69,23 @@ const BoxButton: React.FC<BoxButtonProps> = ({
       className={cn(
         "select-none",
         BoxButtonVariant({ variant: finalVariant, size }),
-        disabled && "opacity-50 cursor-not-allowed pointer-events-none",
-        className
+        disabled && "pointer-events-none cursor-not-allowed opacity-50",
+        className,
       )}
       {...props}
     >
       {image && (
         <div className="mb-4">
-          <img 
-            src={image} 
+          <img
+            src={image}
             alt={name}
-            className="w-16 h-16 object-cover rounded"
+            className="h-16 w-16 rounded object-cover"
           />
         </div>
       )}
-      
-      <span className="font-medium text-base">
-        {name}
-      </span>
-      
+
+      <span className="text-base font-medium">{name}</span>
+
       {children}
     </button>
   );

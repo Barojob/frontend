@@ -1,33 +1,41 @@
 import React from "react";
-import { cn } from "../../utils/classname";
-import Board from "./Board";
 import RightArrowIcon from "../../svgs/RightArrowIcon";
 import SearchIcon from "../../svgs/SearchIcon";
+import { cn } from "../../utils/classname";
+import Board from "./Board";
 
 type Props = {
   className?: string;
+  title: string;
+  time: string;
+  onClick: () => void;
 };
 
-const SearchBoard: React.FC<Props> = ({ className }) => {
+const SearchBoard: React.FC<Props> = ({ className, title, time, onClick }) => {
   return (
-    <Board className={cn("flex flex-col justify-center", className)}>
-      <div className="flex items-center">
-        <div className="text-gray-3 text-xl font-semibold leading-none">
+    <div className="flex flex-col" onClick={onClick}>
+      <div className="mb-3 flex items-center px-3">
+        <div className="text-gray-3 text-xl font-bold leading-none">
           경기 포천시
         </div>
         <RightArrowIcon className="ml-3" />
       </div>
-      <div className="mt-4 flex items-center justify-center">
-        <div className="text-blue-3 text-[1.563rem] font-normal leading-none">
-          일자리 요청하기
+      <Board
+        className={cn(
+          "py-8.5 flex flex-col justify-center bg-blue-600",
+          className,
+        )}
+      >
+        <div className="flex items-center justify-center">
+          <div className="text-[1.563rem] font-bold text-white">{title}</div>
+          <SearchIcon className="ml-3 text-white" />
         </div>
-        <SearchIcon className="ml-3" />
-      </div>
-      <div className="mt-[0.625rem] pb-2 text-center text-xs font-medium">
-        지금 찾으면 <span className="text-blue-4">3시간 </span>뒤에 공고를
-        받아요!
-      </div>
-    </Board>
+        <div className="text-center text-xs font-medium text-white">
+          지금 찾으면 <span className="text-red-300">{time} 뒤</span>에 공고를
+          받아요!
+        </div>
+      </Board>
+    </div>
   );
 };
 export default SearchBoard;
