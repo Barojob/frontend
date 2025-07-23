@@ -27,6 +27,7 @@ export type BoxButtonProps = VariantProps<typeof BoxButtonVariant> & {
   disabled?: boolean;
   selected?: boolean;
   image?: string;
+  icon?: React.ReactNode;
   name: string;
 };
 
@@ -40,6 +41,7 @@ const BoxButton: React.FC<BoxButtonProps> = ({
   onClick,
   onTouchStart,
   image,
+  icon,
   name,
   ...props
 }) => {
@@ -75,6 +77,12 @@ const BoxButton: React.FC<BoxButtonProps> = ({
             alt={name}
             className="w-16 h-16 object-cover rounded"
           />
+        </div>
+      )}
+      
+      {icon && (
+        <div className="mb-4">
+          {icon}
         </div>
       )}
       
