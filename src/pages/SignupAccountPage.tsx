@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BoxButton from "../components/BoxButton/BoxButton";
@@ -7,20 +7,16 @@ import { Drawer, DrawerContent, DrawerTrigger } from "../components/Drawer";
 import Input from "../components/Input/Input";
 import Modal from "../components/Modal";
 import NavigationHeader from "../components/layouts/NavigationHeader";
+import WarningIcon from "../svgs/WarningIcon";
 import { cn } from "../utils/classname";
 
 const banks = [
-  { id: "nh", name: "농협은행", image: "/images/banks/nh.png" },
-  { id: "shinhan", name: "신한은행", image: "/images/banks/shinhan.png" },
-  { id: "kb", name: "국민은행", image: "/images/banks/kb.png" },
-  { id: "woori", name: "우리은행", image: "/images/banks/woori.png" },
-  { id: "samsung", name: "삼성증권", image: "/images/banks/samsung.png" },
-  { id: "hyundai", name: "현대증권", image: "/images/banks/hyundai.png" },
-  { id: "daegu", name: "대구은행", image: "/images/banks/daegu.png" },
-  { id: "busan", name: "부산은행", image: "/images/banks/busan.png" },
-  { id: "kakao", name: "카카오뱅크", image: "/images/banks/kakao.png" },
-  { id: "toss", name: "토스뱅크", image: "/images/banks/toss.png" },
-  { id: "kbank", name: "케이뱅크", image: "/images/banks/kbank.png" },
+  { id: "nh", name: "농협은행", image: "/BankSvg/nongHyup.svg" },
+  { id: "shinhan", name: "신한은행", image: "/BankSvg/shinhan.svg" },
+  { id: "kb", name: "국민은행", image: "/BankSvg/kb.svg" },
+  { id: "woori", name: "우리은행", image: "/BankSvg/woori.svg" },
+  { id: "kakao", name: "카카오뱅크", image: "/BankSvg/kakao.svg" },
+  { id: "toss", name: "토스뱅크", image: "/BankSvg/toss.svg" },
 ];
 
 const SignupAccountPage: React.FC = () => {
@@ -76,10 +72,8 @@ const SignupAccountPage: React.FC = () => {
 
   const handleModalClose = () => {
     setShowModal(false);
-    // 모달 닫은 후 다음 페이지로 이동
-    //console.log("다음 페이지로 이동");
-    // TODO: 실제 네비게이션 구현
-    // navigate('/next-page');
+    // 모달 닫은 후 회원가입 성공 페이지로 이동
+    navigate('/signup-success');
   };
 
   const handleErrorModalClose = () => {
@@ -108,7 +102,7 @@ const SignupAccountPage: React.FC = () => {
               등록해주세요
             </h1>
             <p className="text-sm text-gray-500">
-              본인 명의 계좌만 가능
+              본인 명의의 계좌만 등록 가능합니다
             </p>
           </div>
 
@@ -209,7 +203,7 @@ const SignupAccountPage: React.FC = () => {
         <div className="px-8 py-10 text-center">
           {/* 느낌표 아이콘 */}
           <div className="mb-6 flex justify-center">
-            <ExclamationTriangleIcon className="w-16 h-16 text-blue-500" />
+            <WarningIcon />
           </div>
           
           {/* 메인 메시지 */}
@@ -241,7 +235,7 @@ const SignupAccountPage: React.FC = () => {
         <div className="px-8 py-10 text-center">
           {/* 느낌표 아이콘 */}
           <div className="mb-6 flex justify-center">
-            <ExclamationTriangleIcon className="w-16 h-16 text-blue-500" />
+            <WarningIcon />
           </div>
           
           {/* 에러 메시지 */}
