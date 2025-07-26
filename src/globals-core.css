@@ -7,6 +7,9 @@ layer(base);
 
 @theme {
   /* Colors */
+  --color-blue: #247af2;
+
+  /* Deprecated. Do not use these colors */
   --color-blue-2: #376fff;
   --color-blue-3: #0900ff;
   --color-blue-4: #374bff;
