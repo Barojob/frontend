@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import Button from "./Button";
+import DeprecatedButton from "./DeprecatedButton";
 
-const meta: Meta<typeof Button> = {
+const meta: Meta<typeof DeprecatedButton> = {
   title: "Atoms/Button",
-  component: Button,
+  component: DeprecatedButton,
   parameters: {
     layout: "centered",
   },

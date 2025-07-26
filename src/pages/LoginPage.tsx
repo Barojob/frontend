@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button/Button";
+import DeprecatedButton from "../components/DeprecatedButton/DeprecatedButton";
 import Input from "../components/Input/Input";
 import NavigationHeader from "../components/layouts/NavigationHeader";
 import Modal from "../components/Modal";
@@ -208,7 +208,7 @@ const LoginPage: React.FC<Props> = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 z-10 w-full bg-white px-6 pb-10 pt-4 shadow-md">
-        <Button
+        <DeprecatedButton
           onClick={handleLogin}
           disabled={!isLoginButtonEnabled}
           className={cn(
@@ -219,7 +219,7 @@ const LoginPage: React.FC<Props> = () => {
           )}
         >
           {!verificationSent ? "로그인" : "다음 단계"}
-        </Button>
+        </DeprecatedButton>
       </div>
 
       {/* 인증번호 오류 모달 */}
@@ -242,7 +242,7 @@ const LoginPage: React.FC<Props> = () => {
           다시 보내드릴까요?
         </div>
 
-        <Button
+        <DeprecatedButton
           onClick={() => {
             setShowErrorModal(false);
             setVerificationCode("");
@@ -250,7 +250,7 @@ const LoginPage: React.FC<Props> = () => {
           className="w-fit rounded-[0.625rem] border-blue-600 bg-violet-200 px-5 text-sm text-blue-600"
         >
           다시 입력하기
-        </Button>
+        </DeprecatedButton>
       </Modal>
     </div>
   );
