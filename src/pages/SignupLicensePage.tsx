@@ -5,7 +5,7 @@ import BoxButton from "../components/BoxButton/BoxButton";
 import DeprecatedButton from "../components/DeprecatedButton/DeprecatedButton";
 import { Drawer, DrawerContent, DrawerTrigger } from "../components/Drawer";
 import Modal from "../components/Modal";
-import NavigationHeader from "../components/layouts/NavigationHeader";
+import NavigationHeader from "../components/NavigationHeader/NavigationHeader";
 import CameraIcon from "../svgs/CameraIcon";
 import GalleryIcon from "../svgs/GalleryIcon";
 import WarningIcon from "../svgs/WarningIcon";

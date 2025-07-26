@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { BsChevronLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import DeprecatedButton from "../components/DeprecatedButton/DeprecatedButton";
-import NavigationHeader from "../components/layouts/NavigationHeader";
+import NavigationHeader from "../components/NavigationHeader/NavigationHeader";
 import AlreadyRegisteredStep from "../components/Signup/AlreadyRegistered";
 import InputVerifyNumber from "../components/Signup/InputVerifyNumber";
 import PhoneAgreeModal from "../components/Signup/PhoneAgreeModal";
