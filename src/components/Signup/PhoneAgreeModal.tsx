@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { cn } from "../../utils/classname";
-import Button from "../Button/Button";
 import CheckBox from "../CheckBox/CheckBox";
 import CircleCheckBox from "../CheckBox/CircleCheckBox";
+import DeprecatedButton from "../DeprecatedButton/DeprecatedButton";
 import Modal from "../Modal";
 
 type CheckItem = {
@@ -88,7 +88,7 @@ const PhoneAgreeModal: React.FC<PhoneAgreeModalProps> = ({
         ))}
       </div>
 
-      <Button
+      <DeprecatedButton
         className={cn(
           "w-full rounded-none border-blue-500 bg-blue-500 py-4 font-normal text-white disabled:opacity-50",
         )}
@@ -96,7 +96,7 @@ const PhoneAgreeModal: React.FC<PhoneAgreeModalProps> = ({
         onClick={handleContinue}
       >
         다음
-      </Button>
+      </DeprecatedButton>
     </Modal>
   );
 

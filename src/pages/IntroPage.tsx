@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Button from "../components/Button/Button";
+import Button from "../components/Button";
 import HomeIntroCarousel from "../components/HomeIntroCarousel";
 
 const IntroPage: React.FC = () => {
@@ -9,15 +9,15 @@ const IntroPage: React.FC = () => {
       <HomeIntroCarousel className="flex-1" />
 
       <section>
-        <div className="flex justify-center gap-x-4">
-          <Link to="/login">
-            <Button variant="primary" size="md">
+        <div className="flex justify-center gap-x-3.5">
+          <Link className="flex-1" to="/login">
+            <Button theme="primary" size="md" block>
               로그인
             </Button>
           </Link>
 
-          <Link to="/signup">
-            <Button variant="secondary" size="md">
+          <Link className="flex-1" to="/signup">
+            <Button theme="secondary" size="md" block>
               회원가입
             </Button>
           </Link>

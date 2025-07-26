@@ -84,7 +84,7 @@ const sizeStyles = {
   md: "w-[328px] h-[42px] text-base rounded-md",
 };
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const DeprecatedButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
@@ -181,6 +181,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 
-Button.displayName = "Button";
+DeprecatedButton.displayName = "Button";
 
-export default Button;
+export default DeprecatedButton;
