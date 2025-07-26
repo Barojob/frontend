@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeprecatedButton from "../components/DeprecatedButton/DeprecatedButton";
 import Input from "../components/Input/Input";
-import NavigationHeader from "../components/layouts/NavigationHeader";
 import Modal from "../components/Modal";
+import NavigationHeader from "../components/NavigationHeader/NavigationHeader";
 import WarningIcon from "../svgs/WarningIcon";
 import { cn } from "../utils/classname";
 
