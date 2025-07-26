@@ -1,17 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
-import HomeIntroCarousel from "../components/HomeIntroCarousel";
+import IntroIcon from "../svgs/IntroIcon";
 
 const IntroPage: React.FC = () => {
   return (
-    <div className="flex h-dvh flex-col justify-between gap-y-5 pb-4">
-      <HomeIntroCarousel className="flex-1" />
+    <div className="bg-blue-1 pb-11.5 flex h-dvh flex-col">
+      <div className="flex flex-1 items-center justify-center">
+        <IntroIcon className="max-w-51.5 md:max-w-90 w-full" />
+      </div>
 
       <section>
-        <div className="flex justify-center gap-x-3.5">
+        <p className="whitespace-pre-line text-center text-2xl font-bold text-white">
+          {`가까운 일자리,\n인력특공대로 1분 안에`}
+        </p>
+
+        <div className="max-w-100 mt-19.5 mx-auto flex justify-center gap-x-3.5 px-6">
           <Link className="flex-1" to="/login">
-            <Button theme="primary" size="md" block>
+            <Button theme="tertiary" size="md" block>
               로그인
             </Button>
           </Link>
@@ -23,10 +29,10 @@ const IntroPage: React.FC = () => {
           </Link>
         </div>
 
-        <div className="space-x-2 pt-5 text-center text-sm">
-          <span>계정이 기억나지 않나요?</span>
+        <div className="mt-5 space-x-2 text-center text-sm text-white">
+          <span className="font-medium">계정이 기억나지 않나요?</span>
           {/* TODO: implement this route */}
-          <Link to="/find-account" className="border-b border-black font-bold">
+          <Link className="font-bold underline" to="/find-account">
             계정 찾기
           </Link>
         </div>
