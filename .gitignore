@@ -29,3 +29,5 @@ dist-ssr
 # Capacitor
 ios/
 android/
+
+.env

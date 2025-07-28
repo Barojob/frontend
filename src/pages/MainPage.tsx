@@ -1,6 +1,7 @@
 import NavBar from "@/components/NavBar";
 import { BellIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import React from "react";
+import { Link } from "react-router-dom";
 import JobRequestCard from "../components/JobRequestCard";
 import MainCarousel from "../components/MainCarousel";
 import UrgentRecruitmentCard from "../components/UrgentRecruitmentCard";
@@ -19,7 +20,9 @@ const MainPage: React.FC = () => {
 
       <div className="mt-8">
         <MainHeading title="경기 포천시" />
-        <JobRequestCard className="mt-3" />
+        <Link to="/job-request">
+          <JobRequestCard className="mt-3" />
+        </Link>
       </div>
 
       <div className="mt-8">
