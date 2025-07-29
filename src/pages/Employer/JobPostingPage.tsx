@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CategoryTabs from "../../components/JobPost/CategoryTabs";
 import MultiSelector from "../../components/JobPost/MultiSelector";
 import PersonCountSelector from "../../components/JobPost/PersonCountSelector";
@@ -7,12 +8,12 @@ import WorkTimeSelector from "../../components/JobPost/WorkTimeSelector";
 import NavigationHeader from "../../components/layouts/NavigationHeader";
 import StepIndicator from "../../components/StepIndicator";
 import { labelMappings } from "../../utils/labelMappings";
-
 type Props = {
   className?: string;
 };
 
 const JobPostingPage: React.FC<Props> = () => {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("general");
   const [selectedDemolitionWork, setSelectedDemolitionWork] = useState<
     string[]
@@ -164,7 +165,13 @@ const JobPostingPage: React.FC<Props> = () => {
   return (
     <div className="flex min-h-screen w-full flex-col justify-start bg-gray-200">
       <div className="bg-white px-6">
-        <NavigationHeader title="인력 구하기" className="mb-7" />
+        <NavigationHeader
+          title="인력 구하기"
+          className="mb-7"
+          onBack={() => {
+            navigate("/");
+          }}
+        />
         <StepIndicator currentStep={1} totalSteps={3} />
       </div>
 
