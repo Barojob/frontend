@@ -7,6 +7,7 @@ layer(base);
 
 @theme {
   /* Colors */
+  --color-blue-1: #247af2;
   --color-blue-2: #376fff;
   --color-blue-3: #0900ff;
   --color-blue-4: #374bff;
@@ -34,6 +35,10 @@ layer(base);
 
   button:hover:not(:disabled) {
     @apply cursor-pointer;
+  }
+
+  button:disabled {
+    @apply cursor-not-allowed;
   }
 }
 

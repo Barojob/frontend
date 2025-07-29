@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Button/Button";
+import DeprecatedButton from "../DeprecatedButton/DeprecatedButton";
 import Modal from "../Modal";
 
 type PhotoModalProps = {
@@ -42,18 +42,18 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
         인증 미등록시 매칭이 불가합니다.
       </div>
       <div className="absolute bottom-0 left-0 grid w-full grid-cols-2">
-        <Button
+        <DeprecatedButton
           onClick={onProceed}
           className="w-full rounded-none border-gray-400 bg-gray-400 py-4 font-normal text-white"
         >
           지금 할게요
-        </Button>
-        <Button
+        </DeprecatedButton>
+        <DeprecatedButton
           onClick={onClose}
           className="w-full rounded-none border-blue-500 bg-blue-500 py-4 font-normal text-white"
         >
           나중에 할게요
-        </Button>
+        </DeprecatedButton>
       </div>
     </Modal>
   );

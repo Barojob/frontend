@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BsChevronLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button/Button";
-import NavigationHeader from "../components/layouts/NavigationHeader";
+import DeprecatedButton from "../components/DeprecatedButton/DeprecatedButton";
+import NavigationHeader from "../components/NavigationHeader/NavigationHeader";
 import AlreadyRegisteredStep from "../components/Signup/AlreadyRegistered";
 import InputVerifyNumber from "../components/Signup/InputVerifyNumber";
 import PhoneAgreeModal from "../components/Signup/PhoneAgreeModal";
@@ -159,7 +159,7 @@ const SignupPage: React.FC<Props> = () => {
           showBackButton={shouldShowBackButton()}
         />
         <div>{renderStep()}</div>
-        <Button
+        <DeprecatedButton
           disabled={!isStepValid}
           className={cn(
             "w-full rounded-[10px] border-blue-500 bg-blue-500 py-3 font-normal text-white",
@@ -168,7 +168,7 @@ const SignupPage: React.FC<Props> = () => {
           onClick={handleNext}
         >
           {step < 4 ? "다음" : alreadyRegistered ? "로그인" : "완료"}
-        </Button>
+        </DeprecatedButton>
       </div>
 
       <PhoneAgreeModal
