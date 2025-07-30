@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { BsChevronLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import DeprecatedButton from "../components/DeprecatedButton/DeprecatedButton";
 import NavigationHeader from "../components/NavigationHeader/NavigationHeader";
@@ -74,41 +73,6 @@ const SignupPage: React.FC<Props> = () => {
       setStep(3);
     }
   }, [phoneAgree, step]);
-
-  const getStepTitle = () => {
-    switch (step) {
-      case 1:
-        return "회원가입";
-      case 2:
-        return (
-          <div className="flex items-center gap-1">
-            <BsChevronLeft />
-            <span>휴대폰 인증</span>
-          </div>
-        );
-      case 3:
-        return (
-          <div className="flex items-center gap-1">
-            <BsChevronLeft />
-            <span>인증번호 입력</span>
-          </div>
-        );
-      case 4:
-        return alreadyRegistered ? (
-          <div className="flex items-center gap-1">
-            <BsChevronLeft />
-            <span>이미 가입된 회원</span>
-          </div>
-        ) : (
-          <div className="flex items-center gap-1">
-            <BsChevronLeft />
-            <span>프로필 설정</span>
-          </div>
-        );
-      default:
-        return "회원가입";
-    }
-  };
 
   const renderStep = () => {
     switch (step) {
