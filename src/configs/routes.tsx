@@ -4,8 +4,10 @@ import JobRequest from "../pages/JobRequest";
 import LoginPage from "../pages/LoginPage";
 import LoginSuccessPage from "../pages/LoginSuccessPage";
 import MainPage from "../pages/MainPage";
+import SignupAccountPage from "../pages/SignupAccountPage";
 import SignupLicensePage from "../pages/SignupLicensePage";
 import SignupPage from "../pages/SignupPage";
+import SignupSuccessPage from "../pages/SignupSuccessPage";
 
 export const routes = [
   {
@@ -30,8 +32,16 @@ export const routes = [
     element: <SignupPage />,
   },
   {
+    path: "/signup/account",
+    element: <SignupAccountPage />,
+  },
+  {
     path: "/signup/license",
     element: <SignupLicensePage />,
+  },
+  {
+    path: "/signup-success",
+    element: <SignupSuccessPage />,
   },
   {
     path: "/job-request",
