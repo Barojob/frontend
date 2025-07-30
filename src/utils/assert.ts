@@ -15,10 +15,15 @@ export function assert(
   throw new AssertionError(message);
 }
 
-export class AssertionError extends Error {
+class AssertionError extends Error {
   constructor(message: string) {
     super(message);
 
     this.name = "AssertionError";
   }
+}
+
+export function ensure<T>(value: T, message: string = "Assertion failed"): T {
+  assert(!!value, message);
+  return value;
 }
