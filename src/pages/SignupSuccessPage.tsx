@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button/Button";
+import Button from "../components/DeprecatedButton/DeprecatedButton";
 import CongratsIcon from "../svgs/CongratsIcon";
 
 const SignupSuccessPage: React.FC = () => {

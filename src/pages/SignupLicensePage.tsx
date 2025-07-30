@@ -109,7 +109,7 @@ const SignupLicensePage: React.FC = () => {
     setShowSkipModal(false);
     // 다음 페이지로 이동
     console.log("다음 페이지로 이동");
-    navigate('/signup/account'); 
+    navigate("/signup/account");
   };
 
   const handleStayAndRegister = () => {
