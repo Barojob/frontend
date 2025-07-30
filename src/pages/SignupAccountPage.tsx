@@ -1,0 +1,263 @@
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import BoxButton from "../components/BoxButton/BoxButton";
+import Button from "../components/DeprecatedButton/DeprecatedButton";
+import { Drawer, DrawerContent, DrawerTrigger } from "../components/Drawer";
+import Input from "../components/Input/Input";
+import Modal from "../components/Modal";
+import NavigationHeader from "../components/NavigationHeader/NavigationHeader";
+import WarningIcon from "../svgs/WarningIcon";
+import { cn } from "../utils/classname";
+
+const banks = [
+  { id: "nh", name: "농협은행", image: "/BankSvg/nongHyup.svg" },
+  { id: "shinhan", name: "신한은행", image: "/BankSvg/shinhan.svg" },
+  { id: "kb", name: "국민은행", image: "/BankSvg/kb.svg" },
+  { id: "woori", name: "우리은행", image: "/BankSvg/woori.svg" },
+  { id: "kakao", name: "카카오뱅크", image: "/BankSvg/kakao.svg" },
+  { id: "toss", name: "토스뱅크", image: "/BankSvg/toss.svg" },
+];
+
+const SignupAccountPage: React.FC = () => {
+  const navigate = useNavigate();
+  const [selectedBank, setSelectedBank] = useState<string>("");
+  const [accountNumber, setAccountNumber] = useState<string>("");
+  const [drawerKey, setDrawerKey] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleBankSelect = (bankName: string) => {
+    setSelectedBank(bankName);
+    // 드로어를 강제로 닫기 위해 key를 변경하여 리렌더링
+    setDrawerKey((prev) => prev + 1);
+  };
+
+  const handleAccountNumberChange = (value: string) => {
+    // 숫자만 허용
+    const numericValue = value.replace(/[^0-9]/g, "");
+    setAccountNumber(numericValue);
+  };
+
+  const handleBack = () => {
+    navigate(-1); // 이전 페이지로 돌아가기
+  };
+
+  const handleSkip = () => {
+    // 건너뛰기 로직 - 모달 표시
+    setShowModal(true);
+  };
+
+  const handleAddAccount = () => {
+    // 계좌 추가하기 로직 - 모든 필드 검증
+    const missingFields = [];
+
+    if (!selectedBank) {
+      missingFields.push("은행");
+    }
+    if (!accountNumber) {
+      missingFields.push("계좌번호");
+    }
+
+    if (missingFields.length > 0) {
+      setErrorMessage(`${missingFields.join(", ")}을(를) 입력해주세요.`);
+      setShowErrorModal(true);
+      return;
+    }
+
+    // 모든 정보가 입력되면 안내 모달 표시
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    // 모달 닫은 후 회원가입 성공 페이지로 이동
+    navigate("/signup-success");
+  };
+
+  const handleErrorModalClose = () => {
+    setShowErrorModal(false);
+  };
+
+  return (
+    <div className="flex min-h-screen flex-col bg-white">
+      {/* 메인 콘텐츠 */}
+      <div className="flex-1 px-6 py-8">
+        <div className="mx-auto max-w-md">
+          {/* 네비게이션 헤더 */}
+          <NavigationHeader
+            title="계좌 입력"
+            onBack={handleBack}
+            showBackButton={true}
+            className="mb-10"
+          />
+
+          {/* 헤더 섹션 */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">
+              임금을 <span className="text-blue-600">지급받을 계좌</span>를
+            </h1>
+            <h1 className="mb-4 text-3xl font-bold text-gray-900">
+              등록해주세요
+            </h1>
+            <p className="text-sm text-gray-500">
+              본인 명의의 계좌만 등록 가능합니다
+            </p>
+          </div>
+
+          {/* 은행 선택 섹션 */}
+          <div className="mb-6">
+            <label className="mb-3 block text-base font-medium text-gray-900">
+              은행명
+            </label>
+
+            <Drawer key={drawerKey}>
+              <DrawerTrigger asChild>
+                <button
+                  className={cn(
+                    "h-11 w-full rounded-lg border border-gray-200 px-4 py-3",
+                    "flex items-center justify-between bg-white text-left",
+                    "focus:border-gray-400 focus:outline-none",
+                    "transition-colors hover:border-gray-300",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "text-base",
+                      selectedBank ? "text-gray-900" : "text-gray-400",
+                    )}
+                  >
+                    {selectedBank || "은행을 선택해주세요"}
+                  </span>
+                  <ChevronDownIcon className="h-5 w-5 text-gray-400" />
+                </button>
+              </DrawerTrigger>
+
+              <DrawerContent position="bottom" className="p-6">
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    은행 선택
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  {banks.map((bank) => (
+                    <BoxButton
+                      key={bank.id}
+                      name={bank.name}
+                      image={bank.image}
+                      variant="primary"
+                      className="!h-28 !w-full"
+                      selected={selectedBank === bank.name}
+                      onClick={() => handleBankSelect(bank.name)}
+                    />
+                  ))}
+                </div>
+              </DrawerContent>
+            </Drawer>
+          </div>
+
+          {/* 계좌번호 입력 섹션 */}
+          <div className="mb-6">
+            <label className="mb-3 block text-base font-medium text-gray-900">
+              계좌번호
+            </label>
+
+            <Input
+              value={accountNumber}
+              onValueChange={handleAccountNumberChange}
+              placeholder="'-' 없이 숫자만 입력해주세요"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              size="lg"
+              className="w-full"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 하단 고정 버튼 섹션 (푸터) */}
+      <div className="safe-area-inset-bottom bg-white px-6 py-6 pb-12">
+        <div className="mx-auto flex max-w-md gap-3">
+          <Button
+            variant="primary"
+            size="md"
+            className="flex-1"
+            onClick={handleSkip}
+          >
+            건너뛰기
+          </Button>
+          <Button
+            variant="blue"
+            size="md"
+            className="flex-1"
+            onClick={handleAddAccount}
+          >
+            계좌 추가하기
+          </Button>
+        </div>
+      </div>
+
+      {/* 계좌 안내 모달 */}
+      <Modal visible={showModal} onClose={handleModalClose}>
+        <div className="px-8 py-10 text-center">
+          {/* 느낌표 아이콘 */}
+          <div className="mb-6 flex justify-center">
+            <WarningIcon />
+          </div>
+
+          {/* 메인 메시지 */}
+          <h2 className="mb-3 text-xl font-bold text-gray-900">
+            본인 명의 계좌만
+            <br />
+            등록가능해요
+          </h2>
+
+          {/* 서브 메시지 */}
+          <p className="mb-8 text-sm text-gray-500">
+            일치 여부 확인 후 등록해드립니다
+          </p>
+
+          {/* 확인 버튼 */}
+          <Button
+            variant="blue"
+            size="md"
+            className="mx-auto w-full max-w-[200px]"
+            onClick={handleModalClose}
+          >
+            확인했어요
+          </Button>
+        </div>
+      </Modal>
+
+      {/* 입력 오류 모달 */}
+      <Modal visible={showErrorModal} onClose={handleErrorModalClose}>
+        <div className="px-8 py-10 text-center">
+          {/* 느낌표 아이콘 */}
+          <div className="mb-6 flex justify-center">
+            <WarningIcon />
+          </div>
+
+          {/* 에러 메시지 */}
+          <h2 className="mb-8 text-xl font-bold text-gray-900">
+            {errorMessage}
+          </h2>
+
+          {/* 확인 버튼 */}
+          <Button
+            variant="blue"
+            size="md"
+            className="mx-auto w-full max-w-[200px]"
+            onClick={handleErrorModalClose}
+          >
+            확인
+          </Button>
+        </div>
+      </Modal>
+    </div>
+  );
+};
+
+export default SignupAccountPage;
