@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-
-export type UserType = "worker" | "employer" | null;
+import type { UserType } from "../types/user";
+import { useUser } from "./useUser";
 
 // 전역 상태를 위한 변수들
 let globalUserType: UserType = null;
@@ -33,6 +33,7 @@ const updateUserType = (newType: UserType) => {
 
 export const useUserType = () => {
   const [userType, setUserType] = useState<UserType>(globalUserType);
+  const { userType: backendUserType, isLoading } = useUser();
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 리스너 등록
@@ -48,6 +49,17 @@ export const useUserType = () => {
     };
   }, []);
 
+  // 백엔드에서 받은 유저 타입으로 전역 상태 업데이트
+  useEffect(() => {
+    if (
+      !isLoading &&
+      backendUserType !== null &&
+      backendUserType !== globalUserType
+    ) {
+      updateUserType(backendUserType);
+    }
+  }, [backendUserType, isLoading]);
+
   const setWorker = () => updateUserType("worker");
   const setEmployer = () => updateUserType("employer");
   const clearUserType = () => updateUserType(null);
@@ -59,5 +71,6 @@ export const useUserType = () => {
     clearUserType,
     isWorker: userType === "worker",
     isEmployer: userType === "employer",
+    isLoading, // 백엔드 로딩 상태도 함께 반환
   };
 };
