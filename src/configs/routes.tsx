@@ -1,4 +1,6 @@
 import { type RouteObject } from "react-router-dom";
+import JobPostingPage from "../pages/Employer/JobPostingPage";
+import JobPostLocation from "../pages/Employer/JobPostLocation";
 import IntroPage from "../pages/IntroPage";
 import JobRequest from "../pages/JobRequest";
 import LoginPage from "../pages/LoginPage";
@@ -14,7 +16,14 @@ export const routes = [
     path: "/",
     element: <MainPage />,
   },
-
+  {
+    path: "/location-selector",
+    element: <JobPostLocation />,
+  },
+  {
+    path: "/job-posting",
+    element: <JobPostingPage />,
+  },
   {
     path: "/intro",
     element: <IntroPage />,

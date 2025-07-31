@@ -46,15 +46,48 @@ const Map: React.FC<Props> = ({ className, ref }) => {
         return;
       }
 
-      const map = new kakao.maps.Map(internalRef.current, {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 3,
-      });
+      // 현재 위치를 가져와서 지도 중심으로 설정
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
 
-      setMap(map);
-      setIsLoading(false);
-      setIsLoaded(true);
-      setIsError(false);
+            const map = new kakao.maps.Map(internalRef.current!, {
+              center: new kakao.maps.LatLng(lat, lng),
+              level: 3,
+            });
+
+            setMap(map);
+            setIsLoading(false);
+            setIsLoaded(true);
+            setIsError(false);
+          },
+          () => {
+            // 위치 정보를 가져올 수 없는 경우 기본 위치 사용
+            const map = new kakao.maps.Map(internalRef.current!, {
+              center: new kakao.maps.LatLng(37.5665, 126.978), // 서울 시청
+              level: 3,
+            });
+
+            setMap(map);
+            setIsLoading(false);
+            setIsLoaded(true);
+            setIsError(false);
+          },
+        );
+      } else {
+        // geolocation을 지원하지 않는 경우 기본 위치 사용
+        const map = new kakao.maps.Map(internalRef.current, {
+          center: new kakao.maps.LatLng(37.5665, 126.978), // 서울 시청
+          level: 3,
+        });
+
+        setMap(map);
+        setIsLoading(false);
+        setIsLoaded(true);
+        setIsError(false);
+      }
     });
   }
 

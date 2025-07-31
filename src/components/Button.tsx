@@ -4,7 +4,7 @@ import { cn } from "../utils/classname";
 
 type Props = React.ComponentPropsWithRef<"button"> & {
   className?: string;
-  size: "sm" | "md";
+  size: "sm" | "md" | "xl";
   theme: "primary" | "secondary" | "tertiary";
   type?: "button" | "submit" | "reset";
   loading?: boolean;
@@ -35,6 +35,7 @@ const Button: React.FC<PropsWithChildren<Props>> = ({
           "bg-gray-0 border border-[#E0E0E0] text-[#898989]",
         size === "sm" && "h-9.5",
         size === "md" && "h-10.5",
+        size === "xl" && "h-12",
         block && "block w-full",
         className,
       )}
