@@ -170,7 +170,7 @@ const JobPostingPage: React.FC<Props> = () => {
             title="인력 구하기"
             className="mb-7"
             onBack={() => {
-              navigate("/location-selector");
+              navigate("/job-post-location");
             }}
           />
           <StepIndicator currentStep={1} totalSteps={3} />

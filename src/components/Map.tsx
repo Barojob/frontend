@@ -22,6 +22,16 @@ const Map: React.FC<Props> = ({ className, ref }) => {
     isLoading,
     isLoaded,
     isError,
+    relayout: () => {
+      if (map && internalRef.current) {
+        try {
+          map.relayout();
+          console.log("🔄 Map 컴포넌트에서 relayout 실행됨");
+        } catch (error) {
+          console.error("❌ Map relayout 실행 중 오류:", error);
+        }
+      }
+    },
   }));
 
   React.useEffect(() => {

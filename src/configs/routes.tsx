@@ -15,7 +15,7 @@ export const routes = [
     element: <MainPage />,
   },
   {
-    path: "/location-selector",
+    path: "/job-post-location",
     element: <JobPostLocation />,
   },
   {

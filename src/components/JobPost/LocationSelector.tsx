@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import type { KakaoGeocoderResult } from "../../types/kakao";
 import { MapHandle } from "../../types/map";
 import { Nullable } from "../../types/misc";
 import LocationSearchBar from "../LocationSearchBar";
+import LocationSearchScreen from "../LocationSearchScreen";
 import Map from "../Map";
 
 type LocationData = {
@@ -18,26 +20,6 @@ type Props = {
   onLocationConfirm: (location: LocationData) => void;
 };
 
-// 카카오맵 API 타입 정의
-interface KakaoGeocoderResult {
-  address: {
-    address_name: string;
-    region_1depth_name: string;
-    region_2depth_name: string;
-    region_3depth_name: string;
-  };
-}
-
-interface KakaoPlaceResult {
-  place_name: string;
-  address_name: string;
-  road_address_name: string;
-  x: string;
-  y: string;
-  category_name: string;
-  phone: string;
-}
-
 const LocationSelector: React.FC<Props> = ({
   className = "",
   onLocationConfirm,
@@ -47,14 +29,128 @@ const LocationSelector: React.FC<Props> = ({
   const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(
     null,
   );
-  const [currentLocation, setCurrentLocation] = useState<LocationData | null>(
-    null,
-  );
+  const [showSearchScreen, setShowSearchScreen] = useState(false);
+
+  // 지도 중심 변경 핸들러 (통합)
+  const handleMapCenterChange = (lat: number, lng: number) => {
+    console.log("🗺️ 지도 중심 변경:", { lat, lng });
+
+    // 주소 검색 및 selectedLocation 업데이트
+    const geocoder = new kakao.maps.services.Geocoder();
+    const places = new kakao.maps.services.Places();
+
+    geocoder.coord2Address(
+      lng,
+      lat,
+      (result: KakaoGeocoderResult[], status: string) => {
+        if (status === kakao.maps.services.Status.OK && result.length > 0) {
+          const address = result[0].address.address_name;
+
+          // 주변 장소 검색
+          places.keywordSearch(
+            "건물 상가 지점 매장",
+            (placeResults: unknown[], placeStatus: string) => {
+              let placeName = "선택된 위치";
+
+              if (
+                placeStatus === kakao.maps.services.Status.OK &&
+                Array.isArray(placeResults) &&
+                placeResults.length > 0
+              ) {
+                // 가장 가까운 장소 찾기
+                let closestPlace = placeResults[0] as {
+                  place_name: string;
+                  x: string;
+                  y: string;
+                };
+                let minDistance = Number.MAX_VALUE;
+
+                for (const place of placeResults) {
+                  const placeData = place as {
+                    place_name: string;
+                    x: string;
+                    y: string;
+                  };
+                  const placeLat = parseFloat(placeData.y);
+                  const placeLng = parseFloat(placeData.x);
+                  const distance = Math.sqrt(
+                    Math.pow(lat - placeLat, 2) + Math.pow(lng - placeLng, 2),
+                  );
+
+                  if (distance < minDistance) {
+                    minDistance = distance;
+                    closestPlace = place as {
+                      place_name: string;
+                      x: string;
+                      y: string;
+                    };
+                  }
+                }
+                placeName = closestPlace.place_name;
+              }
+
+              const locationData = {
+                address,
+                latitude: lat,
+                longitude: lng,
+                placeName,
+              };
+
+              console.log("📍 새로운 위치 데이터:", locationData);
+              setSelectedLocation(locationData);
+            },
+            {
+              location: new kakao.maps.LatLng(lat, lng),
+              radius: 500,
+              sort: kakao.maps.services.SortBy.DISTANCE,
+            },
+          );
+        }
+      },
+    );
+  };
+
+  // 검색 화면에서 위치 선택 핸들러
+  const handleLocationSelect = (location: LocationData) => {
+    console.log("🎯 검색에서 위치 선택됨:", location);
+    setSelectedLocation(location);
+    setShowSearchScreen(false);
+
+    // 지도 중심 이동
+    const applyLocationToMap = () => {
+      if (mapRef.current?.map && mapRef.current?.isLoaded) {
+        console.log("🗺️ 지도에 위치 적용:", location);
+        const latlng = new kakao.maps.LatLng(
+          location.latitude,
+          location.longitude,
+        );
+        mapRef.current.map.setCenter(latlng);
+        mapRef.current.map.setLevel(3);
+      } else {
+        console.log("⏳ 지도가 아직 로드되지 않음, 500ms 후 재시도");
+        setTimeout(applyLocationToMap, 500);
+      }
+    };
+
+    applyLocationToMap();
+  };
+
+  // 검색 화면 열기
+  const handleSearchClick = () => {
+    setShowSearchScreen(true);
+  };
+
+  // 검색 화면 닫기
+  const handleSearchClose = () => {
+    setShowSearchScreen(false);
+  };
 
   // 디버깅을 위한 selectedLocation 변경 감지
   useEffect(() => {
     console.log("📍 selectedLocation 변경됨:", selectedLocation);
   }, [selectedLocation]);
+
+  // selectedLocation이 변경될 때 지도 중심 이동 useEffect 제거
 
   // 지도 로드 상태를 적극적으로 체크하는 polling effect
   useEffect(() => {
@@ -85,7 +181,7 @@ const LocationSelector: React.FC<Props> = ({
             placeName: "지도 중심 위치",
           };
           setSelectedLocation(basicLocationData);
-          updateLocationFromCoords(center.getLat(), center.getLng(), false);
+          handleMapCenterChange(center.getLat(), center.getLng());
         }
         return; // 성공하면 polling 중단
       }
@@ -127,127 +223,100 @@ const LocationSelector: React.FC<Props> = ({
       lng: center.getLng(),
     });
 
-    // 이미 selectedLocation이 있다면 이벤트만 등록
-    if (!selectedLocation) {
-      // 지도 로딩 즉시 기본 위치 정보 설정
-      const basicLocationData = {
-        address: "위치 정보를 불러오는 중...",
-        latitude: center.getLat(),
-        longitude: center.getLng(),
-        placeName: "지도 중심 위치",
-      };
-      setSelectedLocation(basicLocationData);
-
-      // 지도 로드 완료 후 즉시 중앙 위치 정보 가져오기
-      console.log("🚀 즉시 위치 정보 업데이트 시작");
-      updateLocationFromCoords(center.getLat(), center.getLng(), false);
-    }
-
-    // 드래그 종료 이벤트 핸들러
+    // 드래그 종료 이벤트 핸들러 (항상 등록)
     const handleDragEnd = () => {
+      console.log("🖱️ 드래그 이벤트 발생!");
       const center = map.getCenter();
       console.log("🖱️ 지도 드래그 종료, 새 중심:", {
         lat: center.getLat(),
         lng: center.getLng(),
       });
-      updateLocationFromCoords(center.getLat(), center.getLng(), false);
+      handleMapCenterChange(center.getLat(), center.getLng());
     };
 
-    // 드래그 종료 이벤트 등록
+    // 드래그 종료 이벤트 등록 (항상 등록)
+    console.log("📌 드래그 이벤트 등록됨");
     kakao.maps.event.addListener(map, "dragend", handleDragEnd);
 
     // cleanup 함수에서 이벤트 제거
     return () => {
       kakao.maps.event.removeListener(map, "dragend", handleDragEnd);
     };
-  }, [mapRef.current?.isLoaded, mapRef.current?.map, selectedLocation]); // 의존성 배열 추가
+  }, [mapRef.current?.isLoaded, mapRef.current?.map]); // selectedLocation 제거
 
-  // 좌표로부터 주소 정보 업데이트
-  const updateLocationFromCoords = (
-    lat: number,
-    lng: number,
-    isCurrentLocation?: boolean,
-  ) => {
-    console.log("🔍 좌표에서 주소 검색 시작:", { lat, lng, isCurrentLocation });
+  // 드래그 이벤트 등록 (별도 useEffect)
+  useEffect(() => {
+    if (!mapRef.current?.map || !mapRef.current?.isLoaded) {
+      console.log("⏳ 드래그 이벤트 등록 대기 - 지도가 아직 로드되지 않음");
+      return;
+    }
 
-    const geocoder = new kakao.maps.services.Geocoder();
-    const places = new kakao.maps.services.Places();
+    const map = mapRef.current.map;
+    console.log("✅ 지도 로드 완료, 드래그 이벤트 등록 시작");
 
-    // 주소 검색
-    geocoder.coord2Address(
-      lng,
-      lat,
-      (result: KakaoGeocoderResult[], status: kakao.maps.services.Status) => {
-        console.log("📮 주소 검색 결과:", { status, result });
+    // 드래그 종료 이벤트 핸들러
+    const handleDragEnd = () => {
+      console.log("🖱️ 드래그 이벤트 발생!");
+      const center = map.getCenter();
+      console.log("🖱️ 지도 드래그 종료, 새 중심:", {
+        lat: center.getLat(),
+        lng: center.getLng(),
+      });
+      handleMapCenterChange(center.getLat(), center.getLng());
+    };
 
-        if (status === kakao.maps.services.Status.OK && result.length > 0) {
-          const address = result[0].address.address_name;
-          console.log("✅ 주소 발견:", address);
+    // 드래그 종료 이벤트 등록
+    console.log("📌 드래그 이벤트 등록됨");
+    kakao.maps.event.addListener(map, "dragend", handleDragEnd);
 
-          // 모든 경우에 주변 장소 검색
-          places.keywordSearch(
-            "건물 상가 지점 매장",
-            (
-              placeResults: KakaoPlaceResult[],
-              placeStatus: kakao.maps.services.Status,
-            ) => {
-              console.log("🏢 장소 검색 결과:", { placeStatus, placeResults });
+    // cleanup 함수에서 이벤트 제거
+    return () => {
+      console.log("🧹 드래그 이벤트 제거됨");
+      kakao.maps.event.removeListener(map, "dragend", handleDragEnd);
+    };
+  }, [mapRef.current?.isLoaded, mapRef.current?.map]); // map이 로드될 때마다 등록
 
-              let finalPlaceName = "선택된 위치";
+  // 드래그 이벤트 등록 확인 (추가 보장)
+  useEffect(() => {
+    let checkCount = 0;
+    const maxChecks = 10;
 
-              if (
-                placeStatus === kakao.maps.services.Status.OK &&
-                placeResults.length > 0
-              ) {
-                // 가장 가까운 장소 찾기
-                let closestPlace = placeResults[0];
-                let minDistance = Number.MAX_VALUE;
+    const checkDragEvent = () => {
+      checkCount++;
+      console.log(`🔍 드래그 이벤트 확인 ${checkCount}/${maxChecks}`);
 
-                for (const place of placeResults) {
-                  const placeLat = parseFloat(place.y);
-                  const placeLng = parseFloat(place.x);
-                  const distance = Math.sqrt(
-                    Math.pow(lat - placeLat, 2) + Math.pow(lng - placeLng, 2),
-                  );
+      if (mapRef.current?.map && mapRef.current?.isLoaded) {
+        console.log("✅ 지도 로드 확인됨, 드래그 이벤트 재등록");
 
-                  if (distance < minDistance) {
-                    minDistance = distance;
-                    closestPlace = place;
-                  }
-                }
+        const map = mapRef.current.map;
 
-                finalPlaceName = closestPlace.place_name;
-                console.log("🎯 가장 가까운 장소:", finalPlaceName);
-              }
+        // 기존 이벤트 제거
+        kakao.maps.event.removeListener(map, "dragend", () => {});
 
-              const locationData = {
-                address,
-                latitude: lat,
-                longitude: lng,
-                placeName: finalPlaceName,
-              };
+        // 새 이벤트 등록
+        const handleDragEnd = () => {
+          console.log("🖱️ 드래그 이벤트 발생!");
+          const center = map.getCenter();
+          console.log("🖱️ 지도 드래그 종료, 새 중심:", {
+            lat: center.getLat(),
+            lng: center.getLng(),
+          });
+          handleMapCenterChange(center.getLat(), center.getLng());
+        };
 
-              console.log("📍 최종 위치 데이터:", locationData);
-              setSelectedLocation(locationData);
+        kakao.maps.event.addListener(map, "dragend", handleDragEnd);
+        console.log("📌 드래그 이벤트 재등록 완료");
+        return;
+      }
 
-              // 현재 위치인 경우 currentLocation도 설정
-              if (isCurrentLocation) {
-                setCurrentLocation(locationData);
-                console.log("📍 현재 위치로도 설정됨");
-              }
-            },
-            {
-              location: new kakao.maps.LatLng(lat, lng),
-              radius: 500,
-              sort: kakao.maps.services.SortBy.DISTANCE,
-            },
-          );
-        } else {
-          console.log("❌ 주소 검색 실패:", status);
-        }
-      },
-    );
-  };
+      if (checkCount < maxChecks) {
+        setTimeout(checkDragEvent, 500);
+      }
+    };
+
+    // 1초 후 확인 시작
+    setTimeout(checkDragEvent, 1000);
+  }, [mapRef.current?.isLoaded]);
 
   // 현재 위치 찾기
   const handleCurrentLocationClick = () => {
@@ -264,7 +333,7 @@ const LocationSelector: React.FC<Props> = ({
             mapRef.current.map.setLevel(2); // 더 가깝게 (숫자가 작을수록 가까움)
 
             // 주소 정보 업데이트
-            updateLocationFromCoords(lat, lng, true);
+            handleMapCenterChange(lat, lng);
           }
         },
         () => {
@@ -283,6 +352,17 @@ const LocationSelector: React.FC<Props> = ({
     }
   };
 
+  // 검색 화면이 열려있을 때 LocationSearchScreen 렌더링
+  if (showSearchScreen) {
+    return (
+      <LocationSearchScreen
+        onClose={handleSearchClose}
+        onLocationSelect={handleLocationSelect}
+      />
+    );
+  }
+
+  // 기본 지도 화면
   return (
     <div className={`relative h-screen ${className}`}>
       <button
@@ -310,10 +390,11 @@ const LocationSelector: React.FC<Props> = ({
 
       {/* 검색 바 */}
       <LocationSearchBar
-        currentLocation={currentLocation}
+        currentLocation={null} // currentLocation 상태 제거
         selectedLocation={selectedLocation}
         onCurrentLocationClick={handleCurrentLocationClick}
         onLocationConfirm={handleLocationConfirm}
+        onSearchClick={handleSearchClick}
         className="fixed bottom-0 left-0 right-0"
       />
     </div>

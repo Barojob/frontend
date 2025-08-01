@@ -62,7 +62,7 @@ const MainPage: React.FC = () => {
         <>
           <div className="mt-8">
             <MainHeading title="경기 포천시" />
-            <Link to="/location-selector">
+            <Link to="/job-post-location">
               <JobPostCard className="mt-3" />
             </Link>
           </div>
