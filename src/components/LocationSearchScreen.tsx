@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HiOutlineLocationMarker } from "react-icons/hi";
-import { IoSearch } from "react-icons/io5";
+import { IoClose, IoSearch } from "react-icons/io5";
 import type { KakaoPlaceSearchResult } from "../types/kakao";
-import Input from "./Input/Input";
 import NavigationHeader from "./NavigationHeader/NavigationHeader";
 
 type LocationData = {
@@ -10,6 +9,11 @@ type LocationData = {
   latitude: number;
   longitude: number;
   placeName?: string;
+};
+
+type RecentSearchData = {
+  placeName: string;
+  address: string;
 };
 
 type Props = {
@@ -26,13 +30,31 @@ const LocationSearchScreen: React.FC<Props> = ({
     [],
   );
   const [isSearching, setIsSearching] = useState(false);
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [recentSearches, setRecentSearches] = useState<RecentSearchData[]>([]);
 
   // 최근 검색어 불러오기
   useEffect(() => {
     const saved = localStorage.getItem("recentLocationSearches");
     if (saved) {
-      setRecentSearches(JSON.parse(saved));
+      try {
+        const parsedData = JSON.parse(saved);
+        // 기존 string 배열 형태의 데이터를 새로운 구조로 마이그레이션
+        if (Array.isArray(parsedData) && parsedData.length > 0) {
+          if (typeof parsedData[0] === "string") {
+            // 기존 string 배열 형태인 경우 빈 배열로 초기화
+            setRecentSearches([]);
+            localStorage.removeItem("recentLocationSearches");
+          } else {
+            // 새로운 구조인 경우 그대로 사용
+            setRecentSearches(parsedData);
+          }
+        } else {
+          setRecentSearches([]);
+        }
+      } catch (error) {
+        console.error("최근 검색어 데이터 파싱 오류:", error);
+        setRecentSearches([]);
+      }
     }
   }, []);
 
@@ -129,6 +151,11 @@ const LocationSearchScreen: React.FC<Props> = ({
     setSearchKeyword(value);
   };
 
+  // 검색어 전체 삭제 핸들러
+  const handleClearSearch = () => {
+    setSearchKeyword("");
+  };
+
   // 검색 결과 선택 핸들러
   const handleResultSelect = (result: KakaoPlaceSearchResult) => {
     const locationData: LocationData = {
@@ -139,9 +166,14 @@ const LocationSearchScreen: React.FC<Props> = ({
     };
 
     // 최근 검색어에 추가
+    const newSearchData: RecentSearchData = {
+      placeName: result.place_name,
+      address: result.road_address_name || result.address_name,
+    };
+
     const newRecentSearches = [
-      result.place_name,
-      ...recentSearches.filter((item) => item !== result.place_name),
+      newSearchData,
+      ...recentSearches.filter((item) => item.placeName !== result.place_name),
     ].slice(0, 5); // 최대 5개까지만 저장
 
     setRecentSearches(newRecentSearches);
@@ -154,44 +186,59 @@ const LocationSearchScreen: React.FC<Props> = ({
   };
 
   // 최근 검색어 클릭 핸들러
-  const handleRecentSearchClick = (keyword: string) => {
-    setSearchKeyword(keyword);
+  const handleRecentSearchClick = (searchData: RecentSearchData) => {
+    setSearchKeyword(searchData.placeName);
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-white px-4 py-2">
+    <div className="fixed inset-0 z-50 flex flex-col bg-white px-5 py-2">
       {/* 헤더 */}
       <NavigationHeader title="" onBack={onClose} />
 
       {/* 검색 입력 */}
-      <div className="mt-4 flex items-center rounded-2xl bg-neutral-200 px-5">
-        <div className="mr-2 size-3 rounded-full bg-blue-500"></div>
-        <Input
+      <div className="mt-4 flex w-full items-center gap-2 rounded-2xl bg-neutral-100 px-5">
+        <div className="size-2.5 flex-shrink-0 rounded-full bg-blue-500"></div>
+        <input
           value={searchKeyword}
-          onValueChange={setSearchKeyword}
+          onChange={handleSearchChange}
           placeholder="지역, 건물명을 검색해보세요"
-          className="w-full bg-transparent text-neutral-600 focus:outline-none focus:ring-0"
+          className="w-full bg-transparent px-3 py-2 text-neutral-600 placeholder:text-neutral-400 focus:outline-none"
           autoFocus
         />
+        {searchKeyword && (
+          <button
+            onClick={handleClearSearch}
+            className="flex size-4 items-center justify-center rounded-full bg-neutral-400 p-0.5 text-neutral-200"
+          >
+            <IoClose className="" />
+          </button>
+        )}
       </div>
 
       {/* 검색 결과 영역 */}
       <div className="flex-1 overflow-y-auto">
         {/* 최근 검색어 (검색어가 없을 때만 표시) */}
         {!searchKeyword && recentSearches.length > 0 && (
-          <div className="p-4">
-            <h3 className="mb-3 text-sm font-medium text-gray-600">
-              최근 검색
-            </h3>
-            <div className="space-y-2">
-              {recentSearches.map((keyword, index) => (
+          <div className="mt-3 py-3">
+            <div className="text-xs font-medium text-neutral-400">
+              최근 일한 위치
+            </div>
+            <div className="mt-2 space-y-2 px-2">
+              {recentSearches.map((searchData, index) => (
                 <button
                   key={index}
-                  onClick={() => handleRecentSearchClick(keyword)}
-                  className="flex w-full items-center rounded-lg p-3 text-left transition-colors hover:bg-gray-50"
+                  onClick={() => handleRecentSearchClick(searchData)}
+                  className="flex w-full gap-3 rounded-lg py-3 text-left transition-colors hover:bg-gray-50"
                 >
-                  <HiOutlineLocationMarker className="mr-3 h-5 w-5 flex-shrink-0 text-gray-400" />
-                  <span className="text-gray-700">{keyword}</span>
+                  <div className="mt-2 size-2.5 rounded-full border-[1.5px] border-blue-500"></div>
+                  <div className="flex-1">
+                    <div className="font-medium text-neutral-600">
+                      {searchData.placeName}
+                    </div>
+                    <div className="mt-1 text-xs text-neutral-400">
+                      {searchData.address}
+                    </div>
+                  </div>
                 </button>
               ))}
             </div>
@@ -208,39 +255,33 @@ const LocationSearchScreen: React.FC<Props> = ({
 
         {/* 검색 결과 */}
         {!isSearching && searchKeyword && searchResults.length > 0 && (
-          <div className="p-4">
-            <h3 className="mb-3 text-sm font-medium text-gray-600">
-              검색 결과 ({searchResults.length}개)
-            </h3>
+          <div className="py-3">
             <div className="space-y-2">
               {searchResults.map((result) => (
                 <button
                   key={result.id}
                   onClick={() => handleResultSelect(result)}
-                  className="flex w-full items-start rounded-lg p-3 text-left transition-colors hover:bg-gray-50"
+                  className="flex w-full items-start p-3 text-left"
                 >
-                  <HiOutlineLocationMarker className="mr-3 mt-1 h-5 w-5 flex-shrink-0 text-blue-500" />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between">
-                      <div className="truncate font-medium text-gray-900">
+                      <div className="truncate text-gray-900">
                         {result.place_name}
                       </div>
+                    </div>
+                    <div className="mt-1 flex items-center text-xs text-neutral-400">
                       {result.distance && (
-                        <span className="ml-2 flex-shrink-0 text-xs font-medium text-blue-600">
+                        <span className="flex-shrink-0">
                           {parseInt(result.distance) < 1000
                             ? `${result.distance}m`
                             : `${(parseInt(result.distance) / 1000).toFixed(1)}km`}
                         </span>
                       )}
-                    </div>
-                    <div className="truncate text-sm text-gray-500">
-                      {result.road_address_name || result.address_name}
-                    </div>
-                    {result.category_name && (
-                      <div className="mt-1 text-xs text-gray-400">
-                        {result.category_name}
+                      <div className="mx-1 h-3 border-[0.5px] border-neutral-400"></div>
+                      <div className="truncate">
+                        {result.road_address_name || result.address_name}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </button>
               ))}

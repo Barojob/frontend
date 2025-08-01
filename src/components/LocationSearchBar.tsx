@@ -2,6 +2,7 @@ import React from "react";
 import { IoMdLocate } from "react-icons/io";
 import { cn } from "../utils/classname";
 import Button from "./Button";
+import Chip from "./Chip";
 
 type LocationData = {
   address: string;
@@ -47,20 +48,32 @@ const LocationSearchBar: React.FC<Props> = ({
           어디에서 일할까요?
         </div>
         {/* 위치 표시 - 클릭 가능하도록 수정 */}
-        <div className="mb-4">
+        <div className="">
           <button
             onClick={onSearchClick}
             className="-m-2 mb-1 flex w-full gap-4 rounded-lg p-2 text-left transition-colors hover:bg-gray-50"
           >
-            <div className="mt-1.5 size-2.5 rounded-full bg-blue-600"></div>
-            <div className="font-medium text-neutral-600">
-              {displayLocation?.placeName || "선택된 위치"}
-              <br />
-              <span className="text-sm text-neutral-400">
+            <div className="mt-2 size-2.5 rounded-full bg-blue-500"></div>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-neutral-600">
+                {displayLocation?.placeName || "선택된 위치"}
+              </span>
+              <span className="text-xs text-neutral-400">
                 {displayLocation?.address || "지도에서 위치를 확인하세요"}
               </span>
             </div>
           </button>
+        </div>
+        <div className="mb-3 flex gap-2 border-t border-neutral-200 pt-3">
+          <Chip className="rounded-full bg-neutral-100 px-2 text-xs text-neutral-400">
+            회사
+          </Chip>
+          <Chip className="rounded-full bg-neutral-100 px-2 text-xs text-neutral-400">
+            경기 포천시 중앙로 119번길 26
+          </Chip>
+          <Chip className="rounded-full bg-neutral-100 px-2 text-xs text-neutral-400">
+            최근 기록
+          </Chip>
         </div>
 
         {/* 근무지로 설정 버튼 */}
