@@ -46,10 +46,31 @@ const Map: React.FC<Props> = ({ className, ref }) => {
         return;
       }
 
-      // 현재 위치를 가져와서 지도 중심으로 설정
+      // 기본 위치 설정 함수
+      const createMapWithDefaultLocation = () => {
+        const map = new kakao.maps.Map(internalRef.current!, {
+          center: new kakao.maps.LatLng(37.5665, 126.978), // 서울 시청
+          level: 3,
+        });
+
+        setMap(map);
+        setIsLoading(false);
+        setIsLoaded(true);
+        setIsError(false);
+        console.log("🗺️ 지도 로드 완료 (기본 위치)");
+      };
+
+      // 현재 위치를 가져와서 지도 중심으로 설정 (timeout 추가)
       if (navigator.geolocation) {
+        // 3초 후 강제로 기본 위치 사용
+        const timeoutId = setTimeout(() => {
+          console.log("⏰ 위치 요청 타임아웃, 기본 위치 사용");
+          createMapWithDefaultLocation();
+        }, 3000);
+
         navigator.geolocation.getCurrentPosition(
           (position) => {
+            clearTimeout(timeoutId);
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
 
@@ -62,31 +83,22 @@ const Map: React.FC<Props> = ({ className, ref }) => {
             setIsLoading(false);
             setIsLoaded(true);
             setIsError(false);
+            console.log("🗺️ 지도 로드 완료 (현재 위치)");
           },
-          () => {
-            // 위치 정보를 가져올 수 없는 경우 기본 위치 사용
-            const map = new kakao.maps.Map(internalRef.current!, {
-              center: new kakao.maps.LatLng(37.5665, 126.978), // 서울 시청
-              level: 3,
-            });
-
-            setMap(map);
-            setIsLoading(false);
-            setIsLoaded(true);
-            setIsError(false);
+          (error) => {
+            clearTimeout(timeoutId);
+            console.log("📍 위치 정보 가져오기 실패:", error.message);
+            createMapWithDefaultLocation();
+          },
+          {
+            timeout: 5000, // 5초 타임아웃
+            enableHighAccuracy: false, // 빠른 응답을 위해 정확도 낮춤
           },
         );
       } else {
         // geolocation을 지원하지 않는 경우 기본 위치 사용
-        const map = new kakao.maps.Map(internalRef.current, {
-          center: new kakao.maps.LatLng(37.5665, 126.978), // 서울 시청
-          level: 3,
-        });
-
-        setMap(map);
-        setIsLoading(false);
-        setIsLoaded(true);
-        setIsError(false);
+        console.log("🚫 Geolocation 미지원, 기본 위치 사용");
+        createMapWithDefaultLocation();
       }
     });
   }

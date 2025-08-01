@@ -58,7 +58,7 @@ const MainPage: React.FC = () => {
       )}
 
       {/* 고용주용 컨텐츠 */}
-      {isEmployer && (
+      {!isEmployer && (
         <>
           <div className="mt-8">
             <MainHeading title="경기 포천시" />

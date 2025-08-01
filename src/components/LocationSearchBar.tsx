@@ -14,9 +14,7 @@ type Props = {
   currentLocation?: LocationData | null;
   selectedLocation?: LocationData | null;
   onCurrentLocationClick: () => void;
-  onSearch: (keyword: string) => void;
   onLocationConfirm: () => void;
-  isSearching?: boolean;
   className?: string;
 };
 
@@ -29,6 +27,11 @@ const LocationSearchBar: React.FC<Props> = ({
 }) => {
   // 표시할 위치: 선택된 위치가 있으면 선택된 위치, 없으면 현재 위치
   const displayLocation = selectedLocation || currentLocation;
+
+  // 디버깅을 위한 로그
+  console.log("🏠 LocationSearchBar - displayLocation:", displayLocation);
+  console.log("🏠 LocationSearchBar - selectedLocation:", selectedLocation);
+  console.log("🏠 LocationSearchBar - currentLocation:", currentLocation);
 
   return (
     <div
