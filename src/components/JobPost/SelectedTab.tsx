@@ -23,7 +23,7 @@ const SelectedTab: React.FC<SelectedTabProps> = ({
       className={cn("flex items-center justify-between", className)}
       onClick={onClick}
     >
-      <div className="flex-1">
+      <div className="flex-[0.6]">
         <span className="text-base font-normal text-gray-500">{title}</span>
       </div>
       <div className="flex-1">
