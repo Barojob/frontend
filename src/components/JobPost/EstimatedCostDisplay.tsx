@@ -10,7 +10,7 @@ const EstimatedCostDisplay: React.FC<EstimatedCostDisplayProps> = ({
   maxCost,
 }) => {
   return (
-    <div>
+    <div className="pb-20">
       <div className="text-2xl font-bold text-neutral-600">예상 금액</div>
       <div className="mt-3">
         <div className="rounded-lg bg-gray-100 px-4 py-3 text-center">
