@@ -1,5 +1,6 @@
 import React from "react";
 import { IoMdLocate } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import { cn } from "../utils/classname";
 import Button from "./Button";
 import Chip from "./Chip";
@@ -28,6 +29,8 @@ const LocationSearchBar: React.FC<Props> = ({
   onSearchClick,
   className,
 }) => {
+  const navigate = useNavigate();
+
   // 표시할 위치: 선택된 위치가 있으면 선택된 위치, 없으면 현재 위치
   const displayLocation = selectedLocation || currentLocation;
 
@@ -35,6 +38,25 @@ const LocationSearchBar: React.FC<Props> = ({
   console.log("🏠 LocationSearchBar - displayLocation:", displayLocation);
   console.log("🏠 LocationSearchBar - selectedLocation:", selectedLocation);
   console.log("🏠 LocationSearchBar - currentLocation:", currentLocation);
+
+  const handleLocationConfirm = () => {
+    if (displayLocation) {
+      // URL 쿼리 파라미터로 주소 정보 전달
+      const searchParams = new URLSearchParams();
+      searchParams.set("address", displayLocation.address);
+      searchParams.set("latitude", displayLocation.latitude.toString());
+      searchParams.set("longitude", displayLocation.longitude.toString());
+      if (displayLocation.placeName) {
+        searchParams.set("placeName", displayLocation.placeName);
+      }
+
+      // job-posting 페이지로 이동하면서 쿼리 파라미터 전달
+      navigate(`/job-posting?${searchParams.toString()}`);
+    } else {
+      // 위치 정보가 없으면 기본 동작
+      onLocationConfirm();
+    }
+  };
 
   return (
     <div
@@ -80,7 +102,7 @@ const LocationSearchBar: React.FC<Props> = ({
         <Button
           size="xl"
           theme="primary"
-          onClick={onLocationConfirm}
+          onClick={handleLocationConfirm}
           className="w-full"
         >
           근무지로 설정
