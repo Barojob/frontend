@@ -41,17 +41,14 @@ export const useJobPosting = () => {
 
   const handleEquipmentToggle = (equipmentId: string) => {
     setSelectedEquipment((prev) => {
-      // "없음"을 선택한 경우
       if (equipmentId === "none") {
         return ["none"];
       }
 
-      // "없음"이 이미 선택되어 있는데 다른 장비를 선택한 경우
       if (prev.includes("none")) {
         return [equipmentId];
       }
 
-      // 일반적인 토글 로직
       if (prev.includes(equipmentId)) {
         return prev.filter((id) => id !== equipmentId);
       } else {
@@ -132,11 +129,10 @@ export const useJobPosting = () => {
     setIsEditing(false);
   };
 
-  // 편집 핸들러들 - 해당 단계로 돌아가면서 이후 단계들을 자동 완료
+  // 편집 핸들러들
   const handleJobTypeEdit = () => {
     setIsJobTypeCompleted(false);
     setIsEditing(true);
-    // 이후 단계들 모두 초기화
     setIsDemolitionWorkCompleted(false);
     setIsEquipmentCompleted(false);
     setIsExperienceCompleted(false);
@@ -148,7 +144,6 @@ export const useJobPosting = () => {
   const handleDemolitionWorkEdit = () => {
     setIsDemolitionWorkCompleted(false);
     setIsEditing(true);
-    // 이후 단계들 모두 초기화
     setIsEquipmentCompleted(false);
     setIsExperienceCompleted(false);
     setIsWorkTimeCompleted(false);
@@ -159,7 +154,6 @@ export const useJobPosting = () => {
   const handleEquipmentEdit = () => {
     setIsEquipmentCompleted(false);
     setIsEditing(true);
-    // 이후 단계들 모두 초기화
     setIsExperienceCompleted(false);
     setIsWorkTimeCompleted(false);
     setIsPersonCountCompleted(false);
@@ -169,7 +163,6 @@ export const useJobPosting = () => {
   const handleExperienceEdit = () => {
     setIsExperienceCompleted(false);
     setIsEditing(true);
-    // 이후 단계들 모두 초기화
     setIsWorkTimeCompleted(false);
     setIsPersonCountCompleted(false);
     setIsPersonCountSelected(false);
@@ -178,7 +171,6 @@ export const useJobPosting = () => {
   const handleWorkTimeEdit = () => {
     setIsWorkTimeCompleted(false);
     setIsEditing(true);
-    // 이후 단계들 모두 초기화
     setIsPersonCountCompleted(false);
     setIsPersonCountSelected(false);
   };
@@ -193,11 +185,10 @@ export const useJobPosting = () => {
   const handleJobTypeConfirmAfterEdit = () => {
     if (selectedJobTypes.length > 0) {
       setIsJobTypeCompleted(true);
-      // 이후 단계들 자동 완료
       if (selectedDemolitionWork.length > 0) setIsDemolitionWorkCompleted(true);
       if (selectedEquipment.length > 0) setIsEquipmentCompleted(true);
       if (selectedExperience.length > 0) setIsExperienceCompleted(true);
-      setIsWorkTimeCompleted(true); // 기본값이 있으므로 항상 완료
+      setIsWorkTimeCompleted(true);
       setIsPersonCountSelected(true);
       setIsPersonCountCompleted(true);
       setIsEditing(false);
@@ -207,10 +198,9 @@ export const useJobPosting = () => {
   const handleDemolitionWorkConfirmAfterEdit = () => {
     if (selectedDemolitionWork.length > 0) {
       setIsDemolitionWorkCompleted(true);
-      // 이후 단계들 자동 완료
       if (selectedEquipment.length > 0) setIsEquipmentCompleted(true);
       if (selectedExperience.length > 0) setIsExperienceCompleted(true);
-      setIsWorkTimeCompleted(true); // 기본값이 있으므로 항상 완료
+      setIsWorkTimeCompleted(true);
       setIsPersonCountSelected(true);
       setIsPersonCountCompleted(true);
       setIsEditing(false);
@@ -220,9 +210,8 @@ export const useJobPosting = () => {
   const handleEquipmentConfirmAfterEdit = () => {
     if (selectedEquipment.length > 0) {
       setIsEquipmentCompleted(true);
-      // 이후 단계들 자동 완료
       if (selectedExperience.length > 0) setIsExperienceCompleted(true);
-      setIsWorkTimeCompleted(true); // 기본값이 있으므로 항상 완료
+      setIsWorkTimeCompleted(true);
       setIsPersonCountSelected(true);
       setIsPersonCountCompleted(true);
       setIsEditing(false);
@@ -232,8 +221,7 @@ export const useJobPosting = () => {
   const handleExperienceConfirmAfterEdit = () => {
     if (selectedExperience.length > 0) {
       setIsExperienceCompleted(true);
-      // 이후 단계들 자동 완료
-      setIsWorkTimeCompleted(true); // 기본값이 있으므로 항상 완료
+      setIsWorkTimeCompleted(true);
       setIsPersonCountSelected(true);
       setIsPersonCountCompleted(true);
       setIsEditing(false);
@@ -242,7 +230,6 @@ export const useJobPosting = () => {
 
   const handleWorkTimeConfirmAfterEdit = () => {
     setIsWorkTimeCompleted(true);
-    // 이후 단계들 자동 완료
     setIsPersonCountSelected(true);
     setIsPersonCountCompleted(true);
     setIsEditing(false);
@@ -279,15 +266,6 @@ export const useJobPosting = () => {
     return { min: minCost, max: maxCost };
   };
 
-  // 모든 단계가 완료되었는지 확인
-  const isAllStepsCompleted =
-    isJobTypeCompleted &&
-    isDemolitionWorkCompleted &&
-    isEquipmentCompleted &&
-    isExperienceCompleted &&
-    isWorkTimeCompleted &&
-    isPersonCountCompleted;
-
   return {
     // 상태
     activeCategory,
@@ -305,7 +283,6 @@ export const useJobPosting = () => {
     isExperienceCompleted,
     isWorkTimeCompleted,
     isPersonCountCompleted,
-    isAllStepsCompleted,
     isEditing,
 
     // 핸들러

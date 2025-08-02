@@ -240,9 +240,9 @@ const JobPostingPage: React.FC<Props> = () => {
           <div className="fixed bottom-0 left-0 right-0 bg-white px-6 py-8 shadow-lg">
             <button
               onClick={handleComplete}
-              className="w-full rounded-xl bg-blue-600 py-3 text-lg font-bold text-white"
+              className="w-full rounded-xl bg-blue-600 py-3 text-lg text-white"
             >
-              설정완료
+              설정 완료
             </button>
           </div>
         )}

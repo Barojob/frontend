@@ -29,7 +29,7 @@ const ExperienceStep: React.FC<ExperienceStepProps> = ({
         <button
           onClick={onConfirm}
           disabled={selectedExperience.length === 0}
-          className={`w-full rounded-xl py-3 text-lg font-bold text-white ${
+          className={`w-full rounded-xl py-3 text-lg text-white ${
             selectedExperience.length > 0 ? "bg-blue-600" : "bg-gray-400"
           }`}
         >

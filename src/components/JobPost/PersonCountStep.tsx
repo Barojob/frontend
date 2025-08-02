@@ -29,7 +29,7 @@ const PersonCountStep: React.FC<PersonCountStepProps> = ({
       <div className="mb-4">
         <button
           onClick={onConfirm}
-          className="w-full rounded-xl bg-blue-600 py-3 text-lg font-bold text-white"
+          className="w-full rounded-xl bg-blue-600 py-3 text-lg text-white"
         >
           확인
         </button>
