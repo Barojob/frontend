@@ -74,13 +74,13 @@ const ProfileSetupStep: React.FC<ProfileSetupStepProps> = ({
         className="mt-6"
       />
 
-        <PhotoModal
+      <PhotoModal
         visible={showPhotoModal}
-          missingCertificate={!certificateFile}
-          missingBankAccount={!bankAccountFile}
+        missingCertificate={!certificateFile}
+        missingBankAccount={!bankAccountFile}
         onProceed={handleModalProceed}
         onClose={handlePhotoModalClose}
-        />
+      />
     </div>
   );
 

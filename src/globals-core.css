@@ -24,6 +24,9 @@ layer(base);
   /* Fonts */
   --font-*: initial;
   --font-brand: "Pretendard", sans-serif;
+
+  /* Animations */
+  --animate-slide-up: slide-up 0.3s ease-out;
 }
 
 @layer base {
@@ -44,4 +47,20 @@ layer(base);
 
 @utility absolute-center {
   @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+}
+
+/* Slide up animation */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
 }
