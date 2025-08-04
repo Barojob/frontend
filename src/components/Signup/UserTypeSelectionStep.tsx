@@ -6,19 +6,17 @@ type UserTypeSelectionStepProps = {
   className?: string;
   onValidityChange: (isValid: boolean) => void;
   onUserTypeChange?: (userType: string) => void;
-  onUserTypeSelect?: (userType: string) => void;
 };
 
 const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
   className,
   onValidityChange,
   onUserTypeChange,
-  onUserTypeSelect,
 }) => {
   const [selectedUserType, setSelectedUserType] = useState<string>("");
 
-  // 유효성 검사 - 항상 true로 설정 (선택 시 바로 다음 단계로)
-  const isValid = true;
+  // 유효성 검사 - 유형이 선택되었을 때만 유효
+  const isValid = selectedUserType !== "";
 
   useEffect(() => {
     onValidityChange(isValid);
@@ -27,17 +25,16 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
   const handleUserTypeSelect = (userType: string) => {
     setSelectedUserType(userType);
     onUserTypeChange?.(userType);
-    // 선택과 동시에 다음 단계로 진행
-    setTimeout(() => {
-      onUserTypeSelect?.(userType);
-    }, 200); // 선택 애니메이션을 위한 짧은 딜레이
+    // 선택만 하고 자동으로 다음 단계로 넘어가지 않음
   };
 
   return (
     <div className={cn("", className)}>
       {/* 상단 타이틀 */}
       <div className="mt-8">
-        <div className="text-2xl font-bold text-gray-900">회원가입 유형을</div>
+        <div className="text-2xl font-bold text-gray-900">
+          <span className="text-blue-500">회원가입 유형</span>을
+        </div>
         <div className="mt-1 text-2xl font-bold text-gray-900">
           선택해주세요
         </div>

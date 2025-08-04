@@ -107,8 +107,8 @@ const SignupLicensePage: React.FC = () => {
 
   const handleSkipNext = () => {
     setShowSkipModal(false);
-    // 다음 페이지로 이동
-    console.log("다음 페이지로 이동");
+    // SignupAccountPage로 이동
+    console.log("계좌 입력 페이지로 이동");
     navigate("/signup/account");
   };
 
@@ -245,14 +245,25 @@ const SignupLicensePage: React.FC = () => {
       {/* 하단 고정 버튼 섹션 (푸터) */}
       <div className="safe-area-inset-bottom bg-white px-6 py-6 pb-12">
         <div className="mx-auto max-w-md">
-          <DeprecatedButton
-            variant="primary"
-            size="md"
-            className="w-full bg-gray-200"
-            onClick={handleSkip}
-          >
-            건너뛰기
-          </DeprecatedButton>
+          {uploadedImage ? (
+            <DeprecatedButton
+              variant="blue"
+              size="md"
+              className="w-full"
+              onClick={() => navigate("/signup/account")}
+            >
+              완료
+            </DeprecatedButton>
+          ) : (
+            <DeprecatedButton
+              variant="primary"
+              size="md"
+              className="w-full bg-gray-200"
+              onClick={handleSkip}
+            >
+              건너뛰기
+            </DeprecatedButton>
+          )}
         </div>
       </div>
 

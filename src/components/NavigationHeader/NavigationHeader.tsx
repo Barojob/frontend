@@ -15,30 +15,17 @@ const NavigationHeader: React.FC<Props> = ({
   showBackButton = true,
   className,
 }) => {
-  const handleTitleClick = () => {
-    if (showBackButton && onBack) {
-      onBack();
-    }
-  };
-
   return (
     <div
       className={cn("mt-4 flex w-full items-center text-gray-500", className)}
     >
       {showBackButton && (
         <HiOutlineChevronLeft
-          className="text-lg"
+          className="cursor-pointer text-lg"
           onClick={onBack}
-          onTouchStart={onBack}
         />
       )}
-      <div
-        className={cn("", showBackButton ? "ml-1 cursor-pointer" : "")}
-        onClick={handleTitleClick}
-        onTouchStart={handleTitleClick}
-      >
-        {title}
-      </div>
+      <div className={cn("", showBackButton ? "ml-1" : "")}>{title}</div>
     </div>
   );
 };
