@@ -38,7 +38,6 @@ const CheckBox: React.FC<Props> = ({
 
       <button
         className={cn(
-          "cursor-pointer transition-all duration-100",
           "text-gray-100 peer-checked:text-blue-600",
           "peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
           className,

@@ -19,15 +19,16 @@ const CheckBoxWithLabel: React.FC<Props> = ({
   return (
     <div
       className={cn(
-        "flex items-center gap-x-2 font-normal",
+        "flex items-center gap-x-2",
         disabled && "opacity-50",
         className,
       )}
     >
       <label
         className={cn(
-          "cursor-pointer text-base duration-200",
-          checked ? "text-black-1" : "text-gray-400",
+          "cursor-pointer text-base font-normal",
+          checked && "text-black-1",
+          !checked && "text-gray-400",
           disabled && "cursor-not-allowed opacity-50",
           labelPosition === "right" && "order-last",
         )}
