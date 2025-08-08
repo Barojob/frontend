@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { cn } from "../../utils/classname";
-import CheckBox from "../CheckBox/CheckBox";
+import CheckBox from "../CheckBox";
 import CircleCheckBox from "../CheckBox/CircleCheckBox";
 import DeprecatedButton from "../DeprecatedButton/DeprecatedButton";
 import Modal from "../Modal";
