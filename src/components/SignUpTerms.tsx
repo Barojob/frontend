@@ -12,14 +12,14 @@ export type CheckItem = {
 
 type Props = {
   className?: string;
-  items: CheckItem[];
+  terms: CheckItem[];
   isRequiredAllChecked: boolean;
-  onChange: (items: CheckItem[]) => void;
+  onChange: (terms: CheckItem[]) => void;
 };
 
 const SignUpTerms: React.FC<Props> = ({
   className,
-  items,
+  terms,
   isRequiredAllChecked,
   onChange,
 }) => {
@@ -35,17 +35,17 @@ const SignUpTerms: React.FC<Props> = ({
       />
 
       <ul className="space-y-3">
-        {items.map((item) => (
-          <li key={item.label}>
+        {terms.map((term) => (
+          <li key={term.label}>
             <TermCheckBox
-              id={item.label}
+              id={term.label}
               theme="secondary"
               label={
-                item.required ? `[필수] ${item.label}` : `[선택] ${item.label}`
+                term.required ? `[필수] ${term.label}` : `[선택] ${term.label}`
               }
-              checked={item.checked}
-              onChange={handleToggleItem(item.label)}
-              onView={handleViewItem(item)}
+              checked={term.checked}
+              onChange={handleToggleItem(term.label)}
+              onView={handleViewItem(term)}
             />
           </li>
         ))}
@@ -55,24 +55,24 @@ const SignUpTerms: React.FC<Props> = ({
 
   function handleToggleItem(label: string) {
     return () => {
-      const newItems = items.map((item) =>
-        item.label === label ? { ...item, checked: !item.checked } : item,
+      const newTerms = terms.map((term) =>
+        term.label === label ? { ...term, checked: !term.checked } : term,
       );
 
-      onChange(newItems);
+      onChange(newTerms);
     };
   }
 
   function handleToggleAll() {
     onChange(
-      items.map((item) => ({ ...item, checked: !isRequiredAllChecked })),
+      terms.map((term) => ({ ...term, checked: !isRequiredAllChecked })),
     );
   }
 
-  function handleViewItem(item: CheckItem) {
+  function handleViewItem(term: CheckItem) {
     return () => {
       // TODO: 모달이나 새 페이지로 상세 내용 표시
-      alert(`${item.label}\n\n${item.content}`);
+      alert(`${term.label}\n\n${term.content}`);
     };
   }
 };

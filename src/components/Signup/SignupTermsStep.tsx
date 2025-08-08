@@ -1,24 +1,22 @@
 import React from "react";
+import useSignupContext from "../../hooks/useSignupContext";
 import { cn } from "../../utils/classname";
 import Button from "../Button";
-import SignUpTerms, { CheckItem } from "../SignUpTerms";
+import SignUpTerms from "../SignUpTerms";
 
 type Props = {
   className?: string;
-  items: CheckItem[];
-  onTermsChange: (items: CheckItem[]) => void;
   onStepChange: () => void;
 };
 
-const SignupTermsStep: React.FC<Props> = ({
-  className,
-  items,
-  onTermsChange,
-  onStepChange,
-}) => {
-  const isRequiredAllChecked = items
-    .filter((item) => item.required)
-    .every((item) => item.checked);
+const SignupTermsStep: React.FC<Props> = ({ className, onStepChange }) => {
+  const {
+    termsState: [terms, setTerms],
+  } = useSignupContext();
+
+  const isRequiredAllChecked = terms
+    .filter((term) => term.required)
+    .every((term) => term.checked);
 
   return (
     <div className={cn("", className)}>
@@ -34,9 +32,9 @@ const SignupTermsStep: React.FC<Props> = ({
 
       <SignUpTerms
         className="mt-12"
-        items={items}
+        terms={terms}
         isRequiredAllChecked={isRequiredAllChecked}
-        onChange={onTermsChange}
+        onChange={setTerms}
       />
 
       <div className="bottom-0-responsive pb-12.5 absolute inset-x-0 px-6">

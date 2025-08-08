@@ -1,3 +1,6 @@
+import React from "react";
+import { CheckItem } from "../components/SignUpTerms";
+
 export enum SignupStep {
   TERMS,
   PHONE_VERIFICATION,
@@ -9,3 +12,7 @@ export enum SignupStep {
   WORKER_EXPERIENCE,
   PROFILE_SETUP,
 }
+
+export type SignUpContextType = {
+  termsState: [CheckItem[], React.Dispatch<React.SetStateAction<CheckItem[]>>];
+};
