@@ -3,17 +3,17 @@ import { HiOutlineChevronLeft } from "react-icons/hi";
 import { cn } from "../../utils/classname";
 
 type Props = {
-  title: string;
-  onBack?: () => void;
-  showBackButton?: boolean;
   className?: string;
+  title: string;
+  showBackButton?: boolean;
+  onBack?: () => void;
 };
 
 const NavigationHeader: React.FC<Props> = ({
-  title,
-  onBack,
-  showBackButton = true,
   className,
+  title,
+  showBackButton = true,
+  onBack,
 }) => {
   return (
     <div

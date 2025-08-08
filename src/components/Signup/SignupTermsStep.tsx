@@ -1,14 +1,21 @@
 import React from "react";
 import { cn } from "../../utils/classname";
+import Button from "../Button";
 import SignUpTerms, { CheckItem } from "../SignUpTerms";
 
 type Props = {
   className?: string;
   items: CheckItem[];
-  onChange: (items: CheckItem[]) => void;
+  onTermsChange: (items: CheckItem[]) => void;
+  onStepChange: () => void;
 };
 
-const SignupTermsStep: React.FC<Props> = ({ className, items, onChange }) => {
+const SignupTermsStep: React.FC<Props> = ({
+  className,
+  items,
+  onTermsChange,
+  onStepChange,
+}) => {
   const isRequiredAllChecked = items
     .filter((item) => item.required)
     .every((item) => item.checked);
@@ -29,8 +36,20 @@ const SignupTermsStep: React.FC<Props> = ({ className, items, onChange }) => {
         className="mt-12"
         items={items}
         isRequiredAllChecked={isRequiredAllChecked}
-        onChange={onChange}
+        onChange={onTermsChange}
       />
+
+      <div className="bottom-0-responsive pb-12.5 absolute inset-x-0 px-6">
+        <Button
+          theme="primary"
+          size="md"
+          block
+          disabled={!isRequiredAllChecked}
+          onClick={onStepChange}
+        >
+          동의합니다
+        </Button>
+      </div>
     </div>
   );
 };

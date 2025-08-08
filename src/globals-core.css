@@ -1,9 +1,7 @@
 @import "tailwindcss";
 @import "swiper/css";
 
-/* FONT: Pretendard */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css")
-layer(base);
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
 @theme {
   /* Colors */
@@ -22,7 +20,6 @@ layer(base);
   --color-main-1: #e1e5ef;
 
   /* Fonts */
-  --font-*: initial;
   --font-brand: "Pretendard", sans-serif;
 
   /* Animations */
@@ -36,6 +33,10 @@ layer(base);
     @apply h-full;
   }
 
+  body {
+    @apply font-brand;
+  }
+
   button:hover:not(:disabled) {
     @apply cursor-pointer;
   }
@@ -47,6 +48,11 @@ layer(base);
 
 @utility absolute-center {
   @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+}
+
+@utility bottom-0-responsive {
+  bottom: 0;
+  bottom: max(0px, env(safe-area-inset-bottom));
 }
 
 /* Slide up animation */
