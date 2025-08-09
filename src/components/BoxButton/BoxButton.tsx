@@ -85,7 +85,7 @@ const BoxButton: React.FC<BoxButtonProps> = ({
           <img
             src={image}
             alt={name}
-            className="h-16 w-16 rounded object-cover"
+            className="h-16 w-16 rounded object-contain"
           />
         </div>
       )}

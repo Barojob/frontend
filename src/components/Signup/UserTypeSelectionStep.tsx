@@ -44,24 +44,20 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
       <div className="mt-40 flex justify-center">
         <div className="flex w-full max-w-md gap-4">
           <BoxButton
-            name=""
+            name="구인자"
             onClick={() => handleUserTypeSelect("employer")}
             selected={selectedUserType === "employer"}
             className="flex-1"
             image="/images/employer.svg" // 구인자 SVG 이미지
-          >
-            구인자
-          </BoxButton>
+          />
 
           <BoxButton
-            name=""
+            name="근로자"
             onClick={() => handleUserTypeSelect("worker")}
             selected={selectedUserType === "worker"}
             className="flex-1"
             image="/images/worker.svg" // 근로자 SVG 이미지
-          >
-            근로자
-          </BoxButton>
+          />
         </div>
       </div>
     </div>
