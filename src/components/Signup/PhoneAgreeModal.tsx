@@ -1,6 +1,7 @@
+/*
 import React, { useState } from "react";
 import { cn } from "../../utils/classname";
-import CheckBox from "../CheckBox/CheckBox";
+import CheckBox from "../CheckBox";
 import CircleCheckBox from "../CheckBox/CircleCheckBox";
 import DeprecatedButton from "../DeprecatedButton/DeprecatedButton";
 import Modal from "../Modal";
@@ -121,3 +122,10 @@ const PhoneAgreeModal: React.FC<PhoneAgreeModalProps> = ({
 };
 
 export default PhoneAgreeModal;
+*/
+
+// 레거시 코드 - 현재 사용되지 않음
+// Context 패턴으로 회원가입 플로우를 개선하면서 더 이상 사용하지 않는 컴포넌트입니다.
+export default function PhoneAgreeModal() {
+  return null;
+}

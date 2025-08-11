@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+import useSignupContext from "../../hooks/useSignupContext";
+import { SignupStep } from "../../types/signup";
 import { cn } from "../../utils/classname";
+import Button from "../Button";
 
 type WorkerExperienceStepProps = {
   className?: string;
@@ -12,6 +15,10 @@ const WorkerExperienceStep: React.FC<WorkerExperienceStepProps> = ({
   onValidityChange,
   onSelectedJobsChange,
 }) => {
+  const {
+    stepState: [, setCurrentStep],
+  } = useSignupContext();
+
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedJobs, setSelectedJobs] = useState<string[]>([]);
 
@@ -70,6 +77,19 @@ const WorkerExperienceStep: React.FC<WorkerExperienceStepProps> = ({
         return [...prev, job];
       }
     });
+  };
+
+  // 건너뛰기 버튼 핸들러
+  const handleSkip = () => {
+    // 이수증 등록 페이지로 이동
+    setCurrentStep(SignupStep.WORKER_LICENSE);
+  };
+
+  // 다음 단계 버튼 핸들러
+  const handleNext = () => {
+    // 선택된 경험을 저장하고 다음 단계로 이동
+    // 이수증 등록 페이지로 이동
+    setCurrentStep(SignupStep.WORKER_LICENSE);
   };
 
   useEffect(() => {
@@ -152,6 +172,31 @@ const WorkerExperienceStep: React.FC<WorkerExperienceStepProps> = ({
           )}
         </div>
       )}
+
+      {/* 하단 버튼 영역 - 화면 하단 고정 */}
+      <div className="animate-slide-up fixed bottom-8 left-4 right-4">
+        {selectedJobs.length === 0 ? (
+          // 아무것도 선택하지 않았을 때 - 건너뛰기 버튼
+          <Button
+            onClick={handleSkip}
+            theme="primary"
+            size="md"
+            className="w-full transition-transform duration-150 active:scale-[0.95]"
+          >
+            건너뛰기
+          </Button>
+        ) : (
+          // 하나 이상 선택했을 때 - 다음 단계 버튼
+          <Button
+            onClick={handleNext}
+            theme="primary"
+            size="md"
+            className="w-full transition-transform duration-150 active:scale-[0.95]"
+          >
+            다음 단계
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

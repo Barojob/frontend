@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import useSignupContext from "../../hooks/useSignupContext";
 import DropdownArrowIcon from "../../svgs/DropdownArrowIcon";
+import { SignupStep } from "../../types/signup";
 import { cn } from "../../utils/classname";
+import Button from "../Button";
 import {
   Drawer,
   DrawerClose,
@@ -20,11 +23,15 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
   className,
   onValidityChange,
 }) => {
-  const [position, setPosition] = useState("");
+  const {
+    employerInfoState: [employerInfo, setEmployerInfo],
+    stepState: [, setCurrentStep],
+  } = useSignupContext();
+
+  // 로컬 상태로 이메일을 분리해서 관리 (입력 편의성을 위해)
   const [emailLocal, setEmailLocal] = useState(""); // @ 앞부분
   const [emailDomain, setEmailDomain] = useState(""); // @ 뒷부분
   const [isCustomDomain, setIsCustomDomain] = useState(false); // 직접 입력 여부
-  const [businessNumber, setBusinessNumber] = useState("");
 
   // 필드 표시 상태
   const [showEmailField, setShowEmailField] = useState(false);
@@ -36,10 +43,23 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
   const businessNumberRef = useRef<HTMLInputElement>(null);
 
   // 이메일 도메인 옵션
-  const emailDomainOptions = ["naver.com", "gmail.com", "daum.net", "nate.com"];
+  const emailDomainOptions = React.useMemo(
+    () => ["naver.com", "gmail.com", "daum.net", "nate.com"],
+    [],
+  );
+
+  // 직함 입력 완료 핸들러
+  const handlePositionBlur = () => {
+    if (isPositionValid && !showEmailField) {
+      setShowEmailField(true);
+      setTimeout(() => {
+        emailLocalRef.current?.focus();
+      }, 200);
+    }
+  };
 
   // 유효성 검사
-  const isPositionValid = position.trim().length > 0;
+  const isPositionValid = employerInfo.position.trim().length > 0;
   const fullEmail =
     emailLocal && emailDomain ? `${emailLocal}@${emailDomain}` : "";
   const isEmailValid =
@@ -47,9 +67,14 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
     emailDomain.trim().length > 0 &&
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fullEmail);
   const isBusinessNumberValid =
-    businessNumber.replace(/[^0-9]/g, "").length === 10;
+    employerInfo.businessNumber.replace(/[^0-9]/g, "").length === 10;
 
   const isValid = isPositionValid && isEmailValid && isBusinessNumberValid;
+
+  // 직함 변경 핸들러
+  const handlePositionChange = (value: string) => {
+    setEmployerInfo((prev) => ({ ...prev, position: value }));
+  };
 
   // 사업자 번호 포맷팅 (000-00-00000)
   const handleBusinessNumberChange = (value: string) => {
@@ -63,18 +88,51 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
         formattedValue = `${numericValue.slice(0, 3)}-${numericValue.slice(3, 5)}-${numericValue.slice(5)}`;
       }
 
-      setBusinessNumber(formattedValue);
+      setEmployerInfo((prev) => ({ ...prev, businessNumber: formattedValue }));
     }
   };
 
-  // 직함 입력 완료 핸들러
-  const handlePositionBlur = () => {
-    if (isPositionValid && !showEmailField) {
+  // 이메일 변경 시 Context 업데이트
+  useEffect(() => {
+    const fullEmail =
+      emailLocal && emailDomain ? `${emailLocal}@${emailDomain}` : "";
+    setEmployerInfo((prev) => ({ ...prev, email: fullEmail }));
+  }, [emailLocal, emailDomain, setEmployerInfo]);
+
+  // 컴포넌트 마운트 시 이미 입력된 정보가 있으면 해당 필드들 표시 및 로컬 상태 초기화
+  useEffect(() => {
+    // 직함이 입력되어 있으면 이메일 필드 표시
+    if (employerInfo.position.trim().length > 0 && !showEmailField) {
       setShowEmailField(true);
-      setTimeout(() => {
-        emailLocalRef.current?.focus();
-      }, 200);
     }
+
+    // 이메일이 입력되어 있으면 휴대폰 필드 표시 및 로컬 상태 설정
+    if (employerInfo.email.trim().length > 0) {
+      setShowBusinessNumberField(true);
+
+      // 기존 이메일을 로컬과 도메인으로 분리
+      const [local, domain] = employerInfo.email.split("@");
+      if (local && domain) {
+        setEmailLocal(local);
+        setEmailDomain(domain);
+
+        // 사전정의된 도메인인지 확인
+        const isPresetDomain = emailDomainOptions.includes(domain);
+        setIsCustomDomain(!isPresetDomain);
+      }
+    }
+  }, [
+    employerInfo.position,
+    employerInfo.email,
+    showEmailField,
+    showBusinessNumberField,
+    emailDomainOptions,
+  ]);
+
+  // 다음 단계로 이동
+  const handleNextStep = () => {
+    // 구인자 정보 입력 완료 후 회원가입 완료 페이지로 이동
+    setCurrentStep(SignupStep.SIGNUP_SUCCESS);
   };
 
   // 이메일 도메인 선택 핸들러
@@ -131,8 +189,8 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
           <Input
             type="text"
             placeholder="직함을 입력하세요"
-            value={position}
-            onValueChange={setPosition}
+            value={employerInfo.position}
+            onValueChange={handlePositionChange}
             onBlur={handlePositionBlur}
             className="w-full rounded-lg border-0 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-500 transition-all duration-150 hover:bg-gray-200 focus:outline-none active:scale-[0.95]"
           />
@@ -227,7 +285,7 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
               ref={businessNumberRef}
               type="text"
               placeholder="000-00-00000"
-              value={businessNumber}
+              value={employerInfo.businessNumber}
               onValueChange={handleBusinessNumberChange}
               className="w-full rounded-lg border-0 bg-gray-100 px-4 py-3 text-gray-900 placeholder-gray-500 transition-all duration-150 hover:bg-gray-100 focus:outline-none active:scale-[0.95]"
               inputMode="numeric"
@@ -236,6 +294,20 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
           </div>
         )}
       </div>
+
+      {/* 다음 버튼 */}
+      {isValid && (
+        <div className="animate-slide-up fixed bottom-8 left-4 right-4">
+          <Button
+            size="md"
+            theme="primary"
+            onClick={handleNextStep}
+            className="w-full transition-transform duration-150 active:scale-[0.95]"
+          >
+            다음
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
