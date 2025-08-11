@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import useSignupContext from "../../hooks/useSignupContext";
+import { SignupStep } from "../../types/signup";
 import { cn } from "../../utils/classname";
 import BoxButton from "../BoxButton/BoxButton";
+import Button from "../Button";
 
 type UserTypeSelectionStepProps = {
   className?: string;
@@ -13,19 +16,30 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
   onValidityChange,
   onUserTypeChange,
 }) => {
-  const [selectedUserType, setSelectedUserType] = useState<string>("");
+  const {
+    userTypeState: [userTypeInfo, setUserTypeInfo],
+    stepState: [currentStep, setCurrentStep],
+  } = useSignupContext();
 
   // 유효성 검사 - 유형이 선택되었을 때만 유효
-  const isValid = selectedUserType !== "";
+  const isValid = userTypeInfo.userType !== "";
 
   useEffect(() => {
     onValidityChange(isValid);
   }, [isValid, onValidityChange]);
 
-  const handleUserTypeSelect = (userType: string) => {
-    setSelectedUserType(userType);
+  const handleUserTypeSelect = (userType: "employer" | "worker") => {
+    setUserTypeInfo({ userType });
     onUserTypeChange?.(userType);
-    // 선택만 하고 자동으로 다음 단계로 넘어가지 않음
+  };
+
+  // 다음 스텝으로 이동
+  const handleNextStep = () => {
+    if (userTypeInfo.userType === "employer") {
+      setCurrentStep(SignupStep.EMPLOYER_INFO);
+    } else if (userTypeInfo.userType === "worker") {
+      setCurrentStep(SignupStep.WORKER_EXPERIENCE);
+    }
   };
 
   return (
@@ -44,26 +58,36 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
       <div className="mt-40 flex justify-center">
         <div className="flex w-full max-w-md gap-4">
           <BoxButton
-            name=""
+            name="구인자"
             onClick={() => handleUserTypeSelect("employer")}
-            selected={selectedUserType === "employer"}
+            selected={userTypeInfo.userType === "employer"}
             className="flex-1"
             image="/images/employer.svg" // 구인자 SVG 이미지
-          >
-            구인자
-          </BoxButton>
+          />
 
           <BoxButton
-            name=""
+            name="근로자"
             onClick={() => handleUserTypeSelect("worker")}
-            selected={selectedUserType === "worker"}
+            selected={userTypeInfo.userType === "worker"}
             className="flex-1"
             image="/images/worker.svg" // 근로자 SVG 이미지
-          >
-            근로자
-          </BoxButton>
+          />
         </div>
       </div>
+
+      {/* 다음 버튼 */}
+      {isValid && (
+        <div className="animate-slide-up fixed bottom-8 left-4 right-4">
+          <Button
+            size="md"
+            theme="primary"
+            onClick={handleNextStep}
+            className="w-full"
+          >
+            다음
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
