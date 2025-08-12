@@ -4,16 +4,16 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
-import useSignupContext from "../../hooks/useSignupContext";
-import CameraIcon from "../../svgs/CameraIcon";
-import GalleryIcon from "../../svgs/GalleryIcon";
-import WarningIcon from "../../svgs/WarningIcon";
-import { SignupStep } from "../../types/signup";
-import { cn } from "../../utils/classname";
-import BoxButton from "../BoxButton/BoxButton";
-import Button from "../Button";
-import { Drawer, DrawerContent, DrawerTrigger } from "../Drawer";
-import Modal from "../Modal";
+import useSignupContext from "../hooks/useSignupContext";
+import CameraIcon from "../svgs/CameraIcon";
+import GalleryIcon from "../svgs/GalleryIcon";
+import WarningIcon from "../svgs/WarningIcon";
+import { SignupStep } from "../types/signup";
+import { cn } from "../utils/classname";
+import BoxButton from "./BoxButton";
+import Button from "./Button";
+import { Drawer, DrawerContent, DrawerTrigger } from "./Drawer";
+import Modal from "./Modal";
 
 // 카메라 촬영 함수 (웹 전용, 추후 Capacitor 추가 예정)
 const takePicture = async (): Promise<string | null> => {

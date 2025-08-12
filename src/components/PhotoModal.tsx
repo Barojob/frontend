@@ -1,6 +1,6 @@
 import React from "react";
-import DeprecatedButton from "../DeprecatedButton/DeprecatedButton";
-import Modal from "../Modal";
+import DeprecatedButton from "./DeprecatedButton";
+import Modal from "./Modal";
 
 type PhotoModalProps = {
   className?: string;

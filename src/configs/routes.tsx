@@ -1,6 +1,6 @@
 import { type RouteObject } from "react-router-dom";
 import IntroPage from "../pages/IntroPage";
-import JobRequest from "../pages/JobRequest";
+import JobRequestPage from "../pages/JobRequestPage";
 import LoginPage from "../pages/LoginPage";
 import LoginSuccessPage from "../pages/LoginSuccessPage";
 import MainPage from "../pages/MainPage";
@@ -35,6 +35,6 @@ export const routes = [
   },
   {
     path: "/job-request",
-    element: <JobRequest />,
+    element: <JobRequestPage />,
   },
 ] satisfies RouteObject[];

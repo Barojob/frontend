@@ -1,6 +1,6 @@
 import React from "react";
 import { HiOutlineChevronLeft } from "react-icons/hi";
-import { cn } from "../../utils/classname";
+import { cn } from "../utils/classname";
 
 type Props = {
   className?: string;

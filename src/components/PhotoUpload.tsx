@@ -1,6 +1,6 @@
 import React from "react";
 import { TiDelete } from "react-icons/ti";
-import { cn } from "../../utils/classname";
+import { cn } from "../utils/classname";
 
 type PhotoUploadProps = {
   className?: string;

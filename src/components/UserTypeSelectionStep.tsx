@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import useSignupContext from "../../hooks/useSignupContext";
-import { SignupStep } from "../../types/signup";
-import { cn } from "../../utils/classname";
-import BoxButton from "../BoxButton/BoxButton";
-import Button from "../Button";
+import useSignupContext from "../hooks/useSignupContext";
+import { SignupStep } from "../types/signup";
+import { cn } from "../utils/classname";
+import BoxButton from "./BoxButton";
+import Button from "./Button";
 
 type UserTypeSelectionStepProps = {
   className?: string;

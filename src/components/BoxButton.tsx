@@ -1,6 +1,6 @@
 import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
-import { cn } from "../../utils/classname";
+import { cn } from "../utils/classname";
 
 const BoxButtonVariant = cva(
   "flex flex-col items-center justify-center text-center border-2 rounded-lg transition-all duration-200 cursor-pointer transform-gpu active:scale-95 active:shadow-lg",

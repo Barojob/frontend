@@ -1,14 +1,14 @@
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
-import useSignupContext from "../../hooks/useSignupContext";
-import WarningIcon from "../../svgs/WarningIcon";
-import { SignupStep } from "../../types/signup";
-import { cn } from "../../utils/classname";
-import BoxButton from "../BoxButton/BoxButton";
-import Button from "../Button";
-import { Drawer, DrawerContent, DrawerTrigger } from "../Drawer";
-import Input from "../Input/Input";
-import Modal from "../Modal";
+import useSignupContext from "../hooks/useSignupContext";
+import WarningIcon from "../svgs/WarningIcon";
+import { SignupStep } from "../types/signup";
+import { cn } from "../utils/classname";
+import BoxButton from "./BoxButton";
+import Button from "./Button";
+import { Drawer, DrawerContent, DrawerTrigger } from "./Drawer";
+import Input from "./Input";
+import Modal from "./Modal";
 
 const banks = [
   { id: "nh", name: "농협은행", image: "/BankSvg/nongHyup.svg" },

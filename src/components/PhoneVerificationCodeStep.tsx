@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import useSignupContext from "../../hooks/useSignupContext";
-import { SignupStep } from "../../types/signup";
-import { cn } from "../../utils/classname";
-import Button from "../Button";
+import useSignupContext from "../hooks/useSignupContext";
+import { SignupStep } from "../types/signup";
+import { cn } from "../utils/classname";
+import Button from "./Button";
 
 type PhoneVerificationCodeStepProps = {
   className?: string;

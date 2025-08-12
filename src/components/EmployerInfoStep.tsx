@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import useSignupContext from "../../hooks/useSignupContext";
-import DropdownArrowIcon from "../../svgs/DropdownArrowIcon";
-import { SignupStep } from "../../types/signup";
-import { cn } from "../../utils/classname";
-import Button from "../Button";
+import useSignupContext from "../hooks/useSignupContext";
+import DropdownArrowIcon from "../svgs/DropdownArrowIcon";
+import { SignupStep } from "../types/signup";
+import { cn } from "../utils/classname";
+import Button from "./Button";
 import {
   Drawer,
   DrawerClose,
@@ -11,8 +11,8 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "../Drawer";
-import Input from "../Input/Input";
+} from "./Drawer";
+import Input from "./Input";
 
 type EmployerInfoStepProps = {
   className?: string;

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import NavigationHeader from "./NavigationHeader";
+import NavigationHeader from "../components/NavigationHeader/NavigationHeader";
 
 const meta: Meta<typeof NavigationHeader> = {
   title: "Layouts/NavigationHeader",

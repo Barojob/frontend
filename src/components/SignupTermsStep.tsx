@@ -1,9 +1,9 @@
 import React from "react";
-import useSignupContext from "../../hooks/useSignupContext";
-import { SignupStep } from "../../types/signup";
-import { cn } from "../../utils/classname";
-import Button from "../Button";
-import SignUpTerms from "../SignUpTerms";
+import useSignupContext from "../hooks/useSignupContext";
+import { SignupStep } from "../types/signup";
+import { cn } from "../utils/classname";
+import Button from "./Button";
+import SignUpTerms from "./SignUpTerms";
 
 type Props = {
   className?: string;

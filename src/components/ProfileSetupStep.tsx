@@ -1,8 +1,8 @@
 import React, { useEffect, useImperativeHandle, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Nullable } from "../../types/misc";
-import { cn } from "../../utils/classname";
-import PhotoModal from "./PhotoModal"; // 경로는 실제 위치에 맞게 수정
+import type { Nullable } from "../types/misc";
+import { cn } from "../utils/classname";
+import PhotoModal from "./PhotoModal";
 import PhotoUpload from "./PhotoUpload";
 
 export type ProfileSetupStepHandle = {
