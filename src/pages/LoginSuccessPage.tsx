@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import DeprecatedButton from "../components/DeprecatedButton/DeprecatedButton";
+import DeprecatedButton from "../components/DeprecatedButton";
 import CongratsIcon from "../svgs/CongratsIcon";
 
 const LoginSuccessPage: React.FC = () => {

@@ -18,7 +18,7 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
 }) => {
   const {
     userTypeState: [userTypeInfo, setUserTypeInfo],
-    stepState: [currentStep, setCurrentStep],
+    stepState: [, setCurrentStep],
   } = useSignupContext();
 
   // 유효성 검사 - 유형이 선택되었을 때만 유효

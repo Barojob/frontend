@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
-import Input, { InputProps } from "../components/Input/Input";
+import Input, { InputProps } from "../components/Input";
 
 export default {
   title: "Components/Input",
