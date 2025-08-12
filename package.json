@@ -9,7 +9,16 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "cap:ios:add": "pnpm cap add ios",
+    "cap:ios:sync": "pnpm cap sync ios",
+    "cap:ios:open": "pnpm cap open ios",
+    "cap:ios:run": "pnpm cap run ios",
+    "cap:android:add": "pnpm cap add android",
+    "cap:android:sync": "pnpm cap sync android",
+    "cap:android:open": "pnpm cap open android",
+    "cap:android:run": "pnpm cap run android",
+    "cap:sync": "pnpm cap:ios:sync && pnpm cap:android:sync"
   },
   "dependencies": {
     "@capacitor/android": "^7.2.0",
