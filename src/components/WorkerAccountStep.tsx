@@ -11,12 +11,12 @@ import Input from "./Input";
 import Modal from "./Modal";
 
 const banks = [
-  { id: "nh", name: "농협은행", image: "/BankSvg/nongHyup.svg" },
-  { id: "shinhan", name: "신한은행", image: "/BankSvg/shinhan.svg" },
-  { id: "kb", name: "국민은행", image: "/BankSvg/kb.svg" },
-  { id: "woori", name: "우리은행", image: "/BankSvg/woori.svg" },
-  { id: "kakao", name: "카카오뱅크", image: "/BankSvg/kakao.svg" },
-  { id: "toss", name: "토스뱅크", image: "/BankSvg/toss.svg" },
+  { id: "nh", name: "농협은행", image: "/images/bank/nongHyup.svg" },
+  { id: "shinhan", name: "신한은행", image: "/images/bank/shinhan.svg" },
+  { id: "kb", name: "국민은행", image: "/images/bank/kb.svg" },
+  { id: "woori", name: "우리은행", image: "/images/bank/woori.svg" },
+  { id: "kakao", name: "카카오뱅크", image: "/images/bank/kakao.svg" },
+  { id: "toss", name: "토스뱅크", image: "/images/bank/toss.svg" },
 ];
 
 type WorkerAccountStepProps = {
