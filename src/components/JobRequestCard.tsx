@@ -11,7 +11,9 @@ const JobRequestCard: React.FC<Props> = ({ className }) => {
     <div className={cn("bg-blue-1 h-28 rounded-2xl", className)}>
       <section className="flex h-full flex-col items-center justify-center">
         <div className="flex items-center gap-x-3">
-          <span className="text-2xl font-bold text-white">일자리 요청하기</span>
+          <span className="text-2xl font-bold text-white">
+            일자리 요청하기 asd
+          </span>
           <MagnifyingGlassIcon className="size-4.5 text-[#C5D6EF]" />
         </div>
 

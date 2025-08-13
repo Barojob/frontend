@@ -5,8 +5,5 @@ export const configs = {
     import.meta.env.VITE_KAKAO_MAP_API_KEY,
     "KAKAO_MAP_API_KEY is not set",
   ),
-  BACKEND_BASE_URL: ensure(
-    import.meta.env.VITE_BACKEND_BASE_URL || "http://localhost:8080",
-    "BACKEND_BASE_URL is not set",
-  ),
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000",
 };
