@@ -28,7 +28,7 @@ const SignupPageContent: React.FC = () => {
         </div>
       ) : (
         <>
-          <SignupHeader className="mt-4" step={step} onStepChange={setStep} />
+          <SignupHeader className="mt-8" step={step} onStepChange={setStep} />
           <PresenceTransition
             className="flex-1 overflow-y-auto"
             transitionKey={step.toString()}

@@ -79,25 +79,25 @@ const SignupHeader: React.FC<Props> = ({ className, step, onStepChange }) => {
       case SignupStep.TERMS:
         return "회원가입";
       case SignupStep.PERSONAL_INFO:
-        return "인적사항 입력";
+        return "휴대폰 인증";
       case SignupStep.PHONE_VERIFICATION:
         return "휴대폰 인증";
       case SignupStep.PHONE_VERIFICATION_SUCCESS:
         return "휴대폰 인증 완료";
       case SignupStep.USER_TYPE_SELECTION:
-        return "사용자 유형 선택";
+        return "회원가입";
       case SignupStep.ALREADY_REGISTERED:
         return "기존 회원 확인";
       case SignupStep.EMPLOYER_INFO:
-        return "업체 정보 입력";
+        return "구인자 회원가입";
       case SignupStep.WORKER_INFO:
         return "근로자 정보 입력";
       case SignupStep.WORKER_EXPERIENCE:
-        return "경험 정보 입력";
+        return "경력 체크";
       case SignupStep.WORKER_LICENSE:
-        return "이수증 등록";
+        return "정보 입력";
       case SignupStep.WORKER_ACCOUNT:
-        return "계좌 등록";
+        return "계좌 입력";
       case SignupStep.PROFILE_SETUP:
         return "프로필 설정";
       case SignupStep.SIGNUP_SUCCESS:
