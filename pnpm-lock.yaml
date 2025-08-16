@@ -26,9 +26,6 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: ^5.74.4
         version: 5.74.4(@tanstack/react-query@5.74.4(react@19.1.0))(react@19.1.0)
-      '@types/classnames':
-        specifier: ^2.3.0
-        version: 2.3.4
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -53,9 +50,6 @@ importers:
       react-router-dom:
         specifier: ^7.1.5
         version: 7.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react-swipeable:
-        specifier: ^7.0.2
-        version: 7.0.2(react@19.1.0)
       swiper:
         specifier: ^11.2.10
         version: 11.2.10
@@ -96,6 +90,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.4
         version: 4.1.4
+      '@types/classnames':
+        specifier: ^2.3.0
+        version: 2.3.4
       '@types/react':
         specifier: ^19.1.2
         version: 19.1.2
@@ -2484,11 +2481,6 @@ packages:
     peerDependenciesMeta:
       react-dom:
         optional: true
-
-  react-swipeable@7.0.2:
-    resolution: {integrity: sha512-v1Qx1l+aC2fdxKa9aKJiaU/ZxmJ5o98RMoFwUqAAzVWUcxgfHFXDDruCKXhw6zIYXm6V64JiHgP9f6mlME5l8w==}
-    peerDependencies:
-      react: ^16.8.3 || ^17 || ^18 || ^19.0.0 || ^19.0.0-rc
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -5434,10 +5426,6 @@ snapshots:
       turbo-stream: 2.4.0
     optionalDependencies:
       react-dom: 19.1.0(react@19.1.0)
-
-  react-swipeable@7.0.2(react@19.1.0):
-    dependencies:
-      react: 19.1.0
 
   react@18.3.1:
     dependencies:
