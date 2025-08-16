@@ -3,7 +3,7 @@ import { BrowserRouter, useNavigate } from "react-router-dom";
 import { configs } from "../configs";
 import { DeepLinkTarget } from "../utils/url";
 import AnimatedRoutes from "./AnimatedRoutes";
-import AppUrlListener from "./AppUrlListener";
+import DeepLinkListener from "./DeepLinkListener";
 
 const AppRouter: React.FC = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const AppRouter: React.FC = () => {
   return (
     <BrowserRouter>
       <AnimatedRoutes />
-      <AppUrlListener
+      <DeepLinkListener
         scheme={configs.DEEP_LINK_SCHEME}
         host={configs.DEEP_LINK_HOST}
         onNavigate={handleNavigate}

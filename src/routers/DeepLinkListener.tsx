@@ -8,7 +8,7 @@ type Props = {
   onNavigate: (target: DeepLinkTarget) => void;
 };
 
-const AppUrlListener: React.FC<Props> = ({ scheme, host, onNavigate }) => {
+const DeepLinkListener: React.FC<Props> = ({ scheme, host, onNavigate }) => {
   useEffect(() => {
     const handle = App.addListener(
       "appUrlOpen",
@@ -35,4 +35,4 @@ const AppUrlListener: React.FC<Props> = ({ scheme, host, onNavigate }) => {
   return null;
 };
 
-export default AppUrlListener;
+export default DeepLinkListener;
