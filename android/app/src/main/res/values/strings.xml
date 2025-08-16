@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">frontend</string>
-    <string name="title_activity_main">frontend</string>
+    <string name="app_name">인력특공대</string>
+    <string name="title_activity_main">인력특공대</string>
     <string name="package_name">com.barojob.app</string>
     <string name="custom_url_scheme">com.barojob.app</string>
 </resources>
