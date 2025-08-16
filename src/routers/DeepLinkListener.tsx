@@ -13,17 +13,16 @@ const DeepLinkListener: React.FC<Props> = ({ scheme, host, onNavigate }) => {
     const handle = App.addListener(
       "appUrlOpen",
       (event: URLOpenListenerEvent) => {
-        const target = resolveDeepLink({
-          targetUrl: event.url,
-          scheme,
-          host,
-        });
-
-        if (!target?.path) {
-          return;
+        try {
+          const target = resolveDeepLink({
+            targetUrl: event.url,
+            scheme,
+            host,
+          });
+          onNavigate(target);
+        } catch (error) {
+          console.error(`Failed to resolve deep link: ${event.url}`, error);
         }
-
-        onNavigate(target);
       },
     );
 
