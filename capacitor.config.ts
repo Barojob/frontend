@@ -1,9 +1,11 @@
 import type { CapacitorConfig } from "@capacitor/cli";
-import { configs } from "./src/configs";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const config: CapacitorConfig = {
-  appId: configs.DEEP_LINK_HOST,
-  appName: configs.APP_NAME,
+  appId: process.env.VITE_DEEP_LINK_HOST,
+  appName: process.env.VITE_APP_NAME,
   webDir: "dist",
 };
 

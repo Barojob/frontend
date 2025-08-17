@@ -1,7 +1,5 @@
 {
-  "name": "frontend",
-  "private": true,
-  "version": "0.0.0",
+  "name": "barojob",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -55,6 +53,7 @@
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.21",
+    "dotenv": "^17.2.1",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
