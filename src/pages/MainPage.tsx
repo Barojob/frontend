@@ -2,6 +2,7 @@ import NavBar from "@/components/NavBar";
 import { BellIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { Link } from "react-router-dom";
+import Button from "../components/Button";
 import JobRequestCard from "../components/JobRequestCard";
 import MainCarousel from "../components/MainCarousel";
 import UrgentRecruitmentCard from "../components/UrgentRecruitmentCard";
@@ -17,6 +18,15 @@ const MainPage: React.FC = () => {
       </div>
 
       <MainCarousel className="h-33 -mx-6" />
+
+      {/* 테스트용 Intro 페이지 이동 버튼 */}
+      <div className="mt-6">
+        <Link to="/intro">
+          <Button theme="primary" size="sm" block>
+            🧪 테스트: Intro 페이지로 이동
+          </Button>
+        </Link>
+      </div>
 
       <div className="mt-8">
         <MainHeading title="경기 포천시" />
