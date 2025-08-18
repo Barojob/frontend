@@ -11,6 +11,9 @@ importers:
       '@capacitor/android':
         specifier: ^7.2.0
         version: 7.2.0(@capacitor/core@7.2.0)
+      '@capacitor/app':
+        specifier: ^7.0.2
+        version: 7.0.2(@capacitor/core@7.2.0)
       '@capacitor/core':
         specifier: ^7.2.0
         version: 7.2.0
@@ -20,15 +23,15 @@ importers:
       '@heroicons/react':
         specifier: ^2.2.0
         version: 2.2.0(react@19.1.0)
+      '@ionic/pwa-elements':
+        specifier: ^3.3.0
+        version: 3.3.0
       '@tanstack/react-query':
         specifier: ^5.74.4
         version: 5.74.4(react@19.1.0)
       '@tanstack/react-query-devtools':
         specifier: ^5.74.4
         version: 5.74.4(@tanstack/react-query@5.74.4(react@19.1.0))(react@19.1.0)
-      '@types/classnames':
-        specifier: ^2.3.0
-        version: 2.3.4
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -53,9 +56,6 @@ importers:
       react-router-dom:
         specifier: ^7.1.5
         version: 7.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react-swipeable:
-        specifier: ^7.0.2
-        version: 7.0.2(react@19.1.0)
       swiper:
         specifier: ^11.2.10
         version: 11.2.10
@@ -96,6 +96,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.4
         version: 4.1.4
+      '@types/classnames':
+        specifier: ^2.3.0
+        version: 2.3.4
       '@types/react':
         specifier: ^19.1.2
         version: 19.1.2
@@ -108,6 +111,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.4.49)
+      dotenv:
+        specifier: ^17.2.1
+        version: 17.2.1
       eslint:
         specifier: ^9.17.0
         version: 9.17.0(jiti@2.4.2)
@@ -135,6 +141,9 @@ importers:
       kakao.maps.d.ts:
         specifier: ^0.1.40
         version: 0.1.40
+      native-run:
+        specifier: ^2.0.1
+        version: 2.0.1
       postcss:
         specifier: ^8.4.49
         version: 8.4.49
@@ -247,6 +256,11 @@ packages:
     resolution: {integrity: sha512-zdhEy3jZPG5Toe/pGzKtDgIiBGywjaoEuQWnGVjBYPlSAEUtAhpZ2At7V0SCb26yluAuzrAUV0Ue+LQeEtHwFQ==}
     peerDependencies:
       '@capacitor/core': ^7.2.0
+
+  '@capacitor/app@7.0.2':
+    resolution: {integrity: sha512-kRWBF6Wc6OQxhL+N6rsegyfJY37Lj9/VJhtrmgmH+y+rdxQLQwUOpMyxXStym7cF+QzGeVpItyVxyUT9fE5ByQ==}
+    peerDependencies:
+      '@capacitor/core': '>=7.0.0'
 
   '@capacitor/cli@7.2.0':
     resolution: {integrity: sha512-RNW9vtYYYSDmOdguYBSW0VpRnG/d6lGydlc9DLrJ7qbSPxFrotTz9IjkM48O+SruUma61DyuSqJttdbay2xSxg==}
@@ -488,6 +502,10 @@ packages:
   '@ionic/cli-framework-output@2.2.8':
     resolution: {integrity: sha512-TshtaFQsovB4NWRBydbNFawql6yul7d5bMiW1WYYf17hd99V6xdDdk3vtF51bw6sLkxON3bDQpWsnUc9/hVo3g==}
     engines: {node: '>=16.0.0'}
+
+  '@ionic/pwa-elements@3.3.0':
+    resolution: {integrity: sha512-vbykpxd2nGRlA67AnqDwsiVf8PUmInLyi6lQdnPDjeiML1WZa0CPe6r632nGDV9PTi+sWNde9Xexg9SD6Pwyqw==}
+    engines: {node: '>=16.0.0', npm: '>=8.0.0'}
 
   '@ionic/utils-array@2.1.6':
     resolution: {integrity: sha512-0JZ1Zkp3wURnv8oq6Qt7fMPo5MpjbLoUoa9Bu2Q4PJuSDWM8H8gwF3dQO7VTeUj3/0o1IB1wGkFWZZYgUXZMUg==}
@@ -1471,6 +1489,10 @@ packages:
 
   dom-accessibility-api@0.6.3:
     resolution: {integrity: sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w==}
+
+  dotenv@17.2.1:
+    resolution: {integrity: sha512-kQhDYKZecqnM0fCnzI5eIv5L4cAe/iRI+HqMbO/hbRdTAeXDG+M9FjipUxNfbARuEg4iHIbhnhs78BCHNbSxEQ==}
+    engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -2485,11 +2507,6 @@ packages:
       react-dom:
         optional: true
 
-  react-swipeable@7.0.2:
-    resolution: {integrity: sha512-v1Qx1l+aC2fdxKa9aKJiaU/ZxmJ5o98RMoFwUqAAzVWUcxgfHFXDDruCKXhw6zIYXm6V64JiHgP9f6mlME5l8w==}
-    peerDependencies:
-      react: ^16.8.3 || ^17 || ^18 || ^19.0.0 || ^19.0.0-rc
-
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}
@@ -3133,6 +3150,10 @@ snapshots:
     dependencies:
       '@capacitor/core': 7.2.0
 
+  '@capacitor/app@7.0.2(@capacitor/core@7.2.0)':
+    dependencies:
+      '@capacitor/core': 7.2.0
+
   '@capacitor/cli@7.2.0':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
@@ -3324,6 +3345,8 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+
+  '@ionic/pwa-elements@3.3.0': {}
 
   '@ionic/utils-array@2.1.6':
     dependencies:
@@ -4389,6 +4412,8 @@ snapshots:
 
   dom-accessibility-api@0.6.3: {}
 
+  dotenv@17.2.1: {}
+
   dunder-proto@1.0.1:
     dependencies:
       call-bind-apply-helpers: 1.0.1
@@ -5434,10 +5459,6 @@ snapshots:
       turbo-stream: 2.4.0
     optionalDependencies:
       react-dom: 19.1.0(react@19.1.0)
-
-  react-swipeable@7.0.2(react@19.1.0):
-    dependencies:
-      react: 19.1.0
 
   react@18.3.1:
     dependencies:

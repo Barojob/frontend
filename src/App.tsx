@@ -1,9 +1,14 @@
 import "@/globals-core.css";
-import RootProvider from "@/providers/RootProvider";
 import React from "react";
+import TanstackProvider from "./providers/TanstackProvider";
+import AppRouter from "./routers/AppRouter";
 
 const App: React.FC = () => {
-  return <RootProvider />;
+  return (
+    <TanstackProvider>
+      <AppRouter />
+    </TanstackProvider>
+  );
 };
 
 export default App;
