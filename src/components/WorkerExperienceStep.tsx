@@ -174,7 +174,7 @@ const WorkerExperienceStep: React.FC<WorkerExperienceStepProps> = ({
       )}
 
       {/* 하단 버튼 영역 - 화면 하단 고정 */}
-      <div className="animate-slide-up fixed bottom-8 left-4 right-4">
+      <div className="animate-slide-up fixed-bottom-button">
         {selectedJobs.length === 0 ? (
           // 아무것도 선택하지 않았을 때 - 건너뛰기 버튼
           <Button

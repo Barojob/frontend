@@ -6,7 +6,6 @@ import { SignupStep } from "../types/signup";
 import { cn } from "../utils/classname";
 import BoxButton from "./BoxButton";
 import Button from "./Button";
-import { Drawer, DrawerContent, DrawerTrigger } from "./Drawer";
 import Input from "./Input";
 import Modal from "./Modal";
 
@@ -34,18 +33,17 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
 
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [accountNumber, setAccountNumber] = useState<string>("");
-  const [drawerKey, setDrawerKey] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // 유효성 검사 - 항상 유효 (건너뛸 수 있음)
   const isValid = true;
 
   const handleBankSelect = (bankName: string) => {
     setSelectedBank(bankName);
-    // 드로어를 강제로 닫기 위해 key를 변경하여 리렌더링
-    setDrawerKey((prev) => prev + 1);
+    setIsDrawerOpen(false);
   };
 
   const handleAccountNumberChange = (value: string) => {
@@ -94,6 +92,10 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
     onValidityChange(isValid);
   }, [isValid, onValidityChange]);
 
+  useEffect(() => {
+    console.log("WorkerAccountStep isDrawerOpen 상태 변화:", isDrawerOpen);
+  }, [isDrawerOpen]);
+
   return (
     <div className={cn("", className)}>
       {/* 상단 타이틀 */}
@@ -115,48 +117,74 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
           은행명
         </label>
 
-        <Drawer key={drawerKey}>
-          <DrawerTrigger asChild>
-            <button
-              className={cn(
-                "h-11 w-full rounded-lg border border-gray-200 px-4 py-3",
-                "flex items-center justify-between bg-white text-left",
-                "focus:border-gray-400 focus:outline-none",
-                "transition-colors hover:border-gray-300 active:scale-[0.98]",
-              )}
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // 이벤트 버블링 방지
+            console.log("은행 선택 버튼 클릭, setIsDrawerOpen(true) 호출");
+            setIsDrawerOpen(true);
+          }}
+          className={cn(
+            "h-11 w-full rounded-lg border border-gray-200 px-4 py-3",
+            "flex items-center justify-between bg-white text-left",
+            "focus:border-gray-400 focus:outline-none",
+            "transition-colors hover:border-gray-300 active:scale-[0.98]",
+          )}
+        >
+          <span
+            className={cn(
+              "text-base",
+              selectedBank ? "text-gray-900" : "text-gray-400",
+            )}
+          >
+            {selectedBank || "은행을 선택해주세요"}
+          </span>
+          <ChevronDownIcon className="h-5 w-5 text-gray-400" />
+        </button>
+
+        {/* 커스텀 은행 선택 드로어 */}
+        {isDrawerOpen && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center">
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black/50 transition-opacity duration-300"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDrawerOpen(false);
+              }}
+            />
+
+            {/* Drawer Content */}
+            <div
+              className="relative max-h-[85vh] w-full max-w-lg transform overflow-hidden rounded-t-lg bg-white p-6 shadow-lg transition-all duration-300 ease-out"
+              onClick={(e) => e.stopPropagation()} // 드로어 내부 클릭 시 닫히지 않도록
             >
-              <span
-                className={cn(
-                  "text-base",
-                  selectedBank ? "text-gray-900" : "text-gray-400",
-                )}
-              >
-                {selectedBank || "은행을 선택해주세요"}
-              </span>
-              <ChevronDownIcon className="h-5 w-5 text-gray-400" />
-            </button>
-          </DrawerTrigger>
+              {/* Handle */}
+              <div className="flex justify-center pb-2 pt-4">
+                <div className="h-1 w-10 rounded-full bg-gray-300" />
+              </div>
 
-          <DrawerContent position="bottom" className="p-6">
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">은행 선택</h3>
-            </div>
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  은행 선택
+                </h3>
+              </div>
 
-            <div className="grid grid-cols-3 gap-3">
-              {banks.map((bank) => (
-                <BoxButton
-                  key={bank.id}
-                  name={bank.name}
-                  image={bank.image}
-                  variant="primary"
-                  className="!h-28 !w-full"
-                  selected={selectedBank === bank.name}
-                  onClick={() => handleBankSelect(bank.name)}
-                />
-              ))}
+              <div className="grid grid-cols-3 gap-3">
+                {banks.map((bank) => (
+                  <BoxButton
+                    key={bank.id}
+                    name={bank.name}
+                    image={bank.image}
+                    variant="primary"
+                    className="!h-28 !w-full"
+                    selected={selectedBank === bank.name}
+                    onClick={() => handleBankSelect(bank.name)}
+                  />
+                ))}
+              </div>
             </div>
-          </DrawerContent>
-        </Drawer>
+          </div>
+        )}
       </div>
 
       {/* 계좌번호 입력 섹션 */}
@@ -176,26 +204,28 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
       </div>
 
       {/* 하단 버튼 영역 - 화면 하단 고정 */}
-      <div className="animate-slide-up fixed bottom-8 left-4 right-4">
-        <div className="flex gap-3">
-          <Button
-            onClick={handleSkip}
-            theme="secondary"
-            size="md"
-            className="flex-1 transition-transform duration-150 active:scale-[0.95]"
-          >
-            건너뛰기
-          </Button>
-          <Button
-            onClick={handleAddAccount}
-            theme="primary"
-            size="md"
-            className="flex-1 transition-transform duration-150 active:scale-[0.95]"
-          >
-            계좌 추가하기
-          </Button>
+      {!isDrawerOpen && (
+        <div className="animate-slide-up fixed-bottom-button">
+          <div className="flex gap-3">
+            <Button
+              onClick={handleSkip}
+              theme="secondary"
+              size="md"
+              className="flex-1 transition-transform duration-150 active:scale-[0.95]"
+            >
+              건너뛰기
+            </Button>
+            <Button
+              onClick={handleAddAccount}
+              theme="primary"
+              size="md"
+              className="flex-1 transition-transform duration-150 active:scale-[0.95]"
+            >
+              계좌 추가하기
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* 계좌 안내 모달 */}
       <Modal visible={showModal} onClose={handleModalClose}>

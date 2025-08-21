@@ -1,5 +1,6 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { SignupStep } from "../types/signup";
 import { cn } from "../utils/classname";
 
@@ -10,13 +11,21 @@ type Props = {
 };
 
 const SignupHeader: React.FC<Props> = ({ className, step, onStepChange }) => {
+  const navigate = useNavigate();
+
   const showBackButton =
     step !== SignupStep.TERMS && step !== SignupStep.SIGNUP_SUCCESS;
 
   return (
-    <div className={cn("flex items-center gap-x-1 text-gray-500", className)}>
+    <div
+      className={cn(
+        "pt-safe-top flex items-center gap-x-1 text-gray-500",
+        className,
+      )}
+      style={{ paddingTop: "max(4px, env(safe-area-inset-top))" }}
+    >
       {showBackButton && (
-        <button onClick={handleBack}>
+        <button onClick={handleBack} className="touch-manipulation">
           <ChevronLeftIcon className="-mt-0.5 size-6 text-gray-500" />
         </button>
       )}
@@ -26,6 +35,8 @@ const SignupHeader: React.FC<Props> = ({ className, step, onStepChange }) => {
 
   function handleBack() {
     if (step === SignupStep.TERMS) {
+      // 첫 단계에서는 인트로 페이지로 이동
+      navigate("/intro");
       return;
     }
 

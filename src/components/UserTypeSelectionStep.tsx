@@ -77,7 +77,7 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
 
       {/* 다음 버튼 */}
       {isValid && (
-        <div className="animate-slide-up fixed bottom-8 left-4 right-4">
+        <div className="animate-slide-up fixed-bottom-button">
           <Button
             size="md"
             theme="primary"

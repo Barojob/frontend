@@ -12,7 +12,6 @@ import { SignupStep } from "../types/signup";
 import { cn } from "../utils/classname";
 import BoxButton from "./BoxButton";
 import Button from "./Button";
-import { Drawer, DrawerContent, DrawerTrigger } from "./Drawer";
 import Modal from "./Modal";
 
 // 카메라 촬영 함수 (웹 전용, 추후 Capacitor 추가 예정)
@@ -79,18 +78,18 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
     stepState: [, setCurrentStep],
   } = useSignupContext();
 
-  const [drawerKey, setDrawerKey] = useState(0);
   const [showSkipModal, setShowSkipModal] = useState(false);
   const [showCameraPermissionModal, setShowCameraPermissionModal] =
     useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // 유효성 검사 - 항상 유효 (건너뛸 수 있음)
   const isValid = true;
 
   const handleCameraSelect = () => {
     console.log("카메라 선택");
-    setDrawerKey((prev) => prev + 1); // 드로어 닫기
+    setIsDrawerOpen(false); // 드로어 상태 업데이트
     setShowCameraPermissionModal(true);
   };
 
@@ -103,7 +102,7 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
 
   const handleGallerySelect = async () => {
     console.log("갤러리 선택");
-    setDrawerKey((prev) => prev + 1); // 드로어 닫기
+    setIsDrawerOpen(false); // 드로어 상태 업데이트
 
     const imageData = await selectFromGallery();
     if (imageData) {
@@ -158,6 +157,10 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
     onValidityChange(isValid);
   }, [isValid, onValidityChange]);
 
+  useEffect(() => {
+    console.log("WorkerLicenseStep isDrawerOpen 상태 변화:", isDrawerOpen);
+  }, [isDrawerOpen]);
+
   return (
     <div className={cn("", className)}>
       {/* 상단 타이틀 */}
@@ -202,48 +205,74 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
           </div>
         ) : (
           /* 기존 업로드 버튼 */
-          <Drawer key={drawerKey}>
-            <DrawerTrigger asChild>
-              <button
-                className={cn(
-                  "h-48 w-full rounded-lg border-2 border-gray-300",
-                  "flex flex-col items-center justify-center bg-gray-50",
-                  "transition-all hover:border-gray-400 hover:bg-gray-100",
-                  "focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100",
-                  "active:scale-[0.98]",
-                )}
-              >
-                <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500">
-                  <PlusIcon className="h-12 w-12 text-white" />
+          <>
+            <button
+              className={cn(
+                "h-48 w-full rounded-lg border-2 border-gray-300",
+                "flex flex-col items-center justify-center bg-gray-50",
+                "transition-all hover:border-gray-400 hover:bg-gray-100",
+                "focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100",
+                "active:scale-[0.98]",
+              )}
+              onClick={(e) => {
+                e.stopPropagation(); // 이벤트 버블링 방지
+                console.log("+ 버튼 클릭, setIsDrawerOpen(true) 호출");
+                setIsDrawerOpen(true);
+              }}
+            >
+              <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500">
+                <PlusIcon className="h-12 w-12 text-white" />
+              </div>
+            </button>
+
+            {/* 커스텀 드로어 */}
+            {isDrawerOpen && (
+              <div className="fixed inset-0 z-50 flex items-end justify-center">
+                {/* Backdrop */}
+                <div
+                  className="fixed inset-0 bg-black/50 transition-opacity duration-300"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDrawerOpen(false);
+                  }}
+                />
+
+                {/* Drawer Content */}
+                <div
+                  className="relative max-h-[85vh] w-full max-w-lg transform overflow-hidden rounded-t-lg bg-white p-6 shadow-lg transition-all duration-300 ease-out"
+                  onClick={(e) => e.stopPropagation()} // 드로어 내부 클릭 시 닫히지 않도록
+                >
+                  {/* Handle */}
+                  <div className="flex justify-center pb-2 pt-4">
+                    <div className="h-1 w-10 rounded-full bg-gray-300" />
+                  </div>
+
+                  <div className="mb-4">
+                    <h3 className="flex items-center justify-center text-lg font-semibold text-gray-900">
+                      이수증 등록 방법 선택
+                    </h3>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <BoxButton
+                      name="카메라"
+                      variant="primary"
+                      className="!h-36 !w-full"
+                      icon={<CameraIcon width="64" height="64" />}
+                      onClick={handleCameraSelect}
+                    />
+                    <BoxButton
+                      name="갤러리"
+                      variant="primary"
+                      className="!h-36 !w-full"
+                      icon={<GalleryIcon width="64" height="64" />}
+                      onClick={handleGallerySelect}
+                    />
+                  </div>
                 </div>
-              </button>
-            </DrawerTrigger>
-
-            <DrawerContent position="bottom" className="p-6">
-              <div className="mb-4">
-                <h3 className="flex items-center justify-center text-lg font-semibold text-gray-900">
-                  이수증 등록 방법 선택
-                </h3>
               </div>
-
-              <div className="flex gap-4">
-                <BoxButton
-                  name="카메라"
-                  variant="primary"
-                  className="!h-36 !w-full"
-                  icon={<CameraIcon width="64" height="64" />}
-                  onClick={handleCameraSelect}
-                />
-                <BoxButton
-                  name="갤러리"
-                  variant="primary"
-                  className="!h-36 !w-full"
-                  icon={<GalleryIcon width="64" height="64" />}
-                  onClick={handleGallerySelect}
-                />
-              </div>
-            </DrawerContent>
-          </Drawer>
+            )}
+          </>
         )}
       </div>
 
@@ -261,7 +290,7 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
       </div>
 
       {/* 하단 버튼 영역 - 화면 하단 고정 */}
-      <div className="animate-slide-up fixed bottom-8 left-4 right-4">
+      <div className="animate-slide-up fixed-bottom-button">
         {uploadedImage ? (
           <Button
             onClick={handleComplete}
@@ -272,14 +301,16 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
             완료
           </Button>
         ) : (
-          <Button
-            onClick={handleSkip}
-            theme="primary"
-            size="md"
-            className="w-full transition-transform duration-150 active:scale-[0.95]"
-          >
-            건너뛰기
-          </Button>
+          !isDrawerOpen && (
+            <Button
+              onClick={handleSkip}
+              theme="primary"
+              size="md"
+              className="w-full transition-transform duration-150 active:scale-[0.95]"
+            >
+              건너뛰기
+            </Button>
+          )
         )}
       </div>
 

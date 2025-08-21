@@ -71,6 +71,22 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
 
   const isValid = isPositionValid && isEmailValid && isBusinessNumberValid;
 
+  // 디버깅용 로그
+  console.log("EmployerInfoStep validation:", {
+    isPositionValid,
+    isEmailValid,
+    isBusinessNumberValid,
+    isValid,
+    position: employerInfo.position,
+    emailLocal,
+    emailDomain,
+    fullEmail,
+    businessNumber: employerInfo.businessNumber,
+    businessNumberNumeric: employerInfo.businessNumber.replace(/[^0-9]/g, ""),
+    businessNumberLength: employerInfo.businessNumber.replace(/[^0-9]/g, "")
+      .length,
+  });
+
   // 직함 변경 핸들러
   const handlePositionChange = (value: string) => {
     setEmployerInfo((prev) => ({ ...prev, position: value }));
@@ -297,7 +313,7 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
 
       {/* 다음 버튼 */}
       {isValid && (
-        <div className="animate-slide-up fixed bottom-8 left-4 right-4">
+        <div className="animate-slide-up fixed-bottom-button">
           <Button
             size="md"
             theme="primary"
