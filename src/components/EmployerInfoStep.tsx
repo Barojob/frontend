@@ -147,8 +147,8 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
 
   // 다음 단계로 이동
   const handleNextStep = () => {
-    // 구인자 정보 입력 완료 후 회원가입 완료 페이지로 이동
-    setCurrentStep(SignupStep.SIGNUP_SUCCESS);
+    // 구인자 정보 입력 완료 후 계좌 등록 페이지로 이동
+    setCurrentStep(SignupStep.WORKER_ACCOUNT);
   };
 
   // 이메일 도메인 선택 핸들러
