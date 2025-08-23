@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import DeprecatedButton from "../components/DeprecatedButton";
+import Button from "../components/Button";
 import CongratsIcon from "../svgs/CongratsIcon";
 
 const LoginSuccessPage: React.FC = () => {
@@ -25,12 +25,14 @@ const LoginSuccessPage: React.FC = () => {
 
       {/* 메인홈으로 이동 버튼 */}
       <div className="fixed bottom-0 left-0 right-0 px-6 pb-10">
-        <DeprecatedButton
+        <Button
+          size="md"
+          theme="primary"
           onClick={handleGoToMain}
           className="w-full rounded-[0.625rem] border-white bg-white py-6 text-neutral-600"
         >
           메인홈으로 이동하기
-        </DeprecatedButton>
+        </Button>
       </div>
     </div>
   );
