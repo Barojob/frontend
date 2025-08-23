@@ -285,6 +285,7 @@ const CommuteRangePage: React.FC = () => {
   const [selected, setSelected] = useState<"대중교통 + 도보" | "자차" | null>(
     null,
   );
+  const isTransportSelected = selected !== null;
 
   // 지도에서 폴리곤 업데이트
   const updateMapPolygon = useCallback(() => {
@@ -569,14 +570,16 @@ const CommuteRangePage: React.FC = () => {
             자차
           </button>
         </div>
-        <div className="mt-12">
-          <button
-            className="font-inter w-full rounded-lg bg-[#247AF2] py-3 text-lg text-white shadow transition-all duration-150 active:scale-[0.95]"
-            onClick={() => navigate("/worker-detail")}
-          >
-            다음
-          </button>
-        </div>
+        {isTransportSelected && (
+          <div className="animate-slide-up mt-12 duration-1000">
+            <button
+              className="font-inter w-full rounded-lg bg-[#247AF2] py-3 text-lg text-white shadow transition-all duration-150 active:scale-[0.95]"
+              onClick={() => navigate("/worker-detail")}
+            >
+              다음
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 커스텀 슬라이더 스타일 */}
