@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import NavigationHeader from "../components/NavigationHeader";
 import { cn } from "../utils/classname";
 
 // 거리 계산 함수 (Haversine formula)
@@ -21,168 +23,173 @@ const calculateDistance = (
   return R * c;
 };
 
-// 더미 지역 데이터 (테스트용)
+// 더미 지역 데이터 (명지대학교 자연캠퍼스 주변)
 const FALLBACK_AREA_BOUNDARIES: {
   [key: string]: { lat: number; lng: number }[];
 } = {
+  "경기도 용인시 처인구 남동1리": [
+    { lat: 37.2229, lng: 127.1876 },
+    { lat: 37.2245, lng: 127.1891 },
+    { lat: 37.226, lng: 127.1906 },
+    { lat: 37.227, lng: 127.1926 },
+    { lat: 37.226, lng: 127.1946 },
+    { lat: 37.224, lng: 127.1956 },
+    { lat: 37.2215, lng: 127.1951 },
+    { lat: 37.2195, lng: 127.1941 },
+    { lat: 37.218, lng: 127.1926 },
+    { lat: 37.217, lng: 127.1906 },
+    { lat: 37.218, lng: 127.1886 },
+    { lat: 37.22, lng: 127.1871 },
+    { lat: 37.222, lng: 127.1866 },
+  ],
   "경기도 용인시 처인구 김량장동": [
-    { lat: 37.2455, lng: 127.201 },
-    { lat: 37.247, lng: 127.2025 },
-    { lat: 37.2485, lng: 127.204 },
-    { lat: 37.2495, lng: 127.206 },
-    { lat: 37.2485, lng: 127.208 },
-    { lat: 37.2465, lng: 127.209 },
-    { lat: 37.244, lng: 127.2085 },
-    { lat: 37.242, lng: 127.2075 },
-    { lat: 37.2405, lng: 127.206 },
-    { lat: 37.2395, lng: 127.204 },
-    { lat: 37.2405, lng: 127.202 },
-    { lat: 37.2425, lng: 127.2005 },
-    { lat: 37.2445, lng: 127.2 },
+    { lat: 37.218, lng: 127.1976 },
+    { lat: 37.2195, lng: 127.1991 },
+    { lat: 37.221, lng: 127.2006 },
+    { lat: 37.222, lng: 127.2026 },
+    { lat: 37.221, lng: 127.2046 },
+    { lat: 37.219, lng: 127.2056 },
+    { lat: 37.2165, lng: 127.2051 },
+    { lat: 37.2145, lng: 127.2041 },
+    { lat: 37.213, lng: 127.2026 },
+    { lat: 37.212, lng: 127.2006 },
+    { lat: 37.213, lng: 127.1986 },
+    { lat: 37.215, lng: 127.1971 },
+    { lat: 37.217, lng: 127.1966 },
   ],
   "경기도 용인시 처인구 역북동": [
-    { lat: 37.2405, lng: 127.2085 },
-    { lat: 37.242, lng: 127.21 },
-    { lat: 37.244, lng: 127.2115 },
-    { lat: 37.2455, lng: 127.213 },
-    { lat: 37.2445, lng: 127.215 },
-    { lat: 37.2425, lng: 127.2155 },
-    { lat: 37.2405, lng: 127.215 },
-    { lat: 37.2385, lng: 127.214 },
-    { lat: 37.237, lng: 127.2125 },
-    { lat: 37.236, lng: 127.211 },
-    { lat: 37.2365, lng: 127.2095 },
-    { lat: 37.2385, lng: 127.2085 },
+    { lat: 37.213, lng: 127.2051 },
+    { lat: 37.2145, lng: 127.2066 },
+    { lat: 37.2165, lng: 127.2081 },
+    { lat: 37.218, lng: 127.2096 },
+    { lat: 37.217, lng: 127.2116 },
+    { lat: 37.215, lng: 127.2121 },
+    { lat: 37.213, lng: 127.2116 },
+    { lat: 37.211, lng: 127.2106 },
+    { lat: 37.2095, lng: 127.2091 },
+    { lat: 37.2085, lng: 127.2076 },
+    { lat: 37.209, lng: 127.2061 },
+    { lat: 37.211, lng: 127.2051 },
   ],
   "경기도 용인시 처인구 마평동": [
-    { lat: 37.254, lng: 127.212 },
-    { lat: 37.256, lng: 127.2135 },
-    { lat: 37.258, lng: 127.2155 },
-    { lat: 37.259, lng: 127.218 },
-    { lat: 37.2585, lng: 127.22 },
-    { lat: 37.257, lng: 127.221 },
-    { lat: 37.255, lng: 127.2205 },
-    { lat: 37.253, lng: 127.2195 },
-    { lat: 37.2515, lng: 127.218 },
-    { lat: 37.251, lng: 127.216 },
-    { lat: 37.252, lng: 127.214 },
-    { lat: 37.2535, lng: 127.2125 },
+    { lat: 37.2265, lng: 127.2086 },
+    { lat: 37.2285, lng: 127.2101 },
+    { lat: 37.2305, lng: 127.2121 },
+    { lat: 37.2315, lng: 127.2146 },
+    { lat: 37.231, lng: 127.2166 },
+    { lat: 37.2295, lng: 127.2176 },
+    { lat: 37.2275, lng: 127.2171 },
+    { lat: 37.2255, lng: 127.2161 },
+    { lat: 37.224, lng: 127.2146 },
+    { lat: 37.2235, lng: 127.2126 },
+    { lat: 37.2245, lng: 127.2106 },
+    { lat: 37.226, lng: 127.2091 },
   ],
   "경기도 용인시 처인구 유방동": [
-    { lat: 37.238, lng: 127.195 },
-    { lat: 37.2395, lng: 127.1965 },
-    { lat: 37.241, lng: 127.1985 },
-    { lat: 37.2415, lng: 127.2005 },
-    { lat: 37.2405, lng: 127.202 },
-    { lat: 37.2385, lng: 127.2025 },
-    { lat: 37.2365, lng: 127.2015 },
-    { lat: 37.235, lng: 127.2 },
-    { lat: 37.234, lng: 127.198 },
-    { lat: 37.2345, lng: 127.196 },
-    { lat: 37.236, lng: 127.195 },
-    { lat: 37.2375, lng: 127.1945 },
+    { lat: 37.2105, lng: 127.1816 },
+    { lat: 37.212, lng: 127.1831 },
+    { lat: 37.2135, lng: 127.1851 },
+    { lat: 37.214, lng: 127.1871 },
+    { lat: 37.213, lng: 127.1886 },
+    { lat: 37.211, lng: 127.1891 },
+    { lat: 37.209, lng: 127.1881 },
+    { lat: 37.2075, lng: 127.1866 },
+    { lat: 37.2065, lng: 127.1846 },
+    { lat: 37.207, lng: 127.1826 },
+    { lat: 37.2085, lng: 127.1816 },
+    { lat: 37.21, lng: 127.1811 },
   ],
+  // 4km 반경에 포함될 동네들
   "경기도 용인시 기흥구 구갈동": [
-    { lat: 37.26, lng: 127.23 },
-    { lat: 37.262, lng: 127.232 },
-    { lat: 37.264, lng: 127.235 },
-    { lat: 37.263, lng: 127.238 },
-    { lat: 37.261, lng: 127.24 },
-    { lat: 37.258, lng: 127.239 },
-    { lat: 37.256, lng: 127.236 },
-    { lat: 37.257, lng: 127.233 },
-    { lat: 37.259, lng: 127.231 },
+    { lat: 37.2525, lng: 127.2196 },
+    { lat: 37.2545, lng: 127.2216 },
+    { lat: 37.2565, lng: 127.2246 },
+    { lat: 37.2555, lng: 127.2276 },
+    { lat: 37.2535, lng: 127.2296 },
+    { lat: 37.2505, lng: 127.2286 },
+    { lat: 37.2485, lng: 127.2256 },
+    { lat: 37.2495, lng: 127.2226 },
+    { lat: 37.2515, lng: 127.2206 },
   ],
   "경기도 용인시 기흥구 상갈동": [
-    { lat: 37.265, lng: 127.225 },
-    { lat: 37.267, lng: 127.228 },
-    { lat: 37.269, lng: 127.231 },
-    { lat: 37.268, lng: 127.234 },
-    { lat: 37.266, lng: 127.236 },
-    { lat: 37.263, lng: 127.235 },
-    { lat: 37.261, lng: 127.232 },
-    { lat: 37.262, lng: 127.229 },
-    { lat: 37.264, lng: 127.226 },
+    { lat: 37.259, lng: 127.2091 },
+    { lat: 37.2615, lng: 127.2116 },
+    { lat: 37.264, lng: 127.2146 },
+    { lat: 37.263, lng: 127.2176 },
+    { lat: 37.261, lng: 127.2196 },
+    { lat: 37.258, lng: 127.2186 },
+    { lat: 37.256, lng: 127.2156 },
+    { lat: 37.257, lng: 127.2126 },
+    { lat: 37.259, lng: 127.2106 },
   ],
   // 6km 반경에 포함될 동네들
   "경기도 용인시 수지구 풍덕천동": [
-    { lat: 37.285, lng: 127.18 },
-    { lat: 37.288, lng: 127.183 },
-    { lat: 37.29, lng: 127.187 },
-    { lat: 37.289, lng: 127.19 },
-    { lat: 37.286, lng: 127.192 },
-    { lat: 37.283, lng: 127.19 },
-    { lat: 37.281, lng: 127.187 },
-    { lat: 37.282, lng: 127.184 },
-    { lat: 37.284, lng: 127.181 },
+    { lat: 37.271, lng: 127.1596 },
+    { lat: 37.2735, lng: 127.1626 },
+    { lat: 37.2755, lng: 127.1666 },
+    { lat: 37.2745, lng: 127.1696 },
+    { lat: 37.2715, lng: 127.1716 },
+    { lat: 37.2685, lng: 127.1696 },
+    { lat: 37.2665, lng: 127.1666 },
+    { lat: 37.2675, lng: 127.1636 },
+    { lat: 37.2695, lng: 127.1606 },
   ],
   "경기도 용인시 수지구 신봉동": [
-    { lat: 37.295, lng: 127.195 },
-    { lat: 37.298, lng: 127.198 },
-    { lat: 37.3, lng: 127.202 },
-    { lat: 37.299, lng: 127.205 },
-    { lat: 37.296, lng: 127.207 },
-    { lat: 37.293, lng: 127.205 },
-    { lat: 37.291, lng: 127.202 },
-    { lat: 37.292, lng: 127.199 },
-    { lat: 37.294, lng: 127.196 },
+    { lat: 37.282, lng: 127.1841 },
+    { lat: 37.2845, lng: 127.1871 },
+    { lat: 37.2865, lng: 127.1911 },
+    { lat: 37.2855, lng: 127.1941 },
+    { lat: 37.2825, lng: 127.1961 },
+    { lat: 37.2795, lng: 127.1941 },
+    { lat: 37.2775, lng: 127.1911 },
+    { lat: 37.2785, lng: 127.1881 },
+    { lat: 37.2805, lng: 127.1851 },
   ],
+  // 8km 반경에 포함될 동네들
   "경기도 용인시 처인구 원삼면": [
-    { lat: 37.19, lng: 127.18 },
-    { lat: 37.193, lng: 127.183 },
-    { lat: 37.196, lng: 127.187 },
-    { lat: 37.195, lng: 127.19 },
-    { lat: 37.192, lng: 127.192 },
-    { lat: 37.189, lng: 127.19 },
-    { lat: 37.187, lng: 127.187 },
-    { lat: 37.188, lng: 127.184 },
-    { lat: 37.19, lng: 127.181 },
+    { lat: 37.165, lng: 127.1596 },
+    { lat: 37.1675, lng: 127.1626 },
+    { lat: 37.1695, lng: 127.1666 },
+    { lat: 37.1685, lng: 127.1696 },
+    { lat: 37.1655, lng: 127.1716 },
+    { lat: 37.1625, lng: 127.1696 },
+    { lat: 37.1605, lng: 127.1666 },
+    { lat: 37.1615, lng: 127.1636 },
+    { lat: 37.1635, lng: 127.1606 },
   ],
-  // 8km 반경에 포함될 동네들 (7.5km 거리로 재조정)
   "경기도 용인시 처인구 백암면": [
-    { lat: 37.2, lng: 127.26 },
-    { lat: 37.203, lng: 127.263 },
-    { lat: 37.206, lng: 127.267 },
-    { lat: 37.205, lng: 127.27 },
-    { lat: 37.202, lng: 127.272 },
-    { lat: 37.199, lng: 127.27 },
-    { lat: 37.197, lng: 127.267 },
-    { lat: 37.198, lng: 127.264 },
-    { lat: 37.2, lng: 127.261 },
-  ],
-  "경기도 안산시 상록구 사동": [
-    { lat: 37.3, lng: 127.16 },
-    { lat: 37.303, lng: 127.163 },
-    { lat: 37.306, lng: 127.167 },
-    { lat: 37.305, lng: 127.17 },
-    { lat: 37.302, lng: 127.172 },
-    { lat: 37.299, lng: 127.17 },
-    { lat: 37.297, lng: 127.167 },
-    { lat: 37.298, lng: 127.164 },
-    { lat: 37.3, lng: 127.161 },
+    { lat: 37.192, lng: 127.2406 },
+    { lat: 37.1945, lng: 127.2436 },
+    { lat: 37.1965, lng: 127.2476 },
+    { lat: 37.1955, lng: 127.2506 },
+    { lat: 37.1925, lng: 127.2526 },
+    { lat: 37.1895, lng: 127.2506 },
+    { lat: 37.1875, lng: 127.2476 },
+    { lat: 37.1885, lng: 127.2446 },
+    { lat: 37.1905, lng: 127.2416 },
   ],
   "경기도 용인시 기흥구 기흥동": [
-    { lat: 37.28, lng: 127.27 },
-    { lat: 37.283, lng: 127.273 },
-    { lat: 37.286, lng: 127.277 },
-    { lat: 37.285, lng: 127.28 },
-    { lat: 37.282, lng: 127.282 },
-    { lat: 37.279, lng: 127.28 },
-    { lat: 37.277, lng: 127.277 },
-    { lat: 37.278, lng: 127.274 },
-    { lat: 37.28, lng: 127.271 },
+    { lat: 37.272, lng: 127.2436 },
+    { lat: 37.2745, lng: 127.2466 },
+    { lat: 37.2765, lng: 127.2506 },
+    { lat: 37.2755, lng: 127.2536 },
+    { lat: 37.2725, lng: 127.2556 },
+    { lat: 37.2695, lng: 127.2536 },
+    { lat: 37.2675, lng: 127.2506 },
+    { lat: 37.2685, lng: 127.2476 },
+    { lat: 37.2705, lng: 127.2446 },
   ],
 };
 
-// 중심 좌표
-const CENTER_COORDINATES = { lat: 37.2422, lng: 127.2044 };
+// 중심 좌표 (명지대학교 자연캠퍼스)
+const CENTER_COORDINATES = { lat: 37.2229, lng: 127.1876 };
 
 // 단계별 범위 설정
 const RANGE_STEPS = [
-  { step: 1, radius: 2000, description: "가까운 동네" }, // 2km
-  { step: 2, radius: 4000, description: "주변 동네" }, // 4km
-  { step: 3, radius: 6000, description: "확장된 지역" }, // 6km
-  { step: 4, radius: 8000, description: "먼 동네" }, // 8km
+  { step: 1, radius: 1000, description: "도보 가능 거리" }, // 1km
+  { step: 2, radius: 2000, description: "자전거 이용 가능" }, // 2km
+  { step: 3, radius: 4000, description: "대중교통 이용" }, // 4km
+  { step: 4, radius: 6000, description: "대중교통 + 환승" }, // 6km
 ];
 
 // 모든 가능한 지역 목록
@@ -268,12 +275,16 @@ const getAreasInRadius = (
   });
 };
 
-const CommuteRangePageSimple: React.FC = () => {
+const CommuteRangePage: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedRange, setSelectedRange] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const mapRef = useRef<any>(null);
   const polygonRef = useRef<any>(null);
   const sliderRef = useRef<HTMLInputElement>(null);
+  const [selected, setSelected] = useState<"대중교통 + 도보" | "자차" | null>(
+    null,
+  );
 
   // 지도에서 폴리곤 업데이트
   const updateMapPolygon = useCallback(() => {
@@ -390,12 +401,15 @@ const CommuteRangePageSimple: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-white">
+    <div className="flex h-screen flex-col overflow-x-hidden bg-white">
+      {/* 상단 네비게이션 헤더 */}
+      <NavigationHeader title="" className="px-6 py-4 font-bold" backTo="/" />
+
       {/* 지도 영역 */}
-      <div className="relative flex-1">
+      <div className="relative flex-1 overflow-hidden">
         <div
           id="kakao-map-simple"
-          className="h-full w-full"
+          className="h-full w-full overflow-hidden"
           ref={(el) => {
             if (el && !mapRef.current && typeof kakao !== "undefined") {
               const map = new kakao.maps.Map(el, {
@@ -404,7 +418,21 @@ const CommuteRangePageSimple: React.FC = () => {
                   CENTER_COORDINATES.lng,
                 ),
                 level: 6,
+                draggable: true,
+                scrollwheel: true,
+                disableDoubleClick: false,
+                disableDoubleClickZoom: false,
               });
+
+              // 지도 드래그 시 수평 스크롤 방지
+              kakao.maps.event.addListener(map, "dragstart", function () {
+                document.body.style.overflow = "hidden";
+              });
+
+              kakao.maps.event.addListener(map, "dragend", function () {
+                document.body.style.overflow = "auto";
+              });
+
               mapRef.current = { map, isLoaded: true };
             }
           }}
@@ -412,15 +440,15 @@ const CommuteRangePageSimple: React.FC = () => {
       </div>
 
       {/* 하단 컨트롤 */}
-      <div className="border-t bg-white p-6">
-        <div className="mb-4">
+      <div className="overflow-x-hidden border-t bg-white p-6">
+        <div className="mb-8">
           <h2 className="mb-2 text-lg font-semibold text-gray-900">
             출퇴근 가능 범위를 설정해주세요.
           </h2>
-          <p className="text-sm text-gray-600">
+          {/* <p className="text-sm text-gray-600">
             현재 범위: {RANGE_STEPS[selectedRange - 1].description} (
             {RANGE_STEPS[selectedRange - 1].radius / 1000}km)
-          </p>
+          </p> */}
         </div>
 
         {/* 드래그 슬라이더 */}
@@ -461,16 +489,23 @@ const CommuteRangePageSimple: React.FC = () => {
                   />
 
                   {/* 단계 번호 라벨 */}
-                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2">
-                    <span
-                      className={cn("text-xs font-medium", {
-                        "text-blue-600": isActive,
-                        "text-gray-400": !isActive,
+                  {(step.step === 1 || step.step === 4) && (
+                    <div
+                      className={cn("absolute -bottom-6 w-20", {
+                        "-left-0": step.step === 1, // 가까운 동네는 왼쪽으로 약간 이동
+                        "-right-12": step.step === 4, // 먼 동네는 오른쪽으로 약간 이동
                       })}
                     >
-                      {step.step}
-                    </span>
-                  </div>
+                      <span
+                        className={cn("whitespace-nowrap text-xs font-medium", {
+                          "text-blue-600": isActive,
+                          "text-gray-400": !isActive,
+                        })}
+                      >
+                        {step.step === 1 ? "가까운 동네" : "먼 동네"}
+                      </span>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -496,7 +531,7 @@ const CommuteRangePageSimple: React.FC = () => {
         {/* 드래그 상태 표시 */}
         <div
           className={cn(
-            "mt-4 text-center text-sm transition-opacity duration-200",
+            "mt-8 text-center text-sm transition-opacity duration-200",
             {
               "opacity-100": isDragging,
               "opacity-0": !isDragging,
@@ -507,29 +542,40 @@ const CommuteRangePageSimple: React.FC = () => {
             드래그해서 출퇴근 가능 범위를 조절하세요
           </p>
         </div>
-
-        {/* 선택된 범위 정보 */}
-        <div className="mt-8 rounded-lg bg-gray-50 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-900">
-                {RANGE_STEPS[selectedRange - 1].description}
-              </p>
-              <p className="text-xs text-gray-500">
-                반경 {RANGE_STEPS[selectedRange - 1].radius / 1000}km 내
-                동네들이 표시됩니다
-              </p>
-            </div>
-            <div
-              className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-200 ${
-                isDragging
-                  ? "bg-blue-100 text-blue-700"
-                  : "bg-gray-200 text-gray-600"
-              }`}
-            >
-              {selectedRange}단계
-            </div>
-          </div>
+        <div className="mb-2 text-lg font-semibold text-gray-900">
+          어떻게 이동하시나요?
+        </div>
+        <div className="mt-4 flex gap-4">
+          <button
+            onClick={() => setSelected("대중교통 + 도보")}
+            className={cn(
+              "font-inter flex-1 rounded-lg border-2 border-gray-300 px-4 py-3 text-center text-lg text-black shadow transition-all duration-150 active:scale-[0.95]",
+              selected === "대중교통 + 도보"
+                ? "border-blue-400 bg-[#86A7FF] text-[#374BFF]"
+                : "bg-[#E0E0E0] text-[#494949]",
+            )}
+          >
+            대중교통 + 도보
+          </button>
+          <button
+            onClick={() => setSelected("자차")}
+            className={cn(
+              "font-inter flex-1 rounded-lg border-2 border-gray-300 px-4 py-3 text-lg text-black shadow transition-all duration-150 active:scale-[0.95]",
+              selected === "자차"
+                ? "border-blue-400 bg-[#86A7FF] text-[#374BFF]"
+                : "bg-[#E0E0E0] text-[#494949]",
+            )}
+          >
+            자차
+          </button>
+        </div>
+        <div className="mt-12">
+          <button
+            className="font-inter w-full rounded-lg bg-[#247AF2] py-3 text-lg text-white shadow transition-all duration-150 active:scale-[0.95]"
+            onClick={() => navigate("/worker-detail")}
+          >
+            다음
+          </button>
         </div>
       </div>
 
@@ -537,6 +583,19 @@ const CommuteRangePageSimple: React.FC = () => {
       <style
         dangerouslySetInnerHTML={{
           __html: `
+          /* 전체 스크롤 제한 */
+          html, body {
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+          }
+          
+          /* iOS rubber band effect 방지 */
+          body {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+          }
+          
           .custom-slider {
             -webkit-appearance: none;
             appearance: none;
@@ -592,4 +651,4 @@ const CommuteRangePageSimple: React.FC = () => {
   );
 };
 
-export default CommuteRangePageSimple;
+export default CommuteRangePage;

@@ -7,6 +7,7 @@ import LoginSuccessPage from "../pages/LoginSuccessPage";
 import MainPage from "../pages/MainPage";
 import SignupPage from "../pages/SignupPage";
 import SignupSuccessPage from "../pages/SignupSuccessPage";
+import WorkerDetailsPage from "../pages/WorkerDetailsPage";
 
 export const routes = [
   {
@@ -41,5 +42,9 @@ export const routes = [
   {
     path: "/commute-range",
     element: <CommuteRangePage />,
+  },
+  {
+    path: "/worker-detail",
+    element: <WorkerDetailsPage />,
   },
 ] satisfies RouteObject[];

@@ -1,5 +1,5 @@
 import React from "react";
-import { HiOutlineChevronLeft } from "react-icons/hi";
+import { HiChevronLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { cn } from "../utils/classname";
 
@@ -36,8 +36,8 @@ const NavigationHeader: React.FC<Props> = ({
       className={cn("mt-4 flex w-full items-center text-gray-500", className)}
     >
       {showBackButton && (
-        <HiOutlineChevronLeft
-          className="cursor-pointer touch-manipulation text-lg"
+        <HiChevronLeft
+          className="cursor-pointer touch-manipulation text-3xl"
           onClick={handleBackClick}
         />
       )}
