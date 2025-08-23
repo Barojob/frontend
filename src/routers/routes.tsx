@@ -1,4 +1,5 @@
 import { type RouteObject } from "react-router-dom";
+import CommuteRangePage from "../pages/CommuteRangePage";
 import IntroPage from "../pages/IntroPage";
 import JobRequestPage from "../pages/JobRequestPage";
 import LoginPage from "../pages/LoginPage";
@@ -6,6 +7,7 @@ import LoginSuccessPage from "../pages/LoginSuccessPage";
 import MainPage from "../pages/MainPage";
 import SignupPage from "../pages/SignupPage";
 import SignupSuccessPage from "../pages/SignupSuccessPage";
+import WorkerDetailsPage from "../pages/WorkerDetailsPage";
 
 export const routes = [
   {
@@ -36,5 +38,13 @@ export const routes = [
   {
     path: "/job-request",
     element: <JobRequestPage />,
+  },
+  {
+    path: "/commute-range",
+    element: <CommuteRangePage />,
+  },
+  {
+    path: "/worker-detail",
+    element: <WorkerDetailsPage />,
   },
 ] satisfies RouteObject[];
