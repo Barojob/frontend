@@ -1,8 +1,8 @@
 import React from "react";
+import { configs } from "../configs";
 import { MapHandle } from "../types/map";
 import { Nullable } from "../types/misc";
 import { cn } from "../utils/classname";
-import { configs } from "../utils/configs";
 
 type Props = {
   className?: string;

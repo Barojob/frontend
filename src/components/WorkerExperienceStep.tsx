@@ -117,7 +117,7 @@ const WorkerExperienceStep: React.FC<WorkerExperienceStepProps> = ({
             className={cn(
               "flex-1 px-6 py-3 text-center font-medium",
               selectedCategory === "보통인부"
-                ? "bg-blue-200 font-bold text-blue-800"
+                ? "bg-[#D3DFFF] font-bold text-[#247AF2]"
                 : "bg-white text-gray-300 hover:bg-gray-50",
             )}
           >
@@ -133,7 +133,7 @@ const WorkerExperienceStep: React.FC<WorkerExperienceStepProps> = ({
             className={cn(
               "flex-1 px-6 py-3 text-center font-medium",
               selectedCategory === "기능공"
-                ? "bg-blue-200 font-bold text-blue-800"
+                ? "bg-[#D3DFFF] font-bold text-[#247AF2]"
                 : "bg-white text-gray-300 hover:bg-gray-50",
             )}
           >
@@ -174,7 +174,7 @@ const WorkerExperienceStep: React.FC<WorkerExperienceStepProps> = ({
       )}
 
       {/* 하단 버튼 영역 - 화면 하단 고정 */}
-      <div className="animate-slide-up fixed bottom-8 left-4 right-4">
+      <div className="animate-slide-up fixed-bottom-button">
         {selectedJobs.length === 0 ? (
           // 아무것도 선택하지 않았을 때 - 건너뛰기 버튼
           <Button

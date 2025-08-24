@@ -20,7 +20,7 @@ const SignupPageContent: React.FC = () => {
   } = useSignupContext();
 
   return (
-    <main className="relative flex min-h-screen flex-col px-6">
+    <main className="keyboard-avoiding mobile-scroll relative flex min-h-screen flex-col">
       {/* SIGNUP_SUCCESS 단계일 때는 전체 화면으로 표시 */}
       {step === SignupStep.SIGNUP_SUCCESS ? (
         <div className="absolute inset-0">
@@ -28,9 +28,13 @@ const SignupPageContent: React.FC = () => {
         </div>
       ) : (
         <>
-          <SignupHeader className="mt-4" step={step} onStepChange={setStep} />
+          <SignupHeader
+            className="mt-2 px-6"
+            step={step}
+            onStepChange={setStep}
+          />
           <PresenceTransition
-            className="flex-1 overflow-y-auto"
+            className="mobile-scroll flex-1 overflow-y-auto px-6"
             transitionKey={step.toString()}
             variant="fadeInOut"
           >

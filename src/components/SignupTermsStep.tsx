@@ -47,7 +47,7 @@ const SignupTermsStep: React.FC<Props> = ({ className, onStepChange }) => {
         onChange={setTerms}
       />
 
-      <div className="bottom-0-responsive pb-12.5 absolute inset-x-0 px-6">
+      <div className="fixed-bottom-button">
         <Button
           theme="primary"
           size="md"

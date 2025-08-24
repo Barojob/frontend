@@ -5,17 +5,17 @@ import IntroIcon from "../svgs/IntroIcon";
 
 const IntroPage: React.FC = () => {
   return (
-    <div className="bg-blue-1 pb-11.5 flex h-dvh flex-col">
-      <div className="flex flex-1 items-center justify-center">
+    <div className="bg-blue-1 flex h-dvh flex-col">
+      <div className="flex flex-1 items-center justify-center px-6 pt-8">
         <IntroIcon className="max-w-51.5 md:max-w-90 w-full" />
       </div>
 
-      <section>
+      <section className="pb-11.5 px-6">
         <p className="whitespace-pre-line text-center text-2xl font-bold text-white">
           {`가까운 일자리,\n인력특공대로 1분 안에`}
         </p>
 
-        <div className="max-w-100 mt-19.5 mx-auto flex justify-center gap-x-3.5 px-6">
+        <div className="max-w-100 mt-19.5 mx-auto flex justify-center gap-x-3.5">
           <Link className="flex-1" to="/login">
             <Button theme="tertiary" size="md" block>
               로그인
