@@ -571,7 +571,7 @@ const CommuteRangePage: React.FC = () => {
           </button>
         </div>
         {isTransportSelected && (
-          <div className="animate-slide-up mt-12 duration-1000">
+          <div className="animate-slide-up mt-12">
             <button
               className="font-inter w-full rounded-lg bg-[#247AF2] py-3 text-lg text-white shadow transition-all duration-150 active:scale-[0.95]"
               onClick={() => navigate("/worker-detail")}
