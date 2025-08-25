@@ -60,6 +60,7 @@ const WorkerDetailsPage: React.FC = () => {
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
     setSelectedJobs([]); // 카테고리 변경 시 선택된 업무 초기화
+    setSelectedPackages([]); // 카테고리 변경 시 선택된 장비도 초기화
   };
 
   // 업무 선택/해제 핸들러
@@ -71,15 +72,23 @@ const WorkerDetailsPage: React.FC = () => {
         return [...prev, job];
       }
     });
+    setSelectedPackages([]); // 다른 업무 선택 시 장비 선택 초기화
   };
 
   // 장비 선택/해제 핸들러
   const handlePackageToggle = (pkg: string) => {
     setSelectedPackages((prev) => {
-      if (prev.includes(pkg)) {
-        return prev.filter((p) => p !== pkg);
+      if (pkg === "없음") {
+        // "없음" 선택 시 다른 모든 장비 체크 해제하고 "없음"만 선택
+        return ["없음"];
       } else {
-        return [...prev, pkg];
+        // 다른 장비 선택 시 "없음" 체크 해제
+        const newSelection = prev.filter((p) => p !== "없음");
+        if (newSelection.includes(pkg)) {
+          return newSelection.filter((p) => p !== pkg);
+        } else {
+          return [...newSelection, pkg];
+        }
       }
     });
   };
@@ -230,7 +239,7 @@ const WorkerDetailsPage: React.FC = () => {
             </div> */}
           </div>
           <div className="mt-12">
-            <div className="mb-6 text-center text-sm leading-relaxed text-[#247AF2]">
+            <div className="mb-4 text-center text-sm leading-relaxed text-[#247AF2]">
               업무 내용에 따라 수령 금액이 달라집니다.
               <br />
               정확한 수령 금액은 공고에서 확인해주세요.
@@ -239,7 +248,7 @@ const WorkerDetailsPage: React.FC = () => {
               className="font-inter w-full rounded-lg bg-[#247AF2] py-3 text-lg text-white shadow transition-all duration-150 active:scale-[0.95]"
               onClick={() => navigate("/")}
             >
-              다음
+              18시에 알려드릴게요 매칭 등록
             </button>
           </div>
         </div>
