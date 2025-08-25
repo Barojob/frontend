@@ -10,7 +10,7 @@ import JobTypeStep from "../../components/JobPost/JobTypeStep";
 import PersonCountStep from "../../components/JobPost/PersonCountStep";
 import SelectedItemsDisplay from "../../components/JobPost/SelectedItemsDisplay";
 import WorkTimeStep from "../../components/JobPost/WorkTimeStep";
-import NavigationHeader from "../../components/NavigationHeader/NavigationHeader";
+import NavigationHeader from "../../components/NavigationHeader";
 import StepIndicator from "../../components/StepIndicator";
 import { useJobPosting } from "../../hooks/useJobPosting";
 
