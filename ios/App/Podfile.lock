@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (5.9.1)
   - Capacitor (7.2.0):
     - CapacitorCordova
   - CapacitorApp (7.0.2):
@@ -6,12 +7,71 @@ PODS:
   - CapacitorCordova (7.2.0)
   - CapacitorKeyboard (7.0.2):
     - Capacitor
+  - KakaoMapsSDK (2.12.9)
+  - KakaoSDK (2.22.7):
+    - KakaoSDKAuth (= 2.22.7)
+    - KakaoSDKCert (= 2.22.7)
+    - KakaoSDKCommon (= 2.22.7)
+    - KakaoSDKFriend (= 2.22.7)
+    - KakaoSDKNavi (= 2.22.7)
+    - KakaoSDKShare (= 2.22.7)
+    - KakaoSDKTalk (= 2.22.7)
+    - KakaoSDKTemplate (= 2.22.7)
+    - KakaoSDKUser (= 2.22.7)
+  - KakaoSDKAuth (2.22.7):
+    - KakaoSDKCommon (= 2.22.7)
+  - KakaoSDKCert (2.22.7):
+    - KakaoSDKCertCore (= 2.22.7)
+    - KakaoSDKUser (= 2.22.7)
+  - KakaoSDKCertCore (2.22.7)
+  - KakaoSDKCommon (2.22.7):
+    - KakaoSDKCommon/Common (= 2.22.7)
+    - KakaoSDKCommon/Network (= 2.22.7)
+  - KakaoSDKCommon/Common (2.22.7)
+  - KakaoSDKCommon/Network (2.22.7):
+    - Alamofire (~> 5.9.0)
+    - KakaoSDKCommon/Common (= 2.22.7)
+  - KakaoSDKFriend (2.22.7):
+    - KakaoSDKFriendCore (= 2.22.7)
+    - KakaoSDKUser (= 2.22.7)
+  - KakaoSDKFriendCore (2.22.7)
+  - KakaoSDKNavi (2.22.7):
+    - KakaoSDKCommon/Common (= 2.22.7)
+  - KakaoSDKShare (2.22.7):
+    - KakaoSDKCommon (= 2.22.7)
+    - KakaoSDKTemplate (= 2.22.7)
+  - KakaoSDKTalk (2.22.7):
+    - KakaoSDKTemplate (= 2.22.7)
+    - KakaoSDKUser (= 2.22.7)
+  - KakaoSDKTemplate (2.22.7):
+    - KakaoSDKCommon/Common (= 2.22.7)
+  - KakaoSDKUser (2.22.7):
+    - KakaoSDKAuth (= 2.22.7)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@7.2.0_@capacitor+core@7.2.0/node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/.pnpm/@capacitor+app@7.0.2_@capacitor+core@7.2.0/node_modules/@capacitor/app`)"
   - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@7.2.0_@capacitor+core@7.2.0/node_modules/@capacitor/ios`)"
   - "CapacitorKeyboard (from `../../node_modules/.pnpm/@capacitor+keyboard@7.0.2_@capacitor+core@7.2.0/node_modules/@capacitor/keyboard`)"
+  - KakaoMapsSDK
+  - KakaoSDK
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Alamofire
+    - KakaoMapsSDK
+    - KakaoSDK
+    - KakaoSDKAuth
+    - KakaoSDKCert
+    - KakaoSDKCertCore
+    - KakaoSDKCommon
+    - KakaoSDKFriend
+    - KakaoSDKFriendCore
+    - KakaoSDKNavi
+    - KakaoSDKShare
+    - KakaoSDKTalk
+    - KakaoSDKTemplate
+    - KakaoSDKUser
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -24,11 +84,25 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/.pnpm/@capacitor+keyboard@7.0.2_@capacitor+core@7.2.0/node_modules/@capacitor/keyboard"
 
 SPEC CHECKSUMS:
+  Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
   Capacitor: 03bc7cbdde6a629a8b910a9d7d78c3cc7ed09ea7
   CapacitorApp: 1f6922c9c5c8b1c538d7fbe92ebe44a81b34bed3
   CapacitorCordova: 5967b9ba03915ef1d585469d6e31f31dc49be96f
   CapacitorKeyboard: a86aa9e4741b6444a802df26440a92ae041b34a6
+  KakaoMapsSDK: d45fb0428c45d3f90acd724893fd30846527f514
+  KakaoSDK: dc4f9062a42e6f7e8e2aacb620a0480996dcb62b
+  KakaoSDKAuth: 45204252ff7c379c0f86c5573f97ec36885afca0
+  KakaoSDKCert: 0e0d2a278731676c566a4bd2da4c0febf1c2d54d
+  KakaoSDKCertCore: 73649497338c420b16b647dba7651855bda21f5c
+  KakaoSDKCommon: 132164a6bac8bcd3a4346d3bf777f34f8f39fdca
+  KakaoSDKFriend: a4ef5e83b8c655b722cf84ec60940a652fb513a9
+  KakaoSDKFriendCore: c2a935a5f6a4bb1dc19d4d7ba692bf2b7c737ca5
+  KakaoSDKNavi: 707e416ffe83b6cf197a964863471e7e6211c593
+  KakaoSDKShare: 01c60c3d5394479429a51ef14ea78d3e72f48af0
+  KakaoSDKTalk: a0c41d014cfda872ea9adae41bcaf7720a002785
+  KakaoSDKTemplate: b11ecf08777198ffafd184201baf93de476ddb84
+  KakaoSDKUser: 4c9cf1da78710d19d0b2c2dd32d1a44c544cdfa4
 
-PODFILE CHECKSUM: 85294906bbc4ac0259fdb6f5b6339b7c9406508a
+PODFILE CHECKSUM: e32ea58c596c27090e9eeecf52db00bddb02478e
 
 COCOAPODS: 1.16.2
