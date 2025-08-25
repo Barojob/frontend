@@ -28,6 +28,14 @@ const MainPage: React.FC = () => {
         </Link>
       </div>
 
+      <div className="mt-6">
+        <Link to="/worker-detail">
+          <Button theme="primary" size="sm" block>
+            🧪 테스트: 출퇴근 범위 설정 페이지로 이동
+          </Button>
+        </Link>
+      </div>
+
       <div className="mt-8">
         <MainHeading title="경기 포천시" />
         <Link to="/job-request">

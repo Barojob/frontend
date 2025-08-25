@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavigationHeader from "../components/NavigationHeader";
 import { cn } from "../utils/classname";
 
@@ -47,6 +48,7 @@ const jobCategories = {
 };
 
 const WorkerDetailsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedJobs, setSelectedJobs] = useState<string[]>([]);
   const [selectedPackages, setSelectedPackages] = useState<string[]>([]);
@@ -186,16 +188,60 @@ const WorkerDetailsPage: React.FC = () => {
       )}
 
       {isPackageSelected && (
-        <div className="animate-slide-up">
-          <div className="ml-6 mt-10 text-2xl font-bold text-gray-900">
-            예상 수령 금액
-          </div>
-          <div className="mx-6 mt-4 flex flex-wrap rounded-lg bg-gray-100 px-6 py-2">
-            최소 <span className="font-bold text-[#FD694B]">100,000원</span> ~
-            최대 <span className="font-bold text-[#374BFF]">200,000원</span>
-          </div>
+        <div className="animate-slide-up mx-6 mt-10">
+          <div className="text-2xl font-bold text-gray-900">예상 수령 금액</div>
 
-          <div className="h-px w-auto bg-gray-300"></div>
+          <div className="mt-4 rounded-lg bg-gray-100 px-6 py-4">
+            {/* 금액 표시 */}
+            <div className="font-inter flex items-baseline justify-between text-xl font-bold">
+              <span>
+                최소 <span className="text-[#FD694B]">140,700원</span>
+              </span>
+              ~
+              <span>
+                최대 <span className="text-[#374BFF]">167,000원</span>
+              </span>
+            </div>
+
+            {/* 고용보험 부분은 버전 1에서는 제거, 버전 2때는 쓸 듯*/}
+            {/* <div className="mt-4 h-px w-full bg-gray-300"></div>
+
+            <div className="mt-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <span className="font-Pretendard text-gray-700">
+                    고용보험
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    <span className="ml-1 flex flex-wrap items-center justify-center rounded-full bg-gray-200 px-2 text-xs font-medium text-gray-600">
+                      자세히
+                    </span>
+                  </span>
+                </div>
+                <span className="font- Pretendard text-gray-700">-920원</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="font-inter text-gray-700">
+                  고용보험료 지원
+                </span>
+                <span className="font-Pretendard text-gray-700">+920원</span>
+              </div>
+            </div> */}
+          </div>
+          <div className="mt-12">
+            <div className="mb-6 text-center text-sm leading-relaxed text-[#247AF2]">
+              업무 내용에 따라 수령 금액이 달라집니다.
+              <br />
+              정확한 수령 금액은 공고에서 확인해주세요.
+            </div>
+            <button
+              className="font-inter w-full rounded-lg bg-[#247AF2] py-3 text-lg text-white shadow transition-all duration-150 active:scale-[0.95]"
+              onClick={() => navigate("/")}
+            >
+              다음
+            </button>
+          </div>
         </div>
       )}
     </div>
