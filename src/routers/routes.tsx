@@ -7,8 +7,8 @@ import JobRequestPage from "../pages/JobRequestPage";
 import LoginPage from "../pages/LoginPage";
 import LoginSuccessPage from "../pages/LoginSuccessPage";
 import MainPage from "../pages/MainPage";
-import SignupPage from "../pages/SignupPage";
-import SignupSuccessPage from "../pages/SignupSuccessPage";
+import SignupPage from "../pages/SignUp/SignupPage";
+import SignupSuccessPage from "../pages/SignUp/SignupSuccessPage";
 import WorkerDetailsPage from "../pages/WorkerDetailsPage";
 
 export const routes = [

@@ -1,10 +1,10 @@
 /*
 import React, { useState } from "react";
 import { cn } from "../../utils/classname";
-import CheckBox from "../CheckBox";
-import CircleCheckBox from "../CheckBox/CircleCheckBox";
-import DeprecatedButton from "../DeprecatedButton/DeprecatedButton";
-import Modal from "../Modal";
+import CheckBox from "../../components/CheckBox";
+import CircleCheckBox from "../../components/CheckBox/CircleCheckBox";
+import DeprecatedButton from "../../components/DeprecatedButton/DeprecatedButton";
+import Modal from "../../components/Modal";
 
 type CheckItem = {
   id: number;

@@ -1,13 +1,13 @@
 import React from "react";
-import useSignupContext from "../hooks/useSignupContext";
-import { SignupStep } from "../types/signup";
-import { cn } from "../utils/classname";
-import Button from "./Button";
+import Button from "../../components/Button";
+import useSignupContext from "../../hooks/useSignupContext";
+import { SignupStep } from "../../types/signup";
+import { cn } from "../../utils/classname";
 import SignUpTerms from "./SignUpTerms";
 
 type Props = {
   className?: string;
-  onStepChange?: () => void; // 이제 선택적으로 만듦
+  onStepChange?: () => void;
 };
 
 const SignupTermsStep: React.FC<Props> = ({ className, onStepChange }) => {
@@ -22,9 +22,9 @@ const SignupTermsStep: React.FC<Props> = ({ className, onStepChange }) => {
 
   const handleNextStep = () => {
     if (onStepChange) {
-      onStepChange(); // 기존 prop이 있으면 사용
+      onStepChange();
     } else {
-      setStep(SignupStep.PERSONAL_INFO); // Context를 통해 다음 단계로 이동
+      setStep(SignupStep.PERSONAL_INFO);
     }
   };
 

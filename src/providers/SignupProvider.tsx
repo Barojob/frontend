@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
-import { CheckItem } from "../components/SignUpTerms";
 import TERMS_FIXTURE from "../fixtures/terms.json";
+import { CheckItem } from "../pages/SignUp/SignUpTerms";
 import { Nullable } from "../types/misc";
 import {
   EmployerInfo,

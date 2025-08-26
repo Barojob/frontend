@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
-import CongratsIcon from "../svgs/CongratsIcon";
+import Button from "../../components/Button";
+import CongratsIcon from "../../svgs/CongratsIcon";
 
 const SignupSuccessPage: React.FC = () => {
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ const SignupSuccessPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 메인홈으로 이동 버튼 */}
       <div className="w-full px-6 pb-8">
         <Button
           size="md"
