@@ -44,6 +44,13 @@ const MainPage: React.FC = () => {
       </div>
 
       <div className="mt-8">
+        <MainHeading title="채용 공고" />
+        <Link to="/job-post-location">
+          <JobRequestCard className="mt-3" />
+        </Link>
+      </div>
+
+      <div className="mt-8">
         <MainHeading title="긴급 모집중" />
         <UrgentRecruitmentCard className="h-30 mt-3" />
       </div>

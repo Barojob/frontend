@@ -1,13 +1,22 @@
 import UIKit
 import Capacitor
+import KakaoSDKCommon
+import KakaoMapsSDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        // 안전한 방법으로 Kakao SDK 초기화
+        guard let appKey = Bundle.main.infoDictionary?["KakaoAppKey"] as? String else {
+            fatalError("KakaoAppKey를 Info.plist에 설정해주세요.") // 개발자만 볼 수 있는 에러 메시지
+        }
+        
+        KakaoSDK.initSDK(appKey: appKey)
+        
         return true
     }
 
