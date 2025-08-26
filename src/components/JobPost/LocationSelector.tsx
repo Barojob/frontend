@@ -1,3 +1,4 @@
+import { Geolocation } from "@capacitor/geolocation";
 import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
@@ -29,11 +30,31 @@ const LocationSelector: React.FC<Props> = ({
   const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(
     null,
   );
+
+  const [currentGeoLocation, setCurrentGeoLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   const [showSearchScreen, setShowSearchScreen] = useState(false);
 
-  // 지도 중심 변경 핸들러 (통합)
   const handleMapCenterChange = (lat: number, lng: number) => {
     console.log("🗺️ 지도 중심 변경:", { lat, lng });
+
+    if (
+      typeof window === "undefined" ||
+      typeof kakao === "undefined" ||
+      !kakao.maps ||
+      !kakao.maps.services
+    ) {
+      console.log("⚠️ kakao 서비스가 로드되지 않아 폴백 적용");
+      setSelectedLocation({
+        address: "주소를 찾지 못했습니다",
+        latitude: lat,
+        longitude: lng,
+        placeName: "지도 중심 위치",
+      });
+      return;
+    }
 
     // 주소 검색 및 selectedLocation 업데이트
     const geocoder = new kakao.maps.services.Geocoder();
@@ -105,7 +126,21 @@ const LocationSelector: React.FC<Props> = ({
               sort: kakao.maps.services.SortBy.DISTANCE,
             },
           );
+          return;
         }
+
+        // 실패 폴백: 주소/장소 없이 좌표 기반으로 선택 처리
+        console.log(
+          "⚠️ 역지오코딩 실패 또는 결과 없음 - 상태:",
+          status,
+          result,
+        );
+        setSelectedLocation({
+          address: "주소를 찾지 못했습니다",
+          latitude: lat,
+          longitude: lng,
+          placeName: "지도 중심 위치",
+        });
       },
     );
   };
@@ -318,32 +353,86 @@ const LocationSelector: React.FC<Props> = ({
     setTimeout(checkDragEvent, 1000);
   }, [mapRef.current?.isLoaded]);
 
-  // 현재 위치 찾기
-  const handleCurrentLocationClick = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
+  // 현재 위치 찾기 (수정된 버전)
+  const handleCurrentLocationClick = async () => {
+    try {
+      await Geolocation.requestPermissions();
+      const position = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 10000,
+      });
 
-          if (mapRef.current?.map) {
-            // 지도 중심을 현재 위치로 이동하고 배율을 가깝게 설정
-            const latlng = new kakao.maps.LatLng(lat, lng);
-            mapRef.current.map.setCenter(latlng);
-            mapRef.current.map.setLevel(2); // 더 가깝게 (숫자가 작을수록 가까움)
+      // 한국 범위(대략) 밖이면 서울 시청 좌표로 폴백
+      const rawLat = position.coords.latitude;
+      const rawLng = position.coords.longitude;
+      const isInKorea = (lat: number, lng: number) =>
+        lat >= 33 && lat <= 38 && lng >= 124 && lng <= 132;
 
-            // 주소 정보 업데이트
-            handleMapCenterChange(lat, lng);
-          }
-        },
-        () => {
-          alert("위치 정보를 가져올 수 없습니다.");
-        },
+      const next = isInKorea(rawLat, rawLng)
+        ? { lat: rawLat, lng: rawLng }
+        : { lat: 37.5843, lng: 126.9255 };
+
+      if (!isInKorea(rawLat, rawLng)) {
+        console.log("🌏 현재 좌표가 한국 범위를 벗어나 서울로 폴백합니다.", {
+          rawLat,
+          rawLng,
+        });
+        alert("시뮬레이터 기본 위치가 해외로 설정되어 있어 서울로 이동합니다.");
+      }
+
+      // 위치 정보를 state에 저장
+      setCurrentGeoLocation(next);
+    } catch (error) {
+      console.error("위치 정보를 가져오는 데 실패했습니다.", error);
+      alert(
+        "위치 정보를 가져올 수 없습니다. 기기의 위치 서비스가 켜져 있는지 확인해주세요.",
       );
-    } else {
-      alert("이 브라우저에서는 위치 서비스를 지원하지 않습니다.");
     }
   };
+
+  useEffect(() => {
+    // currentGeoLocation에 값이 있고, 지도가 준비되었을 때만 실행
+    if (currentGeoLocation && mapRef.current?.map && mapRef.current?.isLoaded) {
+      console.log(
+        "✅ 현재 위치 state 변경 감지! 지도를 이동합니다.",
+        currentGeoLocation,
+      );
+
+      const { lat, lng } = currentGeoLocation;
+
+      // 지도 중심 이동
+      try {
+        if (
+          typeof kakao === "undefined" ||
+          !kakao.maps ||
+          !mapRef.current?.map
+        ) {
+          throw new Error("kakao 또는 map 인스턴스 없음");
+        }
+        const latlng = new kakao.maps.LatLng(lat, lng);
+        // 부드러운 이동으로 시각적 피드백 강화
+        mapRef.current.map.panTo(latlng);
+        // 약간 확대하여 현재 위치 강조
+        mapRef.current.map.setLevel(2);
+        // 레이아웃 보정
+        if (typeof mapRef.current.relayout === "function") {
+          setTimeout(() => mapRef.current?.relayout(), 0);
+        }
+      } catch (err) {
+        console.error("지도 이동 중 오류:", err);
+      }
+
+      // 주소 정보 업데이트
+      try {
+        handleMapCenterChange(lat, lng);
+      } catch (e) {
+        console.error("주소 업데이트 중 오류:", e);
+      }
+
+      // 한 번 사용한 위치 정보는 초기화 (선택사항이지만 권장)
+      setCurrentGeoLocation(null);
+    }
+  }, [currentGeoLocation, mapRef.current?.isLoaded]);
 
   // 위치 확정
   const handleLocationConfirm = () => {

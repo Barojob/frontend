@@ -9,6 +9,14 @@
 	</dict>
 	<key>KakaoAppKey</key>
 	<string>69ae29e6b7cec29d749c551e9bac3ff4</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>현재 위치를 지도에 표시하기 위해 위치 정보 권한이 필요합니다.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>앱이 백그라운드에 있을 때도 위치 서비스를 사용하기 위해 권한이 필요합니다.
+
+앱이 백그라운드에 있을 때도 위치 서비스를 사용하기 위해 권한이 필요합니다.
+
+</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
