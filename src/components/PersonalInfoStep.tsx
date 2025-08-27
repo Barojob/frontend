@@ -1,17 +1,8 @@
 import Button from "@/components/Button";
-import {
-  DeprecatedDrawer,
-  DeprecatedDrawerClose,
-  DeprecatedDrawerContent,
-  DeprecatedDrawerHeader,
-  DeprecatedDrawerTitle,
-  DeprecatedDrawerTrigger,
-} from "@/components/DeprecatedDrawer";
 import Input from "@/components/Input";
 import PresenceTransition from "@/components/PresenceTransition";
-import { CARRIER_OPTIONS } from "@/fixtures/signup";
+import SelectCarrierDrawer from "@/components/SelectCarrierDrawer";
 import { usePersonalInfoForm } from "@/hooks/usePersonalInfoForm";
-import DropdownArrowIcon from "@/svgs/DropdownArrowIcon";
 import { SignupStep } from "@/types/signup";
 import { cn } from "@/utils/classname";
 import { formatPhoneNumber } from "@/utils/formatters";
@@ -104,47 +95,29 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
 
         {showPhoneFields && (
           <div className="animate-slide-up space-y-4">
-            <label className="block text-sm font-medium text-gray-900">
+            <label
+              className="block text-sm font-medium text-gray-900"
+              htmlFor="phone-number"
+            >
               휴대폰 번호 <span className="text-red-500">*</span>
             </label>
-            <div className="flex gap-3">
-              <DeprecatedDrawer>
-                <DeprecatedDrawerTrigger asChild>
-                  <button className="flex flex-1 items-center justify-between rounded-lg bg-gray-100 px-4 py-3 text-left">
-                    <span>{personalInfo.carrier || "통신사"}</span>
-                    <DropdownArrowIcon className="text-blue-500" size={12} />
-                  </button>
-                </DeprecatedDrawerTrigger>
-                <DeprecatedDrawerContent>
-                  <DeprecatedDrawerHeader>
-                    <DeprecatedDrawerTitle>통신사 선택</DeprecatedDrawerTitle>
-                  </DeprecatedDrawerHeader>
-                  <div className="space-y-2 p-6">
-                    {CARRIER_OPTIONS.map((option) => (
-                      <DeprecatedDrawerClose key={option} asChild>
-                        <button
-                          onClick={() => handleCarrierSelect(option)}
-                          className="w-full rounded-lg border p-3 text-left hover:bg-gray-50"
-                        >
-                          {option}
-                        </button>
-                      </DeprecatedDrawerClose>
-                    ))}
-                  </div>
-                </DeprecatedDrawerContent>
-              </DeprecatedDrawer>
 
-              <div className="flex-2" style={{ flex: 2 }}>
-                <Input
-                  ref={phoneNumberRef}
-                  type="tel"
-                  placeholder="전화번호 입력"
-                  value={personalInfo.phoneNumber}
-                  onValueChange={handlePhoneNumberChange}
-                  className="w-full rounded-lg border-0 bg-gray-100 px-4 py-3"
-                  inputMode="numeric"
-                />
-              </div>
+            <div className="flex items-center gap-2">
+              <SelectCarrierDrawer
+                value={personalInfo.carrier}
+                onSelect={handleCarrierSelect}
+              />
+
+              <Input
+                className="flex-3 w-full rounded-lg border-0 bg-gray-100 px-4 py-3"
+                ref={phoneNumberRef}
+                id="phone-number"
+                type="tel"
+                inputMode="numeric"
+                placeholder="전화번호 입력"
+                value={personalInfo.phoneNumber}
+                onValueChange={handlePhoneNumberChange}
+              />
             </div>
           </div>
         )}

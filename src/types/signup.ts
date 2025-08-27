@@ -1,4 +1,5 @@
 import { CheckItem } from "@/components/SignUpTerms";
+import { Nullable } from "@/types/misc";
 import React from "react";
 
 export enum SignupStep {
@@ -17,11 +18,20 @@ export enum SignupStep {
   SIGNUP_SUCCESS,
 }
 
+export enum Carrier {
+  KT = "KT",
+  LG_U_PLUS = "LG U+",
+  SKT = "SKT",
+  KT_ALIM = "KT 알뜰폰",
+  LG_U_PLUS_ALIM = "LG U+ 알뜰폰",
+  SKT_ALIM = "SKT 알뜰폰",
+}
+
 export type PersonalInfo = {
   name: string;
   birthDate: string;
   phoneNumber: string;
-  carrier: string;
+  carrier: Nullable<Carrier>;
 };
 
 export type VerificationInfo = {

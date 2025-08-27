@@ -10,7 +10,7 @@ import {
 import Input from "@/components/Input";
 import { EMAIL_DOMAIN_OPTIONS } from "@/fixtures/signup";
 import { useEmployerInfoForm } from "@/hooks/useEmployerInfoForm";
-import DropdownArrowIcon from "@/svgs/DropdownArrowIcon";
+import ArrowDownIcon from "@/svgs/DropdownArrowIcon";
 import { SignupStep } from "@/types/signup";
 import { cn } from "@/utils/classname";
 import { formatBusinessNumber } from "@/utils/formatters";
@@ -112,10 +112,7 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
                         <span className="text-gray-500">
                           {emailDomain || "선택"}
                         </span>
-                        <DropdownArrowIcon
-                          className="text-blue-500"
-                          size={12}
-                        />
+                        <ArrowDownIcon className="size-3 text-blue-500" />
                       </button>
                     </DeprecatedDrawerTrigger>
                     <DeprecatedDrawerContent>

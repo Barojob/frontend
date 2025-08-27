@@ -22,7 +22,7 @@ export const usePersonalInfoForm = (
     [personalInfo.birthDate],
   );
   const isCarrierSelected = useMemo(
-    () => personalInfo.carrier.trim() !== "",
+    () => !!personalInfo.carrier,
     [personalInfo.carrier],
   );
   const isPhoneNumberValid = useMemo(

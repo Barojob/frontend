@@ -21,7 +21,7 @@ const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
     name: "",
     birthDate: "",
     phoneNumber: "",
-    carrier: "",
+    carrier: null,
   });
   const verificationState = React.useState<VerificationInfo>({
     verificationCode: "",
