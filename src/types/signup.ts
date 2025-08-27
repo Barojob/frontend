@@ -1,20 +1,20 @@
 import React from "react";
-import { CheckItem } from "../pages/SignUp/SignUpTerms";
+import { CheckItem } from "../components/SignUpTerms";
 
 export enum SignupStep {
   TERMS,
-  PERSONAL_INFO, // 인적사항 입력 (이름, 생년월일, 휴대폰번호, 통신사)
-  PHONE_VERIFICATION, // 인증번호 입력
+  PERSONAL_INFO,
+  PHONE_VERIFICATION,
   PHONE_VERIFICATION_SUCCESS,
   USER_TYPE_SELECTION,
   ALREADY_REGISTERED,
   EMPLOYER_INFO,
   WORKER_INFO,
   WORKER_EXPERIENCE,
-  WORKER_LICENSE, // 이수증 등록
-  WORKER_ACCOUNT, // 계좌 등록
+  WORKER_LICENSE,
+  WORKER_ACCOUNT,
   PROFILE_SETUP,
-  SIGNUP_SUCCESS, // 회원가입 완료
+  SIGNUP_SUCCESS,
 }
 
 export type PersonalInfo = {

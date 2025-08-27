@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import CongratsIcon from "../../svgs/CongratsIcon";
 
-const SignupSuccessPage: React.FC = () => {
+const SignupSuccessStep: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGoToLogin = () => {
@@ -41,4 +41,4 @@ const SignupSuccessPage: React.FC = () => {
   );
 };
 
-export default SignupSuccessPage;
+export default SignupSuccessStep;
