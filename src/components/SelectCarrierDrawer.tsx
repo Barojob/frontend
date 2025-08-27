@@ -25,6 +25,7 @@ const SelectCarrierDrawer: React.FC<Props> = ({
           "flex items-center justify-between gap-x-3 rounded-lg bg-gray-100 px-4 py-3",
           className,
         )}
+        type="button"
         onClick={handleToggleVisible(true)}
       >
         {carrier ?? "통신사"}

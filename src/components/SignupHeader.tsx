@@ -22,7 +22,7 @@ const SignupHeader: React.FC<Props> = ({ className, step, onStepChange }) => {
       className={cn("flex items-center gap-x-1 text-gray-500", className)}
     >
       {showBackButton && (
-        <button onClick={handleBack} className="p-2">
+        <button onClick={handleBack}>
           <ChevronLeftIcon className="size-6 text-gray-500" />
         </button>
       )}

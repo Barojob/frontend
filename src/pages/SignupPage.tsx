@@ -28,7 +28,7 @@ const SignupPageContent: React.FC = () => {
 
   return (
     <main className="keyboard-avoiding flex min-h-screen flex-col">
-      <SignupHeader className="mt-2 px-6" step={step} onStepChange={setStep} />
+      <SignupHeader className="mt-3 px-6" step={step} onStepChange={setStep} />
       <PresenceTransition
         className="mobile-scroll flex-1 overflow-y-auto px-6"
         transitionKey={step.toString()}
@@ -38,9 +38,7 @@ const SignupPageContent: React.FC = () => {
 
         {step === SignupStep.PERSONAL_INFO && (
           <PersonalInfoStep
-            onValidityChange={() => {
-              /* FIXME: 유효성 검사 로직 구현 필요 */
-            }}
+            onNextStep={handleNextStep(SignupStep.PHONE_VERIFICATION)}
           />
         )}
 
@@ -130,6 +128,12 @@ const SignupPageContent: React.FC = () => {
       </PresenceTransition>
     </main>
   );
+
+  function handleNextStep(step: SignupStep) {
+    return () => {
+      setStep(step);
+    };
+  }
 };
 
 export default SignupPage;
