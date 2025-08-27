@@ -1,12 +1,12 @@
 import BoxButton from "@/components/BoxButton";
 import Button from "@/components/Button";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/Drawer";
+  DeprecatedDrawer,
+  DeprecatedDrawerContent,
+  DeprecatedDrawerHeader,
+  DeprecatedDrawerTitle,
+  DeprecatedDrawerTrigger,
+} from "@/components/DeprecatedDrawer";
 import Modal from "@/components/Modal";
 import { useWorkerLicense } from "@/hooks/useWorkerLicense";
 import CameraIcon from "@/svgs/CameraIcon";
@@ -86,8 +86,8 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
               </div>
             </div>
           ) : (
-            <Drawer>
-              <DrawerTrigger asChild>
+            <DeprecatedDrawer>
+              <DeprecatedDrawerTrigger asChild>
                 <button
                   className={cn(
                     "h-48 w-full rounded-lg border-2 border-gray-300",
@@ -98,11 +98,13 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
                     <PlusIcon className="h-12 w-12 text-white" />
                   </div>
                 </button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader>
-                  <DrawerTitle>이수증 등록 방법 선택</DrawerTitle>
-                </DrawerHeader>
+              </DeprecatedDrawerTrigger>
+              <DeprecatedDrawerContent>
+                <DeprecatedDrawerHeader>
+                  <DeprecatedDrawerTitle>
+                    이수증 등록 방법 선택
+                  </DeprecatedDrawerTitle>
+                </DeprecatedDrawerHeader>
                 <div className="flex gap-4 p-6">
                   <BoxButton
                     name="카메라"
@@ -123,8 +125,8 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
                     }}
                   />
                 </div>
-              </DrawerContent>
-            </Drawer>
+              </DeprecatedDrawerContent>
+            </DeprecatedDrawer>
           )}
         </div>
 

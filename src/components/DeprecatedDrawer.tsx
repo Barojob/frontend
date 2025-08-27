@@ -53,7 +53,7 @@ interface DrawerProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-export const Drawer: React.FC<DrawerProps> = ({
+export const DeprecatedDrawer: React.FC<DrawerProps> = ({
   children,
   open,
   onOpenChange,
@@ -111,17 +111,15 @@ type ElementWithOnClick = React.ReactElement<{
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }>;
 
-export interface DrawerTriggerProps {
+export interface DeprecatedDrawerTriggerProps {
   children: React.ReactNode;
   className?: string;
   asChild?: boolean;
 }
 
-export const DrawerTrigger: React.FC<DrawerTriggerProps> = ({
-  children,
-  className,
-  asChild = false,
-}) => {
+export const DeprecatedDrawerTrigger: React.FC<
+  DeprecatedDrawerTriggerProps
+> = ({ children, className, asChild = false }) => {
   const { openDrawer } = useDrawer();
 
   if (asChild && React.isValidElement(children)) {
@@ -145,16 +143,16 @@ export const DrawerTrigger: React.FC<DrawerTriggerProps> = ({
   );
 };
 
-export type DrawerContentProps = VariantProps<typeof DrawerContentVariant> & {
+export type DeprecatedDrawerContentProps = VariantProps<
+  typeof DrawerContentVariant
+> & {
   className?: string;
   children: React.ReactNode;
 };
 
-export const DrawerContent: React.FC<DrawerContentProps> = ({
-  className,
-  children,
-  position = "bottom",
-}) => {
+export const DeprecatedDrawerContent: React.FC<
+  DeprecatedDrawerContentProps
+> = ({ className, children, position = "bottom" }) => {
   const { isOpen, isAnimating, closeDrawer } = useDrawer();
 
   const getPositionClasses = () => {
@@ -210,22 +208,22 @@ export const DrawerContent: React.FC<DrawerContentProps> = ({
   );
 };
 
-export interface DrawerHeaderProps {
+export interface DeprecatedDrawerHeaderProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
+export const DeprecatedDrawerHeader: React.FC<DeprecatedDrawerHeaderProps> = ({
   children,
   className,
 }) => <div className={cn("px-6 py-4", className)}>{children}</div>;
 
-export interface DrawerTitleProps {
+export interface DeprecatedDrawerTitleProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export const DrawerTitle: React.FC<DrawerTitleProps> = ({
+export const DeprecatedDrawerTitle: React.FC<DeprecatedDrawerTitleProps> = ({
   children,
   className,
 }) => (
@@ -234,13 +232,13 @@ export const DrawerTitle: React.FC<DrawerTitleProps> = ({
   </h2>
 );
 
-export interface DrawerCloseProps {
+export interface DeprecatedDrawerCloseProps {
   children: React.ReactNode;
   className?: string;
   asChild?: boolean;
 }
 
-export const DrawerClose: React.FC<DrawerCloseProps> = ({
+export const DeprecatedDrawerClose: React.FC<DeprecatedDrawerCloseProps> = ({
   children,
   className,
   asChild = false,
@@ -268,4 +266,4 @@ export const DrawerClose: React.FC<DrawerCloseProps> = ({
   );
 };
 
-export default Drawer;
+export default DeprecatedDrawer;

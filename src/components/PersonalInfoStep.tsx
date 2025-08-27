@@ -1,12 +1,12 @@
 import Button from "@/components/Button";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/Drawer";
+  DeprecatedDrawer,
+  DeprecatedDrawerClose,
+  DeprecatedDrawerContent,
+  DeprecatedDrawerHeader,
+  DeprecatedDrawerTitle,
+  DeprecatedDrawerTrigger,
+} from "@/components/DeprecatedDrawer";
 import Input from "@/components/Input";
 import PresenceTransition from "@/components/PresenceTransition";
 import { CARRIER_OPTIONS } from "@/fixtures/signup";
@@ -42,11 +42,15 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
   const phoneNumberRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (showBirthDateField) birthDateRef.current?.focus();
+    if (showBirthDateField) {
+      birthDateRef.current?.focus();
+    }
   }, [showBirthDateField]);
 
   useEffect(() => {
-    if (showPhoneFields) phoneNumberRef.current?.focus();
+    if (showPhoneFields) {
+      phoneNumberRef.current?.focus();
+    }
   }, [showPhoneFields]);
 
   return (
@@ -104,31 +108,31 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
               휴대폰 번호 <span className="text-red-500">*</span>
             </label>
             <div className="flex gap-3">
-              <Drawer>
-                <DrawerTrigger asChild>
+              <DeprecatedDrawer>
+                <DeprecatedDrawerTrigger asChild>
                   <button className="flex flex-1 items-center justify-between rounded-lg bg-gray-100 px-4 py-3 text-left">
                     <span>{personalInfo.carrier || "통신사"}</span>
                     <DropdownArrowIcon className="text-blue-500" size={12} />
                   </button>
-                </DrawerTrigger>
-                <DrawerContent>
-                  <DrawerHeader>
-                    <DrawerTitle>통신사 선택</DrawerTitle>
-                  </DrawerHeader>
+                </DeprecatedDrawerTrigger>
+                <DeprecatedDrawerContent>
+                  <DeprecatedDrawerHeader>
+                    <DeprecatedDrawerTitle>통신사 선택</DeprecatedDrawerTitle>
+                  </DeprecatedDrawerHeader>
                   <div className="space-y-2 p-6">
                     {CARRIER_OPTIONS.map((option) => (
-                      <DrawerClose key={option} asChild>
+                      <DeprecatedDrawerClose key={option} asChild>
                         <button
                           onClick={() => handleCarrierSelect(option)}
                           className="w-full rounded-lg border p-3 text-left hover:bg-gray-50"
                         >
                           {option}
                         </button>
-                      </DrawerClose>
+                      </DeprecatedDrawerClose>
                     ))}
                   </div>
-                </DrawerContent>
-              </Drawer>
+                </DeprecatedDrawerContent>
+              </DeprecatedDrawer>
 
               <div className="flex-2" style={{ flex: 2 }}>
                 <Input
