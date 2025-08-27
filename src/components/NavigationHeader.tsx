@@ -1,6 +1,6 @@
 import React from "react";
-import { HiChevronLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import SmallLeftIcon from "../svgs/SmallLeftIcon";
 import { cn } from "../utils/classname";
 
 type Props = {
@@ -36,12 +36,12 @@ const NavigationHeader: React.FC<Props> = ({
       className={cn("mt-4 flex w-full items-center text-gray-500", className)}
     >
       {showBackButton && (
-        <HiChevronLeft
+        <SmallLeftIcon
           className="cursor-pointer touch-manipulation text-3xl"
           onClick={handleBackClick}
         />
       )}
-      <div className={cn("", showBackButton ? "ml-1" : "")}>{title}</div>
+      <div className={cn("", showBackButton ? "ml-3" : "")}>{title}</div>
     </div>
   );
 };

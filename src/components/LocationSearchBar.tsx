@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdLocate } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { cn } from "../utils/classname";
@@ -12,12 +12,20 @@ type LocationData = {
   placeName?: string;
 };
 
+type RecentSearchData = {
+  placeName: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+};
+
 type Props = {
   currentLocation?: LocationData | null;
   selectedLocation?: LocationData | null;
   onCurrentLocationClick: () => void;
   onLocationConfirm: () => void;
   onSearchClick?: () => void; // 검색 클릭 핸들러 추가
+  onLocationSelect?: (location: LocationData) => void; // 위치 선택 핸들러 추가
   className?: string;
 };
 
@@ -27,17 +35,110 @@ const LocationSearchBar: React.FC<Props> = ({
   onCurrentLocationClick,
   onLocationConfirm,
   onSearchClick,
+  onLocationSelect,
   className,
 }) => {
   const navigate = useNavigate();
+  const [recentSearches, setRecentSearches] = useState<RecentSearchData[]>([]);
+
+  // 최근 검색어 불러오기
+  useEffect(() => {
+    const saved = localStorage.getItem("recentLocationSearches");
+    if (saved) {
+      try {
+        const parsedData = JSON.parse(saved);
+        // 기존 string 배열 형태의 데이터를 새로운 구조로 마이그레이션
+        if (Array.isArray(parsedData) && parsedData.length > 0) {
+          if (typeof parsedData[0] === "string") {
+            // 기존 string 배열 형태인 경우 빈 배열로 초기화
+            setRecentSearches([]);
+            localStorage.removeItem("recentLocationSearches");
+          } else {
+            // 새로운 구조인 경우 그대로 사용
+            setRecentSearches(parsedData);
+          }
+        } else {
+          setRecentSearches([]);
+        }
+      } catch (error) {
+        console.error("최근 검색어 데이터 파싱 오류:", error);
+        setRecentSearches([]);
+      }
+    }
+  }, []);
 
   // 표시할 위치: 선택된 위치가 있으면 선택된 위치, 없으면 현재 위치
   const displayLocation = selectedLocation || currentLocation;
 
+  // 스마트 주소 표시: placeName이 주소와 동일하거나 주소를 포함하면 하단 주소 숨김
+  const shouldShowAddress = (() => {
+    if (!displayLocation?.placeName || !displayLocation?.address) {
+      return true; // placeName이나 address가 없으면 주소 표시
+    }
+
+    const placeName = displayLocation.placeName.toLowerCase();
+    const address = displayLocation.address.toLowerCase();
+
+    // placeName이 주소와 동일하거나 주소를 포함하면 false
+    if (
+      placeName === address ||
+      address.includes(placeName) ||
+      placeName.includes(address)
+    ) {
+      return false;
+    }
+
+    // placeName이 주소 형태인지 확인 (시, 구, 동, 번지 등 포함)
+    const addressPatterns = [
+      /시$/,
+      /구$/,
+      /동$/,
+      /번지$/,
+      /로$/,
+      /길$/,
+      /읍$/,
+      /면$/,
+      /\d+번지/,
+      /\d+로/,
+      /\d+길/,
+      /\d+동/,
+    ];
+
+    const isAddressFormat = addressPatterns.some((pattern) =>
+      pattern.test(placeName),
+    );
+    if (isAddressFormat) {
+      return false;
+    }
+
+    return true; // 그 외의 경우 주소 표시
+  })();
+
+  // 최근 검색어 클릭 핸들러
+  const handleRecentSearchClick = (searchData: RecentSearchData) => {
+    console.log("🏠 최근 검색어 클릭:", searchData);
+
+    if (onLocationSelect) {
+      const locationData: LocationData = {
+        address: searchData.address,
+        latitude: searchData.latitude,
+        longitude: searchData.longitude,
+        placeName: searchData.placeName,
+      };
+
+      console.log("🏠 최근 검색어로 위치 선택:", locationData);
+      onLocationSelect(locationData);
+    } else if (onSearchClick) {
+      onSearchClick();
+    }
+  };
+
   // 디버깅을 위한 로그
   console.log("🏠 LocationSearchBar - displayLocation:", displayLocation);
+  console.log("🏠 LocationSearchBar - shouldShowAddress:", shouldShowAddress);
   console.log("🏠 LocationSearchBar - selectedLocation:", selectedLocation);
   console.log("🏠 LocationSearchBar - currentLocation:", currentLocation);
+  console.log("🏠 LocationSearchBar - recentSearches:", recentSearches);
 
   const handleLocationConfirm = () => {
     if (displayLocation) {
@@ -61,7 +162,7 @@ const LocationSearchBar: React.FC<Props> = ({
   return (
     <div
       className={cn(
-        "absolute bottom-0 left-0 right-0 z-50 rounded-t-[20px] border-t-2 border-gray-200 bg-white shadow-lg",
+        "absolute bottom-0 left-0 right-0 z-50 rounded-t-[20px] border-t-2 border-gray-200 bg-white pb-3 shadow-lg",
         className,
       )}
     >
@@ -80,22 +181,35 @@ const LocationSearchBar: React.FC<Props> = ({
               <span className="text-neutral-600">
                 {displayLocation?.placeName || "선택된 위치"}
               </span>
-              <span className="text-xs text-neutral-400">
+              <span
+                className={cn(
+                  "text-xs text-neutral-400",
+                  !shouldShowAddress && "invisible",
+                )}
+              >
                 {displayLocation?.address || "지도에서 위치를 확인하세요"}
               </span>
             </div>
           </button>
         </div>
-        <div className="mb-3 flex gap-2 border-t border-neutral-200 pt-3">
-          <Chip className="rounded-full bg-neutral-100 px-2 text-xs text-neutral-400">
-            회사
-          </Chip>
-          <Chip className="rounded-full bg-neutral-100 px-2 text-xs text-neutral-400">
-            경기 포천시 중앙로 119번길 26
-          </Chip>
-          <Chip className="rounded-full bg-neutral-100 px-2 text-xs text-neutral-400">
-            최근 기록
-          </Chip>
+        <div className="mb-3 flex gap-2 overflow-x-auto border-t border-neutral-200 pt-3">
+          {recentSearches.length > 0 ? (
+            recentSearches.slice(0, 3).map((search, index) => (
+              <Chip
+                key={index}
+                className="cursor-pointer text-nowrap rounded-full bg-neutral-100 px-2 text-xs text-neutral-400"
+                onClick={() => handleRecentSearchClick(search)}
+              >
+                {search.placeName}
+              </Chip>
+            ))
+          ) : (
+            <>
+              <Chip className="rounded-full bg-neutral-100 px-2 text-xs text-neutral-400">
+                최근 기록
+              </Chip>
+            </>
+          )}
         </div>
 
         {/* 근무지로 설정 버튼 */}

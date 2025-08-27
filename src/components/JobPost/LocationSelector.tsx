@@ -37,6 +37,7 @@ const LocationSelector: React.FC<Props> = ({
   } | null>(null);
   const [showSearchScreen, setShowSearchScreen] = useState(false);
 
+  // 지도 중심 변경 핸들러 - 하이브리드 검색으로 빠른 응답
   const handleMapCenterChange = (lat: number, lng: number) => {
     console.log("🗺️ 지도 중심 변경:", { lat, lng });
 
@@ -56,93 +57,300 @@ const LocationSelector: React.FC<Props> = ({
       return;
     }
 
-    // 주소 검색 및 selectedLocation 업데이트
+    // 하이브리드 검색 시작 - 키워드와 카테고리를 동시에 검색
+    startHybridSearch(lat, lng);
+  };
+
+  // 하이브리드 검색 - 키워드와 카테고리를 동시에 실행하여 빠른 응답
+  const startHybridSearch = (lat: number, lng: number) => {
     const geocoder = new kakao.maps.services.Geocoder();
     const places = new kakao.maps.services.Places();
 
+    console.log("🔍 하이브리드 검색 시작:", { lat, lng });
+
+    // 역지오코딩으로 주소 가져오기
     geocoder.coord2Address(
       lng,
       lat,
       (result: KakaoGeocoderResult[], status: string) => {
-        if (status === kakao.maps.services.Status.OK && result.length > 0) {
-          const address = result[0].address.address_name;
+        console.log("📍 역지오코딩 결과:", { status, result });
 
-          // 주변 장소 검색
-          places.keywordSearch(
-            "건물 상가 지점 매장",
-            (placeResults: unknown[], placeStatus: string) => {
-              let placeName = "선택된 위치";
-
-              if (
-                placeStatus === kakao.maps.services.Status.OK &&
-                Array.isArray(placeResults) &&
-                placeResults.length > 0
-              ) {
-                // 가장 가까운 장소 찾기
-                let closestPlace = placeResults[0] as {
-                  place_name: string;
-                  x: string;
-                  y: string;
-                };
-                let minDistance = Number.MAX_VALUE;
-
-                for (const place of placeResults) {
-                  const placeData = place as {
-                    place_name: string;
-                    x: string;
-                    y: string;
-                  };
-                  const placeLat = parseFloat(placeData.y);
-                  const placeLng = parseFloat(placeData.x);
-                  const distance = Math.sqrt(
-                    Math.pow(lat - placeLat, 2) + Math.pow(lng - placeLng, 2),
-                  );
-
-                  if (distance < minDistance) {
-                    minDistance = distance;
-                    closestPlace = place as {
-                      place_name: string;
-                      x: string;
-                      y: string;
-                    };
-                  }
-                }
-                placeName = closestPlace.place_name;
-              }
-
-              const locationData = {
-                address,
-                latitude: lat,
-                longitude: lng,
-                placeName,
-              };
-
-              console.log("📍 새로운 위치 데이터:", locationData);
-              setSelectedLocation(locationData);
-            },
-            {
-              location: new kakao.maps.LatLng(lat, lng),
-              radius: 500,
-              sort: kakao.maps.services.SortBy.DISTANCE,
-            },
-          );
+        if (status !== kakao.maps.services.Status.OK || !result.length) {
+          console.log("❌ 역지오코딩 실패, 좌표 기반 폴백");
+          setSelectedLocation({
+            address: "주소를 찾지 못했습니다",
+            latitude: lat,
+            longitude: lng,
+            placeName: `위치 (${lat.toFixed(6)}, ${lng.toFixed(6)})`,
+          });
           return;
         }
 
-        // 실패 폴백: 주소/장소 없이 좌표 기반으로 선택 처리
-        console.log(
-          "⚠️ 역지오코딩 실패 또는 결과 없음 - 상태:",
-          status,
-          result,
-        );
+        const address = result[0].address.address_name;
+        const buildingName = result[0].road_address?.building_name;
+        console.log("✅ 주소 찾음:", address, "빌딩명:", buildingName);
+
+        // 즉시 주소 정보로 초기 설정 (빠른 응답) - 빌딩명이 있으면 우선 사용
         setSelectedLocation({
-          address: "주소를 찾지 못했습니다",
+          address,
           latitude: lat,
           longitude: lng,
-          placeName: "지도 중심 위치",
+          placeName: buildingName || address,
+        });
+
+        // 병렬로 키워드와 카테고리 검색 실행
+        const searchPromises = [
+          searchByKeywords(places, lat, lng, address),
+          searchByCategories(places, lat, lng, address),
+        ];
+
+        // 가장 빠른 결과를 사용하여 업데이트
+        Promise.race(searchPromises).then((bestResult) => {
+          if (bestResult) {
+            console.log("🏆 최적 결과 선택:", bestResult);
+            setSelectedLocation(bestResult);
+          }
         });
       },
     );
+  };
+
+  // 검색 정확도 상수 (더 촘촘하게)
+  const SEARCH_RADIUS_M = 20; // 20m
+  const DIST_THRESHOLD_DEG = 0.0001; // 약 11m
+
+  // 키워드 기반 검색
+  const searchByKeywords = async (
+    places: kakao.maps.services.Places,
+    lat: number,
+    lng: number,
+    address: string,
+  ): Promise<LocationData | null> => {
+    const searchKeywords = [
+      // 공공기관/교육/문화 우선
+      "주민센터",
+      "행정복지센터",
+      "동사무소",
+      "정부청사",
+      "도서관",
+      "학교",
+      // 금융/의료
+      "은행",
+      "병원",
+      "약국",
+      // 치안/소방/우편
+      "경찰서",
+      "지구대",
+      "소방서",
+      "우체국",
+      // 생활편의/유통/식음료
+      "편의점",
+      "마트",
+      "카페",
+      "음식점",
+      // 기타
+      "부동산",
+      "문화센터",
+      "건물",
+      // 최후순위: 포괄적 키워드
+      "상점",
+      "매장",
+      "업소",
+    ];
+
+    for (const keyword of searchKeywords) {
+      try {
+        const result = await searchKeyword(places, keyword, lat, lng);
+        if (result) {
+          console.log(`✅ 키워드 "${keyword}"로 장소 발견:`, result.placeName);
+          return {
+            address,
+            latitude: lat,
+            longitude: lng,
+            placeName: result.placeName,
+          };
+        }
+      } catch (error) {
+        console.log(`❌ 키워드 "${keyword}" 검색 실패:`, error);
+      }
+    }
+
+    return null;
+  };
+
+  // 카테고리 기반 검색 (병렬)
+  const searchByCategories = async (
+    places: kakao.maps.services.Places,
+    lat: number,
+    lng: number,
+    address: string,
+  ): Promise<LocationData | null> => {
+    const categories: KakaoCategory[] = [
+      // 공공기관/금융/의료 최우선
+      "PO3", // 공공기관
+      "BK9", // 은행
+      "HP8", // 병원
+      "PM9", // 약국
+      // 생활편의/식음료
+      "CS2", // 편의점
+      "CE7", // 카페
+      "FD6", // 음식점
+      // 기타 시설
+      "CT1", // 문화시설
+      "AD5", // 건물/시설
+      "AG2", // 부동산
+      "SW8", // 쇼핑
+    ];
+
+    // 모든 카테고리를 병렬 검색 후 가장 가까운 결과 채택
+    const results = await Promise.all(
+      categories.map((cat) =>
+        searchCategory(places, cat, lat, lng).then((r) => ({ cat, r })),
+      ),
+    );
+
+    // 가장 가까운 후보 선택 (30m 이내만 승인)
+    let best: { name: string; distance: number } | null = null;
+    for (const item of results) {
+      if (item.r) {
+        const distance =
+          (item.r as unknown as { distance: number }).distance ?? 0;
+        const name = (item.r as unknown as { placeName: string }).placeName;
+        if (!best || distance < best.distance) {
+          best = { name, distance };
+        }
+      }
+    }
+
+    if (best && best.distance < DIST_THRESHOLD_DEG) {
+      // 약 22~25m
+      return {
+        address,
+        latitude: lat,
+        longitude: lng,
+        placeName: best.name,
+      };
+    }
+
+    return null;
+  };
+
+  // 개별 키워드 검색 (Promise 기반)
+  const searchKeyword = (
+    places: kakao.maps.services.Places,
+    keyword: string,
+    lat: number,
+    lng: number,
+  ): Promise<{ placeName: string; distance: number } | null> => {
+    return new Promise((resolve) => {
+      places.keywordSearch(
+        keyword,
+        (placeResults: unknown[], placeStatus: string) => {
+          if (
+            placeStatus === kakao.maps.services.Status.OK &&
+            Array.isArray(placeResults) &&
+            placeResults.length > 0
+          ) {
+            const closest = findClosestPlace(placeResults, lat, lng);
+            if (closest && closest.distance < DIST_THRESHOLD_DEG) {
+              resolve({
+                placeName: closest.place_name,
+                distance: closest.distance,
+              });
+              return;
+            }
+          }
+          resolve(null);
+        },
+        {
+          location: new kakao.maps.LatLng(lat, lng),
+          radius: SEARCH_RADIUS_M,
+          sort: kakao.maps.services.SortBy.DISTANCE,
+        },
+      );
+    });
+  };
+
+  // 개별 카테고리 검색 (Promise 기반)
+  type KakaoCategory =
+    | "AD5"
+    | "FD6"
+    | "CE7"
+    | "HP8"
+    | "PM9"
+    | "CS2"
+    | "SW8"
+    | "PO3" // 공공기관
+    | "CT1" // 문화시설
+    | "BK9" // 은행
+    | "AG2"; // 부동산
+
+  const searchCategory = (
+    places: kakao.maps.services.Places,
+    category: KakaoCategory,
+    lat: number,
+    lng: number,
+  ): Promise<{ placeName: string; distance: number } | null> => {
+    return new Promise((resolve) => {
+      places.categorySearch(
+        category,
+        (placeResults: unknown[], placeStatus: string) => {
+          if (
+            placeStatus === kakao.maps.services.Status.OK &&
+            Array.isArray(placeResults) &&
+            placeResults.length > 0
+          ) {
+            const closest = findClosestPlace(placeResults, lat, lng);
+            if (closest && closest.distance < DIST_THRESHOLD_DEG) {
+              resolve({
+                placeName: closest.place_name,
+                distance: closest.distance,
+              });
+              return;
+            }
+          }
+          resolve(null);
+        },
+        {
+          location: new kakao.maps.LatLng(lat, lng),
+          radius: SEARCH_RADIUS_M,
+          sort: kakao.maps.services.SortBy.DISTANCE,
+        },
+      );
+    });
+  };
+
+  // 가장 가까운 장소 찾기
+  const findClosestPlace = (
+    placeResults: unknown[],
+    lat: number,
+    lng: number,
+  ) => {
+    let closestPlace = null;
+    let minDistance = Number.MAX_VALUE;
+
+    for (const place of placeResults) {
+      const placeData = place as {
+        place_name: string;
+        x: string;
+        y: string;
+      };
+      const placeLat = parseFloat(placeData.y);
+      const placeLng = parseFloat(placeData.x);
+      const distance = Math.sqrt(
+        Math.pow(lat - placeLat, 2) + Math.pow(lng - placeLng, 2),
+      );
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestPlace = {
+          place_name: placeData.place_name,
+          distance,
+        };
+      }
+    }
+
+    return closestPlace;
   };
 
   // 검색 화면에서 위치 선택 핸들러
@@ -353,43 +561,7 @@ const LocationSelector: React.FC<Props> = ({
     setTimeout(checkDragEvent, 1000);
   }, [mapRef.current?.isLoaded]);
 
-  // 현재 위치 찾기 (수정된 버전)
-  const handleCurrentLocationClick = async () => {
-    try {
-      await Geolocation.requestPermissions();
-      const position = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 10000,
-      });
-
-      // 한국 범위(대략) 밖이면 서울 시청 좌표로 폴백
-      const rawLat = position.coords.latitude;
-      const rawLng = position.coords.longitude;
-      const isInKorea = (lat: number, lng: number) =>
-        lat >= 33 && lat <= 38 && lng >= 124 && lng <= 132;
-
-      const next = isInKorea(rawLat, rawLng)
-        ? { lat: rawLat, lng: rawLng }
-        : { lat: 37.5843, lng: 126.9255 };
-
-      if (!isInKorea(rawLat, rawLng)) {
-        console.log("🌏 현재 좌표가 한국 범위를 벗어나 서울로 폴백합니다.", {
-          rawLat,
-          rawLng,
-        });
-        alert("시뮬레이터 기본 위치가 해외로 설정되어 있어 서울로 이동합니다.");
-      }
-
-      // 위치 정보를 state에 저장
-      setCurrentGeoLocation(next);
-    } catch (error) {
-      console.error("위치 정보를 가져오는 데 실패했습니다.", error);
-      alert(
-        "위치 정보를 가져올 수 없습니다. 기기의 위치 서비스가 켜져 있는지 확인해주세요.",
-      );
-    }
-  };
-
+  // 현재 위치 찾기
   useEffect(() => {
     // currentGeoLocation에 값이 있고, 지도가 준비되었을 때만 실행
     if (currentGeoLocation && mapRef.current?.map && mapRef.current?.isLoaded) {
@@ -441,6 +613,43 @@ const LocationSelector: React.FC<Props> = ({
     }
   };
 
+  // 현재 위치 찾기
+  const handleCurrentLocationClick = async () => {
+    try {
+      await Geolocation.requestPermissions();
+      const position = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 10000,
+      });
+
+      // 한국 범위(대략) 밖이면 서울 시청 좌표로 폴백
+      const rawLat = position.coords.latitude;
+      const rawLng = position.coords.longitude;
+      const isInKorea = (lat: number, lng: number) =>
+        lat >= 33 && lat <= 38 && lng >= 124 && lng <= 132;
+
+      const next = isInKorea(rawLat, rawLng)
+        ? { lat: rawLat, lng: rawLng }
+        : { lat: 37.5843, lng: 126.9255 };
+
+      if (!isInKorea(rawLat, rawLng)) {
+        console.log("🌏 현재 좌표가 한국 범위를 벗어나 서울로 폴백합니다.", {
+          rawLat,
+          rawLng,
+        });
+        alert("시뮬레이터 기본 위치가 해외로 설정되어 있어 서울로 이동합니다.");
+      }
+
+      // 위치 정보를 state에 저장
+      setCurrentGeoLocation(next);
+    } catch (error) {
+      console.error("위치 정보를 가져오는 데 실패했습니다.", error);
+      alert(
+        "위치 정보를 가져올 수 없습니다. 기기의 위치 서비스가 켜져 있는지 확인해주세요.",
+      );
+    }
+  };
+
   // 검색 화면이 열려있을 때 LocationSearchScreen 렌더링
   if (showSearchScreen) {
     return (
@@ -456,9 +665,9 @@ const LocationSelector: React.FC<Props> = ({
     <div className={`relative h-screen ${className}`}>
       <button
         onClick={() => navigate("/")}
-        className="fixed left-4 top-10 z-10 flex size-8 items-center justify-center rounded-full bg-white"
+        className="top-15 fixed left-4 z-10 flex size-9 items-center justify-center rounded-full bg-white"
       >
-        <HiOutlineArrowLeft className="size-5 text-zinc-600" />
+        <HiOutlineArrowLeft className="size-6 text-zinc-600" />
       </button>
 
       {/* 지도 */}
@@ -484,6 +693,7 @@ const LocationSelector: React.FC<Props> = ({
         onCurrentLocationClick={handleCurrentLocationClick}
         onLocationConfirm={handleLocationConfirm}
         onSearchClick={handleSearchClick}
+        onLocationSelect={handleLocationSelect} // 최근 검색어 클릭 시 위치 선택
         className="fixed bottom-0 left-0 right-0"
       />
     </div>

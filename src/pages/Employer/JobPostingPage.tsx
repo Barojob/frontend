@@ -88,7 +88,7 @@ const JobPostingPage: React.FC<Props> = () => {
   return (
     <>
       <div className="flex min-h-screen w-full flex-col justify-start overflow-y-auto bg-gray-200">
-        <div className="bg-white px-6">
+        <div className="bg-white px-6 pt-12">
           <NavigationHeader
             title="인력 구하기"
             className="mb-7"
