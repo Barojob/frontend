@@ -3,7 +3,7 @@ import Input from "@/components/Input";
 import PresenceTransition from "@/components/PresenceTransition";
 import SelectCarrierDrawer from "@/components/SelectCarrierDrawer";
 import { usePersonalInfoForm } from "@/hooks/usePersonalInfoForm";
-import { SignupStep } from "@/types/signup";
+import { Carrier, SignupStep } from "@/types/signup";
 import { cn } from "@/utils/classname";
 import { formatPhoneNumber } from "@/utils/formatters";
 import React, { useEffect, useRef } from "react";
@@ -163,7 +163,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
     setPersonalInfo((prev) => ({ ...prev, phoneNumber: formattedValue }));
   }
 
-  function handleCarrierSelect(selectedCarrier: string) {
+  function handleCarrierSelect(selectedCarrier: Carrier) {
     setPersonalInfo((prev) => ({ ...prev, carrier: selectedCarrier }));
     phoneNumberRef.current?.focus();
   }
