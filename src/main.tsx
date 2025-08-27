@@ -1,8 +1,9 @@
+import App from "@/App";
+import "@/globals-core.css";
+import { assert } from "@/utils/assert";
 import { defineCustomElements } from "@ionic/pwa-elements/loader";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App";
-import { assert } from "./utils/assert";
 
 const renderRoot = () => {
   const rootElement = document.getElementById("root");

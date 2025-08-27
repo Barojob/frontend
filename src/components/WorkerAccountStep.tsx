@@ -1,7 +1,5 @@
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import React from "react";
-import BoxButton from "../../components/BoxButton";
-import Button from "../../components/Button";
+import BoxButton from "@/components/BoxButton";
+import Button from "@/components/Button";
 import {
   Drawer,
   DrawerClose,
@@ -9,13 +7,15 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "../../components/Drawer";
-import Input from "../../components/Input";
-import Modal from "../../components/Modal";
-import { BANK_LIST } from "../../fixtures/banks";
-import { useWorkerAccount } from "../../hooks/useWorkerAccount";
-import WarningIcon from "../../svgs/WarningIcon";
-import { cn } from "../../utils/classname";
+} from "@/components/Drawer";
+import Input from "@/components/Input";
+import Modal from "@/components/Modal";
+import { BANK_LIST } from "@/fixtures/banks";
+import { useWorkerAccount } from "@/hooks/useWorkerAccount";
+import WarningIcon from "@/svgs/WarningIcon";
+import { cn } from "@/utils/classname";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import React from "react";
 
 type WorkerAccountStepProps = {
   className?: string;

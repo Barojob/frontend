@@ -1,4 +1,4 @@
-import type { Maybe } from "../types/misc";
+import type { Maybe } from "@/types/misc";
 
 export function assert(
   condition: Maybe<boolean> | (() => boolean),

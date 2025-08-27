@@ -1,6 +1,6 @@
+import { configs } from "@/configs";
+import { type User, userSchema } from "@/types/user";
 import { useQuery } from "@tanstack/react-query";
-import { type User, userSchema } from "../types/user";
-import { configs } from "../utils/configs";
 
 const fetchUser = async (): Promise<User> => {
   const response = await fetch(`${configs.BACKEND_BASE_URL}/auth/test`);

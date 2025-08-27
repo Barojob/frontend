@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import Button from "../../components/Button";
+import Button from "@/components/Button";
 import {
   Drawer,
   DrawerClose,
@@ -7,14 +6,15 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "../../components/Drawer";
-import Input from "../../components/Input";
-import { CARRIER_OPTIONS } from "../../fixtures/signup";
-import { usePersonalInfoForm } from "../../hooks/usePersonalInfoForm";
-import DropdownArrowIcon from "../../svgs/DropdownArrowIcon";
-import { SignupStep } from "../../types/signup";
-import { cn } from "../../utils/classname";
-import { formatPhoneNumber } from "../../utils/formatters";
+} from "@/components/Drawer";
+import Input from "@/components/Input";
+import { CARRIER_OPTIONS } from "@/fixtures/signup";
+import { usePersonalInfoForm } from "@/hooks/usePersonalInfoForm";
+import DropdownArrowIcon from "@/svgs/DropdownArrowIcon";
+import { SignupStep } from "@/types/signup";
+import { cn } from "@/utils/classname";
+import { formatPhoneNumber } from "@/utils/formatters";
+import React, { useEffect, useRef } from "react";
 
 type PersonalInfoStepProps = {
   className?: string;

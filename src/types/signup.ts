@@ -1,5 +1,5 @@
+import { CheckItem } from "@/components/SignUpTerms";
 import React from "react";
-import { CheckItem } from "../components/SignUpTerms";
 
 export enum SignupStep {
   TERMS,

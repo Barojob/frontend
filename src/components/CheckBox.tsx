@@ -1,7 +1,7 @@
+import CheckBoxIcon from "@/svgs/CheckBoxIcon";
+import RoundCheckBoxIcon from "@/svgs/RoundCheckBoxIcon";
+import { cn } from "@/utils/classname";
 import React from "react";
-import CheckBoxIcon from "../svgs/CheckBoxIcon";
-import RoundCheckBoxIcon from "../svgs/RoundCheckBoxIcon";
-import { cn } from "../utils/classname";
 
 export type Props = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,

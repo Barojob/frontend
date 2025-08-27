@@ -1,5 +1,5 @@
+import PersonCountSelector from "@/components/JobPost/PersonCountSelector";
 import React from "react";
-import PersonCountSelector from "./PersonCountSelector";
 
 interface PersonCountStepProps {
   selectedPersonCount: number;

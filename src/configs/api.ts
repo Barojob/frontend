@@ -1,4 +1,4 @@
-import { ensure } from "../utils/assert";
+import { ensure } from "@/utils/assert";
 
 export const apiConfig = {
   BASE_URL: ensure(

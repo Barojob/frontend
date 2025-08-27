@@ -1,4 +1,4 @@
-import { SignupStep } from "../types/signup";
+import { SignupStep } from "@/types/signup";
 
 const SIGNUP_STEP_TITLES: Record<SignupStep, string> = {
   [SignupStep.TERMS]: "회원가입",

@@ -1,8 +1,8 @@
+import Button from "@/components/Button";
+import { usePhoneVerification } from "@/hooks/usePhoneVerification";
+import { cn } from "@/utils/classname";
+import { formatTime } from "@/utils/formatters";
 import React, { useRef } from "react";
-import Button from "../../components/Button";
-import { usePhoneVerification } from "../../hooks/usePhoneVerification";
-import { cn } from "../../utils/classname";
-import { formatTime } from "../../utils/formatters";
 
 type PhoneVerificationCodeStepProps = {
   className?: string;

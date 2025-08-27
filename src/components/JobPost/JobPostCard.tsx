@@ -1,4 +1,3 @@
-import React from "react";
 import {
   getCategoryLabel,
   getPersonCountLabel,
@@ -6,7 +5,8 @@ import {
   getSelectedEquipmentLabels,
   getSelectedExperienceLabels,
   getWorkTimeLabel,
-} from "../../utils/jobPostingHelpers";
+} from "@/utils/jobPostingHelpers";
+import React from "react";
 
 interface JobPostCardProps {
   activeCategory: string;

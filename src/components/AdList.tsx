@@ -1,16 +1,13 @@
+import { cn } from "@/utils/classname";
 import React, { useState } from "react";
-import { cn } from "../utils/classname";
 
-import {
-  default as Adimg2,
-  default as Adimg4,
-} from "../../assets/images/test.jpg";
+import { default as Adimg2, default as Adimg4 } from "@/assets/images/test.jpg";
 import {
   default as Adimg1,
   default as Adimg3,
-} from "../../assets/images/test1.jpg";
-import Ad from "./Ad";
-import AdIndicator from "./AdIndicator";
+} from "@/assets/images/test1.jpg";
+import Ad from "@/components/Ad";
+import AdIndicator from "@/components/AdIndicator";
 
 type Props = {
   className?: string;

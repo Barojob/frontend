@@ -1,13 +1,13 @@
+import Button from "@/components/Button";
+import JobRequestCard from "@/components/JobRequestCard";
+import MainCarousel from "@/components/MainCarousel";
 import NavBar from "@/components/NavBar";
+import UrgentRecruitmentCard from "@/components/UrgentRecruitmentCard";
+import BrandIcon from "@/svgs/BrandIcon";
+import { cn } from "@/utils/classname";
 import { BellIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { Link } from "react-router-dom";
-import Button from "../components/Button";
-import JobRequestCard from "../components/JobRequestCard";
-import MainCarousel from "../components/MainCarousel";
-import UrgentRecruitmentCard from "../components/UrgentRecruitmentCard";
-import BrandIcon from "../svgs/BrandIcon";
-import { cn } from "../utils/classname";
 
 const MainPage: React.FC = () => {
   return (

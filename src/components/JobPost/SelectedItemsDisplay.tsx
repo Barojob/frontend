@@ -1,4 +1,4 @@
-import React from "react";
+import SelectedTab from "@/components/JobPost/SelectedTab";
 import {
   getCategoryLabel,
   getPersonCountLabel,
@@ -6,8 +6,8 @@ import {
   getSelectedEquipmentLabels,
   getSelectedExperienceLabels,
   getWorkTimeLabel,
-} from "../../utils/jobPostingHelpers";
-import SelectedTab from "./SelectedTab";
+} from "@/utils/jobPostingHelpers";
+import React from "react";
 
 interface SelectedItemsDisplayProps {
   activeCategory: string;

@@ -1,8 +1,8 @@
+import Button from "@/components/Button";
+import { JOB_CATEGORIES, JobCategory } from "@/fixtures/jobs";
+import { useWorkerExperience } from "@/hooks/useWorkerExperience";
+import { cn } from "@/utils/classname";
 import React from "react";
-import Button from "../../components/Button";
-import { JOB_CATEGORIES, JobCategory } from "../../fixtures/jobs";
-import { useWorkerExperience } from "../../hooks/useWorkerExperience";
-import { cn } from "../../utils/classname";
 
 type WorkerExperienceStepProps = {
   className?: string;

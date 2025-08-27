@@ -1,3 +1,5 @@
+import Portal from "@/components/Portal";
+import { cn } from "@/utils/classname";
 import { cva, VariantProps } from "class-variance-authority";
 import React, {
   createContext,
@@ -6,8 +8,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { cn } from "../utils/classname";
-import Portal from "./Portal";
 
 const DrawerContentVariant = cva(
   "relative bg-white shadow-lg transform transition-all duration-300 ease-out max-h-[85vh] overflow-hidden",

@@ -1,6 +1,6 @@
+import { DeepLinkTarget, resolveDeepLink } from "@/utils/url";
 import { App, type URLOpenListenerEvent } from "@capacitor/app";
-import { useEffect } from "react";
-import { DeepLinkTarget, resolveDeepLink } from "../utils/url";
+import React, { useEffect } from "react";
 
 type Props = {
   scheme?: string;

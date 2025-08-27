@@ -1,24 +1,24 @@
-import {
-  ArrowUturnLeftIcon,
-  PlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import React, { useState } from "react";
-import BoxButton from "../../components/BoxButton";
-import Button from "../../components/Button";
+import BoxButton from "@/components/BoxButton";
+import Button from "@/components/Button";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "../../components/Drawer";
-import Modal from "../../components/Modal";
-import { useWorkerLicense } from "../../hooks/useWorkerLicense";
-import CameraIcon from "../../svgs/CameraIcon";
-import GalleryIcon from "../../svgs/GalleryIcon";
-import WarningIcon from "../../svgs/WarningIcon";
-import { cn } from "../../utils/classname";
+} from "@/components/Drawer";
+import Modal from "@/components/Modal";
+import { useWorkerLicense } from "@/hooks/useWorkerLicense";
+import CameraIcon from "@/svgs/CameraIcon";
+import GalleryIcon from "@/svgs/GalleryIcon";
+import WarningIcon from "@/svgs/WarningIcon";
+import { cn } from "@/utils/classname";
+import {
+  ArrowUturnLeftIcon,
+  PlusIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import React, { useState } from "react";
 
 type WorkerLicenseStepProps = {
   className?: string;

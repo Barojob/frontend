@@ -1,5 +1,5 @@
+import useSignupContext from "@/hooks/useSignupContext";
 import { useEffect, useMemo, useState } from "react";
-import useSignupContext from "./useSignupContext";
 
 export const usePersonalInfoForm = (
   onValidityChange: (isValid: boolean) => void,

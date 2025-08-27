@@ -1,6 +1,6 @@
+import { cn } from "@/utils/classname";
 import React, { PropsWithChildren } from "react";
 import { ThreeDots } from "react-loader-spinner";
-import { cn } from "../utils/classname";
 
 type Props = React.ComponentPropsWithRef<"button"> & {
   className?: string;

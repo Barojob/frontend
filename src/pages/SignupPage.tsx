@@ -1,18 +1,18 @@
 import EmployerInfoStep from "@/components/EmployerInfoStep";
 import PersonalInfoStep from "@/components/PersonalInfoStep";
 import PhoneVerificationCodeStep from "@/components/PhoneVerificationCodeStep";
+import PresenceTransition from "@/components/PresenceTransition";
+import SignupHeader from "@/components/SignupHeader";
 import SignupSuccessStep from "@/components/SignupSuccessStep";
 import SignupTermsStep from "@/components/SignupTermsStep";
 import UserTypeSelectionStep from "@/components/UserTypeSelectionStep";
 import WorkerAccountStep from "@/components/WorkerAccountStep";
 import WorkerExperienceStep from "@/components/WorkerExperienceStep";
 import WorkerLicenseStep from "@/components/WorkerLicenseStep";
+import useSignupContext from "@/hooks/useSignupContext";
+import SignupProvider from "@/providers/SignupProvider";
+import { SignupStep } from "@/types/signup";
 import React from "react";
-import PresenceTransition from "../components/PresenceTransition";
-import SignupHeader from "../components/SignupHeader";
-import useSignupContext from "../hooks/useSignupContext";
-import SignupProvider from "../providers/SignupProvider";
-import { SignupStep } from "../types/signup";
 
 const SimpleStepComponent = ({
   title,

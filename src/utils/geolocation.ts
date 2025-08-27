@@ -1,4 +1,4 @@
-import { AREA_BOUNDARIES } from "../fixtures/commuteAreas";
+import { AREA_BOUNDARIES } from "@/fixtures/commuteAreas";
 
 const calculateDistance = (
   lat1: number,

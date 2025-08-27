@@ -1,14 +1,14 @@
+import CommuteRangePage from "@/pages/CommuteRangePage";
+import JobPostingPage from "@/pages/Employer/JobPostingPage";
+import JobPostLocation from "@/pages/Employer/JobPostLocation";
+import IntroPage from "@/pages/IntroPage";
+import JobRequestPage from "@/pages/JobRequestPage";
+import LoginPage from "@/pages/LoginPage";
+import LoginSuccessPage from "@/pages/LoginSuccessPage";
+import MainPage from "@/pages/MainPage";
+import SignupPage from "@/pages/SignupPage";
+import WorkerDetailsPage from "@/pages/WorkerDetailsPage";
 import { type RouteObject } from "react-router-dom";
-import CommuteRangePage from "../pages/CommuteRangePage";
-import JobPostingPage from "../pages/Employer/JobPostingPage";
-import JobPostLocation from "../pages/Employer/JobPostLocation";
-import IntroPage from "../pages/IntroPage";
-import JobRequestPage from "../pages/JobRequestPage";
-import LoginPage from "../pages/LoginPage";
-import LoginSuccessPage from "../pages/LoginSuccessPage";
-import MainPage from "../pages/MainPage";
-import SignupPage from "../pages/SignupPage";
-import WorkerDetailsPage from "../pages/WorkerDetailsPage";
 
 export const routes = [
   {

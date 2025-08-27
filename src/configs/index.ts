@@ -1,4 +1,4 @@
-import { ensure } from "../utils/assert";
+import { ensure } from "@/utils/assert";
 
 export const configs = {
   KAKAO_MAP_API_KEY: ensure(

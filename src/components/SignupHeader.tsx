@@ -1,12 +1,12 @@
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
-import React, { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { SignupStep } from "../types/signup";
-import { cn } from "../utils/classname";
+import { SignupStep } from "@/types/signup";
+import { cn } from "@/utils/classname";
 import {
   getPreviousSignupStep,
   getSignupStepTitle,
-} from "../utils/signupHelpers";
+} from "@/utils/signupHelpers";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import React, { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   className?: string;

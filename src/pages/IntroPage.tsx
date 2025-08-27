@@ -1,7 +1,7 @@
+import Button from "@/components/Button";
+import IntroIcon from "@/svgs/IntroIcon";
 import React from "react";
 import { Link } from "react-router-dom";
-import Button from "../components/Button";
-import IntroIcon from "../svgs/IntroIcon";
 
 const IntroPage: React.FC = () => {
   return (

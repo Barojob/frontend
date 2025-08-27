@@ -1,7 +1,7 @@
+import { useMap } from "@/components/Map";
+import { AREA_BOUNDARIES, CENTER_COORDINATES } from "@/fixtures/commuteAreas";
+import { getAreasInRadius, getConvexHull } from "@/utils/geolocation";
 import React, { useEffect, useRef } from "react";
-import { AREA_BOUNDARIES, CENTER_COORDINATES } from "../fixtures/commuteAreas";
-import { getAreasInRadius, getConvexHull } from "../utils/geolocation";
-import { useMap } from "./Map";
 
 type CommuteRangePolygonProps = {
   radiusKm: number;

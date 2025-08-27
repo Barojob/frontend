@@ -1,10 +1,7 @@
+import { COMMUTE_RANGE_ORDER } from "@/fixtures/commuteAreas";
+import { useDebounce } from "@/hooks/useDebounce";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  COMMUTE_RANGE_DATA,
-  COMMUTE_RANGE_ORDER,
-} from "../fixtures/commuteAreas";
-import { useDebounce } from "./useDebounce";
 
 export const useCommuteRangePage = () => {
   const navigate = useNavigate();

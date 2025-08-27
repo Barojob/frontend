@@ -1,6 +1,6 @@
+import { EMAIL_DOMAIN_OPTIONS } from "@/fixtures/signup";
+import useSignupContext from "@/hooks/useSignupContext";
 import { useEffect, useMemo, useState } from "react";
-import { EMAIL_DOMAIN_OPTIONS } from "../fixtures/signup";
-import useSignupContext from "./useSignupContext";
 
 export const useEmployerInfoForm = (
   onValidityChange: (isValid: boolean) => void,

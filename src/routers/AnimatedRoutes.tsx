@@ -1,7 +1,7 @@
+import PresenceTransition from "@/components/PresenceTransition";
+import { routes } from "@/routers/routes";
 import React from "react";
 import { useLocation, useRoutes } from "react-router-dom";
-import PresenceTransition from "../components/PresenceTransition";
-import { routes } from "./routes";
 
 const AnimatedRoutes: React.FC = () => {
   const location = useLocation();

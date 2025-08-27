@@ -1,6 +1,6 @@
+import useSignupContext from "@/hooks/useSignupContext";
+import { SignupStep } from "@/types/signup";
 import { useEffect, useState } from "react";
-import { SignupStep } from "../types/signup";
-import useSignupContext from "./useSignupContext";
 
 export const useWorkerAccount = (
   onValidityChange: (isValid: boolean) => void,

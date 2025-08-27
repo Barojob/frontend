@@ -1,11 +1,11 @@
+import Button from "@/components/Button";
+import Input from "@/components/Input";
+import Modal from "@/components/Modal";
+import NavigationHeader from "@/components/NavigationHeader";
+import WarningIcon from "@/svgs/WarningIcon";
+import { cn } from "@/utils/classname";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
-import Input from "../components/Input";
-import Modal from "../components/Modal";
-import NavigationHeader from "../components/NavigationHeader";
-import WarningIcon from "../svgs/WarningIcon";
-import { cn } from "../utils/classname";
 
 type Props = {
   className?: string;
