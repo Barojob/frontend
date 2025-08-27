@@ -11,7 +11,7 @@ const AnimatedRoutes: React.FC = () => {
     <PresenceTransition
       className="h-full"
       transitionKey={location.pathname}
-      variant="subtleRise"
+      variant="softFadeIn"
     >
       {element}
     </PresenceTransition>

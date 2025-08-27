@@ -7,7 +7,7 @@ import {
 import React, { type PropsWithChildren } from "react";
 
 const variantsMap = {
-  subtleRise: {
+  softFadeIn: {
     variants: {
       hidden: { opacity: 0.5, scale: 0.98 },
       visible: { opacity: 1, scale: 1 },
@@ -20,6 +20,13 @@ const variantsMap = {
       visible: { opacity: 1 },
     },
     transition: { duration: 0.25, ease: "easeInOut" },
+  },
+  subtleRise: {
+    variants: {
+      hidden: { opacity: 0, y: 20 },
+      visible: { opacity: 1, y: 0 },
+    },
+    transition: { duration: 0.4, ease: "easeInOut" },
   },
 } satisfies Record<string, MotionNodeAnimationOptions>;
 

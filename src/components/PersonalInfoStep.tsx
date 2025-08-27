@@ -8,6 +8,7 @@ import {
   DrawerTrigger,
 } from "@/components/Drawer";
 import Input from "@/components/Input";
+import PresenceTransition from "@/components/PresenceTransition";
 import { CARRIER_OPTIONS } from "@/fixtures/signup";
 import { usePersonalInfoForm } from "@/hooks/usePersonalInfoForm";
 import DropdownArrowIcon from "@/svgs/DropdownArrowIcon";
@@ -145,18 +146,22 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         )}
       </div>
 
-      {isFormValid && (
-        <div className="animate-slide-up fixed-bottom-button">
+      <PresenceTransition
+        className="fixed-bottom-button"
+        transitionKey={isFormValid.toString()}
+        variant="subtleRise"
+      >
+        {isFormValid && (
           <Button
             size="md"
             theme="primary"
+            block
             onClick={() => setCurrentStep(SignupStep.PHONE_VERIFICATION)}
-            className="w-full"
           >
             인증번호 받기
           </Button>
-        </div>
-      )}
+        )}
+      </PresenceTransition>
     </div>
   );
 
