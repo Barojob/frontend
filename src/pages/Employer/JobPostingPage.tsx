@@ -1,18 +1,18 @@
+import AddJobPostCard from "@/components/JobPost/AddJobPostCard";
+import DemolitionWorkStep from "@/components/JobPost/DemolitionWorkStep";
+import EquipmentStep from "@/components/JobPost/EquipmentStep";
+import EstimatedCostDisplay from "@/components/JobPost/EstimatedCostDisplay";
+import ExperienceStep from "@/components/JobPost/ExperienceStep";
+import JobPostCard from "@/components/JobPost/JobPostCard";
+import JobTypeStep from "@/components/JobPost/JobTypeStep";
+import PersonCountStep from "@/components/JobPost/PersonCountStep";
+import SelectedItemsDisplay from "@/components/JobPost/SelectedItemsDisplay";
+import WorkTimeStep from "@/components/JobPost/WorkTimeStep";
+import NavigationHeader from "@/components/NavigationHeader";
+import StepIndicator from "@/components/StepIndicator";
+import { useJobPosting } from "@/hooks/useJobPosting";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import AddJobPostCard from "../../components/JobPost/AddJobPostCard";
-import DemolitionWorkStep from "../../components/JobPost/DemolitionWorkStep";
-import EquipmentStep from "../../components/JobPost/EquipmentStep";
-import EstimatedCostDisplay from "../../components/JobPost/EstimatedCostDisplay";
-import ExperienceStep from "../../components/JobPost/ExperienceStep";
-import JobPostCard from "../../components/JobPost/JobPostCard";
-import JobTypeStep from "../../components/JobPost/JobTypeStep";
-import PersonCountStep from "../../components/JobPost/PersonCountStep";
-import SelectedItemsDisplay from "../../components/JobPost/SelectedItemsDisplay";
-import WorkTimeStep from "../../components/JobPost/WorkTimeStep";
-import NavigationHeader from "../../components/NavigationHeader";
-import { useJobPosting } from "../../hooks/useJobPosting";
-import StepIndicator from "../SignUp/StepIndicator";
 
 type Props = {
   className?: string;

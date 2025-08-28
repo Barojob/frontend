@@ -1,9 +1,9 @@
 import { useUserType } from "@/hooks/useUserType";
+import Logo from "@/svgs/LogoIcon";
+import { cn } from "@/utils/classname";
 import React, { useState } from "react";
 import { IoPerson, IoSwapVertical } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import Logo from "../../svgs/Logo";
-import { cn } from "../../utils/classname";
 
 type Props = {
   className?: string;

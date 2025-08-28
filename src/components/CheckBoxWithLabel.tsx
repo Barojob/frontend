@@ -1,6 +1,6 @@
+import CheckBox, { Props as CheckBoxProps } from "@/components/CheckBox";
+import { cn } from "@/utils/classname";
 import React from "react";
-import { cn } from "../utils/classname";
-import CheckBox, { Props as CheckBoxProps } from "./CheckBox";
 
 type Props = CheckBoxProps & {
   className?: string;

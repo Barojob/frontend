@@ -1,7 +1,7 @@
+import { cn } from "@/utils/classname";
 import React from "react";
 import { HiChevronLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
-import { cn } from "../utils/classname";
 
 type Props = {
   className?: string;

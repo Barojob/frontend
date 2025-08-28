@@ -1,21 +1,21 @@
+import BoxButton from "@/components/BoxButton";
+import Button from "@/components/Button";
+import {
+  DeprecatedDrawer,
+  DeprecatedDrawerClose,
+  DeprecatedDrawerContent,
+  DeprecatedDrawerHeader,
+  DeprecatedDrawerTitle,
+  DeprecatedDrawerTrigger,
+} from "@/components/DeprecatedDrawer";
+import Input from "@/components/Input";
+import Modal from "@/components/Modal";
+import { BANK_LIST } from "@/fixtures/banks";
+import { useWorkerAccount } from "@/hooks/useWorkerAccount";
+import WarningIcon from "@/svgs/WarningIcon";
+import { cn } from "@/utils/classname";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React from "react";
-import BoxButton from "../../components/BoxButton";
-import Button from "../../components/Button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "../../components/Drawer";
-import Input from "../../components/Input";
-import Modal from "../../components/Modal";
-import { BANK_LIST } from "../../fixtures/banks";
-import { useWorkerAccount } from "../../hooks/useWorkerAccount";
-import WarningIcon from "../../svgs/WarningIcon";
-import { cn } from "../../utils/classname";
 
 type WorkerAccountStepProps = {
   className?: string;
@@ -60,8 +60,8 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
             <label className="mb-3 block text-base font-medium text-gray-900">
               은행명
             </label>
-            <Drawer>
-              <DrawerTrigger asChild>
+            <DeprecatedDrawer>
+              <DeprecatedDrawerTrigger asChild>
                 <button
                   className={cn(
                     "flex h-11 w-full items-center justify-between rounded-lg border",
@@ -79,25 +79,25 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
                   </span>
                   <ChevronDownIcon className="h-5 w-5 text-gray-400" />
                 </button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader>
-                  <DrawerTitle>은행 선택</DrawerTitle>
-                </DrawerHeader>
+              </DeprecatedDrawerTrigger>
+              <DeprecatedDrawerContent>
+                <DeprecatedDrawerHeader>
+                  <DeprecatedDrawerTitle>은행 선택</DeprecatedDrawerTitle>
+                </DeprecatedDrawerHeader>
                 <div className="grid grid-cols-3 gap-3 p-6">
                   {BANK_LIST.map((bank) => (
-                    <DrawerClose key={bank.id} asChild>
+                    <DeprecatedDrawerClose key={bank.id} asChild>
                       <BoxButton
                         name={bank.name}
                         image={bank.image}
                         selected={selectedBank === bank.name}
                         onClick={() => setSelectedBank(bank.name)}
                       />
-                    </DrawerClose>
+                    </DeprecatedDrawerClose>
                   ))}
                 </div>
-              </DrawerContent>
-            </Drawer>
+              </DeprecatedDrawerContent>
+            </DeprecatedDrawer>
           </div>
 
           <div>

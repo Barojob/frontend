@@ -1,70 +1,49 @@
-import { useEffect, useMemo, useState } from "react";
-import useSignupContext from "./useSignupContext";
+import useSignupContext from "@/hooks/useSignupContext";
+import { Carrier } from "@/types/signup";
 
-export const usePersonalInfoForm = (
-  onValidityChange: (isValid: boolean) => void,
-) => {
+export const usePersonalInfoForm = () => {
   const {
     personalInfoState: [personalInfo, setPersonalInfo],
-    stepState: [, setCurrentStep],
   } = useSignupContext();
 
-  const [showBirthDateField, setShowBirthDateField] = useState(false);
-  const [showPhoneFields, setShowPhoneFields] = useState(false);
-  const [showBirthDateError, setShowBirthDateError] = useState(false);
-
-  const isNameValid = useMemo(
-    () => personalInfo.name.trim().length > 0,
-    [personalInfo.name],
-  );
-  const isBirthDateValid = useMemo(
-    () => personalInfo.birthDate.trim().length === 8,
-    [personalInfo.birthDate],
-  );
-  const isCarrierSelected = useMemo(
-    () => personalInfo.carrier.trim() !== "",
-    [personalInfo.carrier],
-  );
-  const isPhoneNumberValid = useMemo(
-    () => personalInfo.phoneNumber.replace(/[^0-9]/g, "").length === 11,
-    [personalInfo.phoneNumber],
-  );
-
-  const isFormValid = useMemo(
-    () =>
-      isNameValid &&
-      isBirthDateValid &&
-      isCarrierSelected &&
-      isPhoneNumberValid,
-    [isNameValid, isBirthDateValid, isCarrierSelected, isPhoneNumberValid],
-  );
-
-  useEffect(() => {
-    if (isNameValid) setShowBirthDateField(true);
-  }, [isNameValid]);
-
-  useEffect(() => {
-    if (isBirthDateValid) setShowPhoneFields(true);
-  }, [isBirthDateValid]);
-
-  useEffect(() => {
-    onValidityChange(isFormValid);
-  }, [isFormValid, onValidityChange]);
-
-  useEffect(() => {
-    if (personalInfo.name) setShowBirthDateField(true);
-    if (personalInfo.birthDate) setShowPhoneFields(true);
-  }, []);
+  const isValidName = personalInfo.name.length >= 2;
+  const isValidBirthDate = personalInfo.birthDate.length === 8;
+  const isValidCarrier = !!personalInfo.carrier;
+  const isValidPhoneNumber = personalInfo.phoneNumber.length === 11;
+  const isValidForm =
+    isValidName && isValidBirthDate && isValidCarrier && isValidPhoneNumber;
 
   return {
-    personalInfo,
-    setPersonalInfo,
-    setCurrentStep,
-    showBirthDateField,
-    showPhoneFields,
-    showBirthDateError,
-    setShowBirthDateError,
-    isFormValid,
-    isBirthDateValid,
+    isValidForm,
+    nameField: {
+      isValid: isValidName,
+      value: personalInfo.name,
+      onChange: (value: string) =>
+        setPersonalInfo((prev) => ({ ...prev, name: value })),
+    },
+    birthDateField: {
+      isValid: isValidBirthDate,
+      value: personalInfo.birthDate,
+      onChange: (value: string) =>
+        setPersonalInfo((prev) => ({
+          ...prev,
+          birthDate: value.replace(/[^0-9]/g, "").slice(0, 8),
+        })),
+    },
+    carrierField: {
+      isValid: isValidCarrier,
+      value: personalInfo.carrier,
+      onChange: (carrier: Carrier) =>
+        setPersonalInfo((prev) => ({ ...prev, carrier })),
+    },
+    phoneNumberField: {
+      isValid: isValidPhoneNumber,
+      value: personalInfo.phoneNumber,
+      onChange: (value: string) =>
+        setPersonalInfo((prev) => ({
+          ...prev,
+          phoneNumber: value.replace(/[^0-9]/g, "").slice(0, 11),
+        })),
+    },
   };
 };

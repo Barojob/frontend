@@ -1,7 +1,7 @@
+import useSignupContext from "@/hooks/useSignupContext";
+import { SignupStep } from "@/types/signup";
+import { selectFromGallery, takePicture } from "@/utils/media";
 import { useEffect, useState } from "react";
-import { SignupStep } from "../types/signup";
-import { selectFromGallery, takePicture } from "../utils/media";
-import useSignupContext from "./useSignupContext";
 
 export const useWorkerLicense = (
   onValidityChange: (isValid: boolean) => void,

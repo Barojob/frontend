@@ -1,8 +1,8 @@
+import BoxButton from "@/components/BoxButton";
+import Button from "@/components/Button";
+import { useUserTypeSelection } from "@/hooks/useUserTypeSelection";
+import { cn } from "@/utils/classname";
 import React from "react";
-import BoxButton from "../../components/BoxButton";
-import Button from "../../components/Button";
-import { useUserTypeSelection } from "../../hooks/useUserTypeSelection";
-import { cn } from "../../utils/classname";
 
 type UserTypeSelectionStepProps = {
   className?: string;

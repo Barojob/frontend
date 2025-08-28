@@ -1,7 +1,7 @@
+import { JobCategory } from "@/fixtures/jobs";
+import useSignupContext from "@/hooks/useSignupContext";
+import { SignupStep } from "@/types/signup";
 import { useEffect, useState } from "react";
-import { JobCategory } from "../fixtures/jobs";
-import { SignupStep } from "../types/signup";
-import useSignupContext from "./useSignupContext";
 
 type UseWorkerExperienceProps = {
   onValidityChange: (isValid: boolean) => void;

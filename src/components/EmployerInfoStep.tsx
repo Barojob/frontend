@@ -1,20 +1,20 @@
-import React, { useEffect, useRef } from "react";
-import Button from "../../components/Button";
+import Button from "@/components/Button";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "../../components/Drawer";
-import Input from "../../components/Input";
-import { EMAIL_DOMAIN_OPTIONS } from "../../fixtures/signup";
-import { useEmployerInfoForm } from "../../hooks/useEmployerInfoForm";
-import DropdownArrowIcon from "../../svgs/DropdownArrowIcon";
-import { SignupStep } from "../../types/signup";
-import { cn } from "../../utils/classname";
-import { formatBusinessNumber } from "../../utils/formatters";
+  DeprecatedDrawer,
+  DeprecatedDrawerClose,
+  DeprecatedDrawerContent,
+  DeprecatedDrawerHeader,
+  DeprecatedDrawerTitle,
+  DeprecatedDrawerTrigger,
+} from "@/components/DeprecatedDrawer";
+import Input from "@/components/Input";
+import { EMAIL_DOMAIN_OPTIONS } from "@/fixtures/signup";
+import { useEmployerInfoForm } from "@/hooks/useEmployerInfoForm";
+import ArrowDownIcon from "@/svgs/DropdownArrowIcon";
+import { SignupStep } from "@/types/signup";
+import { cn } from "@/utils/classname";
+import { formatBusinessNumber } from "@/utils/formatters";
+import React, { useEffect, useRef } from "react";
 
 type EmployerInfoStepProps = {
   className?: string;
@@ -106,38 +106,37 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
                     className="w-full rounded-lg border-0 bg-gray-100 px-4 py-3"
                   />
                 ) : (
-                  <Drawer>
-                    <DrawerTrigger asChild>
+                  <DeprecatedDrawer>
+                    <DeprecatedDrawerTrigger asChild>
                       <button className="flex w-full items-center justify-between rounded-lg bg-gray-100 px-4 py-3 text-left">
                         <span className="text-gray-500">
                           {emailDomain || "선택"}
                         </span>
-                        <DropdownArrowIcon
-                          className="text-blue-500"
-                          size={12}
-                        />
+                        <ArrowDownIcon className="size-3 text-blue-500" />
                       </button>
-                    </DrawerTrigger>
-                    <DrawerContent>
-                      <DrawerHeader>
-                        <DrawerTitle>이메일을 선택해주세요</DrawerTitle>
-                      </DrawerHeader>
+                    </DeprecatedDrawerTrigger>
+                    <DeprecatedDrawerContent>
+                      <DeprecatedDrawerHeader>
+                        <DeprecatedDrawerTitle>
+                          이메일을 선택해주세요
+                        </DeprecatedDrawerTitle>
+                      </DeprecatedDrawerHeader>
                       <div className="space-y-2 p-6">
                         {[...EMAIL_DOMAIN_OPTIONS, "직접 입력"].map(
                           (domain) => (
-                            <DrawerClose key={domain} asChild>
+                            <DeprecatedDrawerClose key={domain} asChild>
                               <button
                                 onClick={() => handleDomainSelect(domain)}
                                 className="w-full rounded-lg border p-3 text-left hover:bg-gray-50"
                               >
                                 {domain}
                               </button>
-                            </DrawerClose>
+                            </DeprecatedDrawerClose>
                           ),
                         )}
                       </div>
-                    </DrawerContent>
-                  </Drawer>
+                    </DeprecatedDrawerContent>
+                  </DeprecatedDrawer>
                 )}
               </div>
             </div>

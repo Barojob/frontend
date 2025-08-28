@@ -1,6 +1,6 @@
+import useSignupContext from "@/hooks/useSignupContext";
+import { SignupStep } from "@/types/signup";
 import { useEffect, useMemo, useState } from "react";
-import { SignupStep } from "../types/signup";
-import useSignupContext from "./useSignupContext";
 
 const VERIFICATION_TIME_LIMIT = 120;
 

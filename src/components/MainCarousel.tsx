@@ -1,7 +1,7 @@
+import { cn } from "@/utils/classname";
 import React from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
-import { cn } from "../utils/classname";
 
 const slides = [
   {

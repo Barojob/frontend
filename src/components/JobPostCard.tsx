@@ -1,6 +1,6 @@
+import { cn } from "@/utils/classname";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import React from "react";
-import { cn } from "../utils/classname";
 
 type Props = {
   className?: string;

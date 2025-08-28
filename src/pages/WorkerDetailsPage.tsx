@@ -1,7 +1,7 @@
+import NavigationHeader from "@/components/NavigationHeader";
+import { cn } from "@/utils/classname";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NavigationHeader from "../components/NavigationHeader";
-import { cn } from "../utils/classname";
 
 const usePackage = [
   "없음",

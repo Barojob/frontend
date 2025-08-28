@@ -1,6 +1,6 @@
+import { useUser } from "@/hooks/useUser";
+import type { UserType } from "@/types/user";
 import { useEffect, useState } from "react";
-import type { UserType } from "../types/user";
-import { useUser } from "./useUser";
 
 // 전역 상태를 위한 변수들
 let globalUserType: UserType = null;

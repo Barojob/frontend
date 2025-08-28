@@ -1,7 +1,7 @@
+import CheckBoxWithLabel from "@/components/CheckBoxWithLabel";
+import TermCheckBox from "@/components/TermCheckBox";
+import { cn } from "@/utils/classname";
 import React from "react";
-import CheckBoxWithLabel from "../../components/CheckBoxWithLabel";
-import TermCheckBox from "../../components/TermCheckBox";
-import { cn } from "../../utils/classname";
 
 export type CheckItem = {
   label: string;

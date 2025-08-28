@@ -1,6 +1,6 @@
+import useSignupContext from "@/hooks/useSignupContext";
+import { SignupStep } from "@/types/signup";
 import { useEffect, useMemo } from "react";
-import { SignupStep } from "../types/signup";
-import useSignupContext from "./useSignupContext";
 
 type UseUserTypeSelectionProps = {
   onValidityChange: (isValid: boolean) => void;

@@ -1,6 +1,6 @@
+import LocationSelector from "@/components/JobPost/LocationSelector";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import LocationSelector from "../../components/JobPost/LocationSelector";
 
 type LocationData = {
   address: string;

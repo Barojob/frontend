@@ -1,9 +1,9 @@
+import Button from "@/components/Button";
+import SignUpTerms from "@/components/SignUpTerms";
+import useSignupContext from "@/hooks/useSignupContext";
+import { SignupStep } from "@/types/signup";
+import { cn } from "@/utils/classname";
 import React from "react";
-import Button from "../../components/Button";
-import useSignupContext from "../../hooks/useSignupContext";
-import { SignupStep } from "../../types/signup";
-import { cn } from "../../utils/classname";
-import SignUpTerms from "./SignUpTerms";
 
 type Props = {
   className?: string;

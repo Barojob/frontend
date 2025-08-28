@@ -1,7 +1,7 @@
+import Input, { InputProps } from "@/components/Input";
+import type { Nullable } from "@/types/misc";
+import { cn } from "@/utils/classname";
 import React from "react";
-import type { Nullable } from "../types/misc";
-import { cn } from "../utils/classname";
-import Input, { InputProps } from "./Input";
 
 export type LabelInputProps = InputProps & {
   className?: string;

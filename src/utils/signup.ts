@@ -1,4 +1,5 @@
-import { SignupStep } from "../types/signup";
+import { type Nullable } from "@/types/misc";
+import { SignupStep } from "@/types/signup";
 
 const SIGNUP_STEP_TITLES: Record<SignupStep, string> = {
   [SignupStep.TERMS]: "회원가입",
@@ -31,11 +32,11 @@ const PREVIOUS_STEP_MAP: Partial<Record<SignupStep, SignupStep>> = {
 };
 
 export const getSignupStepTitle = (step: SignupStep): string => {
-  return SIGNUP_STEP_TITLES[step] || "회원가입";
+  return SIGNUP_STEP_TITLES[step];
 };
 
 export const getPreviousSignupStep = (
   currentStep: SignupStep,
-): SignupStep | null => {
+): Nullable<SignupStep> => {
   return PREVIOUS_STEP_MAP[currentStep] ?? null;
 };

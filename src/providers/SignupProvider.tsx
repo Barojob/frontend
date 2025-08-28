@@ -1,7 +1,6 @@
-import React, { PropsWithChildren } from "react";
-import TERMS_FIXTURE from "../fixtures/terms.json";
-import { CheckItem } from "../pages/SignUp/SignUpTerms";
-import { Nullable } from "../types/misc";
+import { CheckItem } from "@/components/SignUpTerms";
+import TERMS_FIXTURE from "@/fixtures/terms.json";
+import { Nullable } from "@/types/misc";
 import {
   EmployerInfo,
   PersonalInfo,
@@ -9,7 +8,8 @@ import {
   SignupStep,
   UserTypeInfo,
   VerificationInfo,
-} from "../types/signup";
+} from "@/types/signup";
+import React, { PropsWithChildren } from "react";
 
 export const SignupContext =
   React.createContext<Nullable<SignUpContextType>>(null);
@@ -21,7 +21,7 @@ const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
     name: "",
     birthDate: "",
     phoneNumber: "",
-    carrier: "",
+    carrier: null,
   });
   const verificationState = React.useState<VerificationInfo>({
     verificationCode: "",

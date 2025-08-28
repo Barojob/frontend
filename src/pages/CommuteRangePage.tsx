@@ -1,10 +1,10 @@
+import CommuteRangePolygon from "@/components/CommuteRangePolygon";
+import Map from "@/components/Map";
+import NavigationHeader from "@/components/NavigationHeader";
+import { COMMUTE_RANGE_ORDER } from "@/fixtures/commuteAreas";
+import { useCommuteRangePage } from "@/hooks/useCommuteRangePage";
+import { cn } from "@/utils/classname";
 import React, { useState } from "react";
-import CommuteRangePolygon from "../components/CommuteRangePolygon";
-import Map from "../components/Map";
-import NavigationHeader from "../components/NavigationHeader";
-import { COMMUTE_RANGE_ORDER } from "../fixtures/commuteAreas";
-import { useCommuteRangePage } from "../hooks/useCommuteRangePage";
-import { cn } from "../utils/classname";
 
 const CommuteRangePage: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);

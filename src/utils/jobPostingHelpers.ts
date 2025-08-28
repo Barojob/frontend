@@ -1,4 +1,4 @@
-import { labelMappings } from "./labelMappings";
+import { labelMappings } from "@/utils/labelMappings";
 
 export const getCategoryLabel = (categoryId: string) => {
   return categoryId === "general" ? "보통 인부" : "기능공";

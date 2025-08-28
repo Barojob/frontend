@@ -1,8 +1,8 @@
+import { configs } from "@/configs";
+import DeepLinkListener from "@/routers/DeepLinkListener";
+import { DeepLinkTarget } from "@/utils/url";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { configs } from "../configs";
-import { DeepLinkTarget } from "../utils/url";
-import DeepLinkListener from "./DeepLinkListener";
 
 const AppDeepLinkHandler: React.FC = () => {
   const navigate = useNavigate();

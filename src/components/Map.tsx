@@ -1,4 +1,8 @@
 // Map 컴포넌트 몇가지 수정함 - 혹시 몰라서 기존 코드는 밑에 전체 주석처리 해둠
+import Skeleton from "@/components/Skeleton";
+import { configs } from "@/configs";
+import { Nullable } from "@/types/misc";
+import { cn } from "@/utils/classname";
 import React, {
   createContext,
   PropsWithChildren,
@@ -7,10 +11,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { configs } from "../configs";
-import { Nullable } from "../types/misc";
-import { cn } from "../utils/classname";
-import Skeleton from "./Skeleton";
 
 const MapContext = createContext<Nullable<kakao.maps.Map>>(null);
 export const useMap = () => useContext(MapContext);
