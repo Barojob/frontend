@@ -1,5 +1,6 @@
 import useSignupContext from "@/hooks/useSignupContext";
 import { Carrier } from "@/types/signup";
+import { formatPhoneNumber } from "@/utils/formatters";
 
 export const usePersonalInfoForm = () => {
   const {
@@ -9,7 +10,8 @@ export const usePersonalInfoForm = () => {
   const isValidName = personalInfo.name.length >= 2;
   const isValidBirthDate = personalInfo.birthDate.length === 8;
   const isValidCarrier = !!personalInfo.carrier;
-  const isValidPhoneNumber = personalInfo.phoneNumber.length === 11;
+  const isValidPhoneNumber =
+    personalInfo.phoneNumber.replace(/[^0-9]/g, "").length === 11;
   const isValidForm =
     isValidName && isValidBirthDate && isValidCarrier && isValidPhoneNumber;
 
@@ -39,11 +41,10 @@ export const usePersonalInfoForm = () => {
     phoneNumberField: {
       isValid: isValidPhoneNumber,
       value: personalInfo.phoneNumber,
-      onChange: (value: string) =>
-        setPersonalInfo((prev) => ({
-          ...prev,
-          phoneNumber: value.replace(/[^0-9]/g, "").slice(0, 11),
-        })),
+      onChange: (value: string) => {
+        const formattedValue = formatPhoneNumber(value);
+        setPersonalInfo((prev) => ({ ...prev, phoneNumber: formattedValue }));
+      },
     },
   };
 };

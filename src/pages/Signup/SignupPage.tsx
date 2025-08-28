@@ -27,8 +27,10 @@ const SignupPageContent: React.FC = () => {
   } = useSignupContext();
 
   return (
-    <main className="keyboard-avoiding flex min-h-screen flex-col">
-      <SignupHeader className="mt-3 px-6" step={step} onStepChange={setStep} />
+    // 👇 pt-[env(safe-area-inset-top)]를 추가하여 안전 영역 확보
+    <main className="keyboard-avoiding flex min-h-screen flex-col pt-[env(safe-area-inset-top)]">
+      {/* 👇 mt-3 클래스 제거 */}
+      <SignupHeader className="px-6" step={step} onStepChange={setStep} />
       <PresenceTransition
         className="mobile-scroll flex-1 overflow-y-auto px-6"
         transitionKey={step.toString()}

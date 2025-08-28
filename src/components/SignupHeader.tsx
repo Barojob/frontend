@@ -17,6 +17,10 @@ const SignupHeader: React.FC<Props> = ({ className, step, onStepChange }) => {
   const showBackButton =
     step !== SignupStep.TERMS && step !== SignupStep.SIGNUP_SUCCESS;
 
+  if (step === SignupStep.SIGNUP_SUCCESS) {
+    return null;
+  }
+
   return (
     <header
       className={cn("flex items-center gap-x-1 text-gray-500", className)}

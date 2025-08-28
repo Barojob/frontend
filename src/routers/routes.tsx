@@ -6,7 +6,7 @@ import JobRequestPage from "@/pages/JobRequestPage";
 import LoginPage from "@/pages/LoginPage";
 import LoginSuccessPage from "@/pages/LoginSuccessPage";
 import MainPage from "@/pages/MainPage";
-import SignupPage from "@/pages/SignupPage";
+import SignupPage from "@/pages/Signup/SignupPage";
 import WorkerDetailsPage from "@/pages/WorkerDetailsPage";
 import { type RouteObject } from "react-router-dom";
 

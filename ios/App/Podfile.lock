@@ -11,7 +11,7 @@ PODS:
   - CapacitorKeyboard (7.0.2):
     - Capacitor
   - IONGeolocationLib (1.0.1)
-  - KakaoMapsSDK (2.12.9)
+  - KakaoMapsSDK (2.12.10)
   - KakaoSDK (2.22.7):
     - KakaoSDKAuth (= 2.22.7)
     - KakaoSDKCert (= 2.22.7)
@@ -58,6 +58,26 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@7.2.0_@capacitor+core@7.2.0/node_modules/@capacitor/ios`)"
   - "CapacitorGeolocation (from `../../node_modules/.pnpm/@capacitor+geolocation@7.1.5_@capacitor+core@7.2.0/node_modules/@capacitor/geolocation`)"
   - "CapacitorKeyboard (from `../../node_modules/.pnpm/@capacitor+keyboard@7.0.2_@capacitor+core@7.2.0/node_modules/@capacitor/keyboard`)"
+  - KakaoMapsSDK
+  - KakaoSDK
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Alamofire
+    - IONGeolocationLib
+    - KakaoMapsSDK
+    - KakaoSDK
+    - KakaoSDKAuth
+    - KakaoSDKCert
+    - KakaoSDKCertCore
+    - KakaoSDKCommon
+    - KakaoSDKFriend
+    - KakaoSDKFriendCore
+    - KakaoSDKNavi
+    - KakaoSDKShare
+    - KakaoSDKTalk
+    - KakaoSDKTemplate
+    - KakaoSDKUser
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -78,7 +98,8 @@ SPEC CHECKSUMS:
   CapacitorCordova: 5967b9ba03915ef1d585469d6e31f31dc49be96f
   CapacitorGeolocation: 84f868bea4c2499aebc3bb3a88fd0a508f87ab87
   CapacitorKeyboard: a86aa9e4741b6444a802df26440a92ae041b34a6
-  KakaoMapsSDK: d45fb0428c45d3f90acd724893fd30846527f514
+  IONGeolocationLib: 20f9d0248a0b5264511fb57a37e25dd2badf797a
+  KakaoMapsSDK: 32040e6268df2447c3f56dc4acada339d8eb8f32
   KakaoSDK: dc4f9062a42e6f7e8e2aacb620a0480996dcb62b
   KakaoSDKAuth: 45204252ff7c379c0f86c5573f97ec36885afca0
   KakaoSDKCert: 0e0d2a278731676c566a4bd2da4c0febf1c2d54d
@@ -92,9 +113,6 @@ SPEC CHECKSUMS:
   KakaoSDKTemplate: b11ecf08777198ffafd184201baf93de476ddb84
   KakaoSDKUser: 4c9cf1da78710d19d0b2c2dd32d1a44c544cdfa4
 
-PODFILE CHECKSUM: e32ea58c596c27090e9eeecf52db00bddb02478e
-  IONGeolocationLib: 20f9d0248a0b5264511fb57a37e25dd2badf797a
-
-PODFILE CHECKSUM: a02ca3d243d5d2c6a56cd2a433df3ecf3eb15058
+PODFILE CHECKSUM: 8218d750587bc83c038b3dfdd0d1f00bb987664b
 
 COCOAPODS: 1.16.2
