@@ -44,7 +44,14 @@ export const useJobPosting = () => {
 
   // 이벤트 핸들러들
   const handleJobTypeToggle = (jobTypeId: string) => {
+    const isChanged = selectedJobTypes[0] !== jobTypeId;
     setSelectedJobTypes([jobTypeId]);
+
+    // 업무가 변경되면 세부업무 초기화
+    if (isChanged) {
+      setSelectedDemolitionWork([]);
+      setIsDemolitionWorkCompleted(false);
+    }
   };
 
   const handleDemolitionWorkToggle = (demolitionWorkId: string) => {
@@ -201,12 +208,6 @@ export const useJobPosting = () => {
   const handleJobTypeConfirmAfterEdit = () => {
     if (selectedJobTypes.length > 0) {
       setIsJobTypeCompleted(true);
-      if (selectedDemolitionWork.length > 0) setIsDemolitionWorkCompleted(true);
-      if (selectedEquipment.length > 0) setIsEquipmentCompleted(true);
-      if (selectedExperience.length > 0) setIsExperienceCompleted(true);
-      setIsWorkTimeCompleted(true);
-      setIsPersonCountSelected(true);
-      setIsPersonCountCompleted(true);
       setIsEditing(false);
     }
   };
@@ -214,11 +215,6 @@ export const useJobPosting = () => {
   const handleDemolitionWorkConfirmAfterEdit = () => {
     if (selectedDemolitionWork.length > 0) {
       setIsDemolitionWorkCompleted(true);
-      if (selectedEquipment.length > 0) setIsEquipmentCompleted(true);
-      if (selectedExperience.length > 0) setIsExperienceCompleted(true);
-      setIsWorkTimeCompleted(true);
-      setIsPersonCountSelected(true);
-      setIsPersonCountCompleted(true);
       setIsEditing(false);
     }
   };
@@ -226,10 +222,6 @@ export const useJobPosting = () => {
   const handleEquipmentConfirmAfterEdit = () => {
     if (selectedEquipment.length > 0) {
       setIsEquipmentCompleted(true);
-      if (selectedExperience.length > 0) setIsExperienceCompleted(true);
-      setIsWorkTimeCompleted(true);
-      setIsPersonCountSelected(true);
-      setIsPersonCountCompleted(true);
       setIsEditing(false);
     }
   };
@@ -237,17 +229,12 @@ export const useJobPosting = () => {
   const handleExperienceConfirmAfterEdit = () => {
     if (selectedExperience.length > 0) {
       setIsExperienceCompleted(true);
-      setIsWorkTimeCompleted(true);
-      setIsPersonCountSelected(true);
-      setIsPersonCountCompleted(true);
       setIsEditing(false);
     }
   };
 
   const handleWorkTimeConfirmAfterEdit = () => {
     setIsWorkTimeCompleted(true);
-    setIsPersonCountSelected(true);
-    setIsPersonCountCompleted(true);
     setIsEditing(false);
   };
 

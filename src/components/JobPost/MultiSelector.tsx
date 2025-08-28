@@ -1,15 +1,17 @@
 import React from "react";
+import {
+  getDemolitionWorkOptions,
+  SelectOption,
+} from "../../utils/jobTypeDemolitionMap";
 
-interface SelectOption {
-  id: string;
-  label: string;
-}
+// SelectOption은 공용 타입 사용
 
 interface MultiSelectorProps {
   selectedItems: string[];
   onItemToggle: (itemId: string) => void;
   type: "jobType" | "demolitionWork" | "equipment" | "experience";
   category?: string;
+  selectedJobTypes?: string[];
   className?: string;
 }
 
@@ -18,6 +20,7 @@ const MultiSelector: React.FC<MultiSelectorProps> = ({
   onItemToggle,
   type,
   category,
+  selectedJobTypes,
   className = "",
 }) => {
   // 어떤 사람?
@@ -39,12 +42,9 @@ const MultiSelector: React.FC<MultiSelectorProps> = ({
   ];
 
   // 세부 업무
-  const demolitionWorkOptions: SelectOption[] = [
-    { id: "clean-up", label: "자재 정리" },
-    { id: "spadework", label: "삽질" },
-    { id: "sawing", label: "톱질" },
-    { id: "sickle", label: "낫질" },
-  ];
+  // 세부 업무: 선택된 직업(업무)에 따라 동적 생성
+  const demolitionWorkOptions: SelectOption[] =
+    type === "demolitionWork" ? getDemolitionWorkOptions(selectedJobTypes) : [];
 
   // 장비 옵션들
   const equipmentOptions: SelectOption[] = [

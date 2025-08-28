@@ -5,12 +5,14 @@ interface DemolitionWorkStepProps {
   selectedDemolitionWork: string[];
   onDemolitionWorkToggle: (demolitionWorkId: string) => void;
   onConfirm: () => void;
+  selectedJobTypes?: string[];
 }
 
 const DemolitionWorkStep: React.FC<DemolitionWorkStepProps> = ({
   selectedDemolitionWork,
   onDemolitionWorkToggle,
   onConfirm,
+  selectedJobTypes,
 }) => {
   return (
     <>
@@ -21,6 +23,7 @@ const DemolitionWorkStep: React.FC<DemolitionWorkStepProps> = ({
         selectedItems={selectedDemolitionWork}
         onItemToggle={onDemolitionWorkToggle}
         type="demolitionWork"
+        selectedJobTypes={selectedJobTypes}
         className="mb-8"
       />
 

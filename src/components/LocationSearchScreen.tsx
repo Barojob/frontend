@@ -257,7 +257,7 @@ const LocationSearchScreen: React.FC<Props> = ({
         {!searchKeyword && recentSearches.length > 0 && (
           <div className="mt-3 py-3">
             <div className="text-xs font-medium text-neutral-400">
-              최근 일한 위치
+              최근 검색 기록
             </div>
             <div className="mt-2 space-y-2 px-2">
               {recentSearches.map((searchData, index) => (
