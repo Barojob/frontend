@@ -238,7 +238,7 @@ const WorkerDetailsPage: React.FC = () => {
               </div>
             </div> */}
           </div>
-          <div className="mt-12">
+          <div className="mb-8 mt-12">
             <div className="mb-4 text-center text-sm leading-relaxed text-[#247AF2]">
               업무 내용에 따라 수령 금액이 달라집니다.
               <br />
