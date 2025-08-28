@@ -74,7 +74,7 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
 
       {isVerificationCodeValid && (
         <div className="animate-slide-up fixed-bottom-button">
-          <Button size="md" theme="primary" onClick={handleNextStep}>
+          <Button size="md" theme="primary" block onClick={handleNextStep}>
             다음
           </Button>
         </div>

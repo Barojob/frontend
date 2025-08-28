@@ -19,7 +19,7 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
     useUserTypeSelection({ onValidityChange, onUserTypeChange });
 
   return (
-    <div className={cn("flex h-full flex-col", className)}>
+    <div className={cn("flex h-screen flex-col", className)}>
       <div className="mt-8">
         <div className="text-2xl font-bold text-gray-900">
           <span className="text-blue-500">회원가입 유형</span>을
@@ -30,7 +30,7 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
       </div>
 
       <div className="flex flex-1 items-center justify-center">
-        <div className="flex w-full max-w-md gap-4">
+        <div className="mb-40 flex w-full max-w-md gap-4">
           <BoxButton
             name="구인자"
             onClick={() => handleUserTypeSelect("employer")}
@@ -50,7 +50,7 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
 
       {isValid && (
         <div className="animate-slide-up fixed-bottom-button">
-          <Button size="md" theme="primary" onClick={handleNextStep}>
+          <Button size="md" theme="primary" block onClick={handleNextStep}>
             다음
           </Button>
         </div>
