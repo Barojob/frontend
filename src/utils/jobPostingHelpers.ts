@@ -38,13 +38,29 @@ export const getSelectedExperienceLabels = (selectedExperience: string[]) => {
 export const getWorkTimeLabel = (
   workStartTime: string,
   workEndTime: string,
+  workMonth?: number,
+  workDay?: number,
 ) => {
+  let timeLabel = "";
   if (workStartTime && workEndTime) {
     const formatTime = (time: string) => {
       const [hour] = time.split(":");
       return `${parseInt(hour)}시`;
     };
-    return `${formatTime(workStartTime)} ~ ${formatTime(workEndTime)}`;
+    timeLabel = `${formatTime(workStartTime)} ~ ${formatTime(workEndTime)}`;
+  }
+
+  let dateLabel = "";
+  if (workMonth && workDay) {
+    dateLabel = `${workMonth}월 ${workDay}일`;
+  }
+
+  if (dateLabel && timeLabel) {
+    return `${dateLabel} ${timeLabel}`;
+  } else if (dateLabel) {
+    return dateLabel;
+  } else if (timeLabel) {
+    return timeLabel;
   }
   return "";
 };

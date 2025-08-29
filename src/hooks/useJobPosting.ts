@@ -24,8 +24,12 @@ export const useJobPosting = () => {
   const [selectedExperience, setSelectedExperience] = useState<string[]>([]);
   const [workStartTime, setWorkStartTime] = useState("09:00");
   const [workEndTime, setWorkEndTime] = useState("18:00");
+  const today = new Date();
+  const [workMonth, setWorkMonth] = useState<number>(today.getMonth() + 1);
+  const [workDay, setWorkDay] = useState<number>(today.getDate());
   const [selectedPersonCount, setSelectedPersonCount] = useState(1);
   const [isPersonCountSelected, setIsPersonCountSelected] = useState(false);
+  const [specialNote, setSpecialNote] = useState<string>("");
 
   // 각 단계별 선택 완료 상태
   const [isJobTypeCompleted, setIsJobTypeCompleted] = useState(false);
@@ -35,6 +39,7 @@ export const useJobPosting = () => {
   const [isExperienceCompleted, setIsExperienceCompleted] = useState(false);
   const [isWorkTimeCompleted, setIsWorkTimeCompleted] = useState(false);
   const [isPersonCountCompleted, setIsPersonCountCompleted] = useState(false);
+  const [isSpecialNoteOpen, setIsSpecialNoteOpen] = useState(false);
 
   // 편집 중인지 여부를 추적하는 상태
   const [isEditing, setIsEditing] = useState(false);
@@ -89,6 +94,11 @@ export const useJobPosting = () => {
     setWorkEndTime(endTime);
   };
 
+  const handleWorkDateChange = (month: number, day: number) => {
+    setWorkMonth(month);
+    setWorkDay(day);
+  };
+
   const handlePersonCountChange = (count: number) => {
     setSelectedPersonCount(count);
   };
@@ -101,6 +111,8 @@ export const useJobPosting = () => {
     setSelectedExperience([]);
     setWorkStartTime("09:00");
     setWorkEndTime("18:00");
+    setWorkMonth(today.getMonth() + 1);
+    setWorkDay(today.getDate());
     setSelectedPersonCount(1);
     setIsPersonCountSelected(false);
     setIsJobTypeCompleted(false);
@@ -150,6 +162,7 @@ export const useJobPosting = () => {
     setIsPersonCountSelected(true);
     setIsPersonCountCompleted(true);
     setIsEditing(false);
+    setIsSpecialNoteOpen(true);
   };
 
   // 편집 핸들러들
@@ -242,6 +255,7 @@ export const useJobPosting = () => {
     setIsPersonCountSelected(true);
     setIsPersonCountCompleted(true);
     setIsEditing(false);
+    setIsSpecialNoteOpen(true);
   };
 
   // 예상 금액 계산
@@ -294,6 +308,8 @@ export const useJobPosting = () => {
     setSelectedExperience([]);
     setWorkStartTime("09:00");
     setWorkEndTime("18:00");
+    setWorkMonth(today.getMonth() + 1);
+    setWorkDay(today.getDate());
     setSelectedPersonCount(1);
     setIsPersonCountSelected(false);
     setIsJobTypeCompleted(false);
@@ -303,6 +319,8 @@ export const useJobPosting = () => {
     setIsWorkTimeCompleted(false);
     setIsPersonCountCompleted(false);
     setIsEditing(false);
+    setSpecialNote("");
+    setIsSpecialNoteOpen(false);
   };
 
   const handleDeleteJobPost = (id: string) => {
@@ -357,7 +375,10 @@ export const useJobPosting = () => {
     selectedExperience,
     workStartTime,
     workEndTime,
+    workMonth,
+    workDay,
     selectedPersonCount,
+    specialNote,
     isPersonCountSelected,
     isJobTypeCompleted,
     isDemolitionWorkCompleted,
@@ -365,6 +386,7 @@ export const useJobPosting = () => {
     isExperienceCompleted,
     isWorkTimeCompleted,
     isPersonCountCompleted,
+    isSpecialNoteOpen,
     isEditing,
     jobPosts,
 
@@ -374,6 +396,7 @@ export const useJobPosting = () => {
     handleEquipmentToggle,
     handleExperienceToggle,
     handleWorkTimeChange,
+    handleWorkDateChange,
     handlePersonCountChange,
     handleCategoryChange,
     handleJobTypeConfirm,
@@ -382,6 +405,8 @@ export const useJobPosting = () => {
     handleExperienceConfirm,
     handleWorkTimeConfirm,
     handlePersonCountConfirm,
+    setSpecialNote,
+    setIsSpecialNoteOpen,
 
     // 편집 핸들러
     handleJobTypeEdit,

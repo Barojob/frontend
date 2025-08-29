@@ -7,6 +7,7 @@ import {
   getSelectedExperienceLabels,
   getWorkTimeLabel,
 } from "../../utils/jobPostingHelpers";
+import PresenceTransition from "../PresenceTransition";
 import SelectedTab from "./SelectedTab";
 
 interface SelectedItemsDisplayProps {
@@ -16,7 +17,10 @@ interface SelectedItemsDisplayProps {
   selectedExperience: string[];
   workStartTime: string;
   workEndTime: string;
+  workMonth?: number;
+  workDay?: number;
   selectedPersonCount: number;
+  // specialNote removed from list view
   isJobTypeCompleted: boolean;
   isDemolitionWorkCompleted: boolean;
   isEquipmentCompleted: boolean;
@@ -36,6 +40,7 @@ interface SelectedItemsDisplayProps {
   onExperienceTabClick?: () => void;
   onWorkTimeTabClick?: () => void;
   onPersonCountTabClick?: () => void;
+  // onSpecialNoteTabClick removed from list view
   // 현재 펼친 섹션: 해당 탭은 숨김 처리
   expandedSection?:
     | "jobType"
@@ -44,6 +49,7 @@ interface SelectedItemsDisplayProps {
     | "experience"
     | "workTime"
     | "personCount"
+    | "specialNote"
     | null;
   // 각 섹션 아래로 렌더링할 에디터(스텝) 노드
   renderJobTypeEditor?: React.ReactNode;
@@ -52,6 +58,7 @@ interface SelectedItemsDisplayProps {
   renderExperienceEditor?: React.ReactNode;
   renderWorkTimeEditor?: React.ReactNode;
   renderPersonCountEditor?: React.ReactNode;
+  // renderSpecialNoteEditor removed from list view
 }
 
 const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
@@ -61,7 +68,10 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
   selectedExperience,
   workStartTime,
   workEndTime,
+  workMonth,
+  workDay,
   selectedPersonCount,
+  // specialNote,
   isJobTypeCompleted,
   isDemolitionWorkCompleted,
   isEquipmentCompleted,
@@ -80,6 +90,7 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
   onExperienceTabClick,
   onWorkTimeTabClick,
   onPersonCountTabClick,
+  // onSpecialNoteTabClick,
   expandedSection,
   renderJobTypeEditor,
   renderDemolitionEditor,
@@ -87,6 +98,7 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
   renderExperienceEditor,
   renderWorkTimeEditor,
   renderPersonCountEditor,
+  // renderSpecialNoteEditor,
 }) => {
   const hasAnyCompleted =
     isJobTypeCompleted ||
@@ -112,7 +124,9 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
               onClick={onJobTypeTabClick ?? onJobTypeEdit}
             />
           ) : (
-            <div className="py-2">{renderJobTypeEditor}</div>
+            <PresenceTransition transitionKey="jobType" variant="subtleRise">
+              <div className="py-4">{renderJobTypeEditor}</div>
+            </PresenceTransition>
           )}
           {(isDemolitionWorkCompleted ||
             expandedSection === "demolitionWork") && (
@@ -135,7 +149,12 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
               onClick={onDemolitionWorkTabClick ?? onDemolitionWorkEdit}
             />
           ) : (
-            <div className="py-2">{renderDemolitionEditor}</div>
+            <PresenceTransition
+              transitionKey="demolitionWork"
+              variant="subtleRise"
+            >
+              <div className="py-4">{renderDemolitionEditor}</div>
+            </PresenceTransition>
           )}
           {(isEquipmentCompleted || expandedSection === "equipment") && (
             <div className="h-px bg-gray-200"></div>
@@ -155,11 +174,11 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
               onClick={onEquipmentTabClick ?? onEquipmentEdit}
             />
           ) : (
-            <div className="py-2">{renderEquipmentEditor}</div>
+            <PresenceTransition transitionKey="equipment" variant="subtleRise">
+              <div className="py-4">{renderEquipmentEditor}</div>
+            </PresenceTransition>
           )}
-          {(isExperienceCompleted || expandedSection === "experience") && (
-            <div className="h-px bg-gray-200"></div>
-          )}
+          {isEquipmentCompleted && <div className="h-px bg-gray-200"></div>}
         </>
       )}
 
@@ -175,7 +194,9 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
               onClick={onExperienceTabClick ?? onExperienceEdit}
             />
           ) : (
-            <div className="py-2">{renderExperienceEditor}</div>
+            <PresenceTransition transitionKey="experience" variant="subtleRise">
+              <div className="py-4">{renderExperienceEditor}</div>
+            </PresenceTransition>
           )}
           {(isWorkTimeCompleted || expandedSection === "workTime") && (
             <div className="h-px bg-gray-200"></div>
@@ -188,12 +209,19 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
           {isWorkTimeCompleted && expandedSection !== "workTime" ? (
             <SelectedTab
               title="근무시간"
-              selectedContent={getWorkTimeLabel(workStartTime, workEndTime)}
+              selectedContent={getWorkTimeLabel(
+                workStartTime,
+                workEndTime,
+                workMonth,
+                workDay,
+              )}
               className="py-4"
               onClick={onWorkTimeTabClick ?? onWorkTimeEdit}
             />
           ) : (
-            <div className="py-2">{renderWorkTimeEditor}</div>
+            <PresenceTransition transitionKey="workTime" variant="subtleRise">
+              <div className="py-4">{renderWorkTimeEditor}</div>
+            </PresenceTransition>
           )}
           {(isPersonCountCompleted || expandedSection === "personCount") && (
             <div className="h-px bg-gray-200"></div>
@@ -211,10 +239,18 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
               onClick={onPersonCountTabClick ?? onPersonCountEdit}
             />
           ) : (
-            <div className="py-2">{renderPersonCountEditor}</div>
+            <PresenceTransition
+              transitionKey="personCount"
+              variant="subtleRise"
+            >
+              <div className="py-4">{renderPersonCountEditor}</div>
+            </PresenceTransition>
           )}
+          {isPersonCountCompleted && <div className="h-px bg-gray-200"></div>}
         </>
       )}
+
+      {null}
     </div>
   );
 };

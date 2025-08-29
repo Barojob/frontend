@@ -5,11 +5,12 @@ import DemolitionWorkStep from "../../components/JobPost/DemolitionWorkStep";
 import EquipmentStep from "../../components/JobPost/EquipmentStep";
 // import EstimatedCostDisplay from "../../components/JobPost/EstimatedCostDisplay";
 import CompleteBar from "../../components/JobPost/CompleteBar";
-import ExperienceStep from "../../components/JobPost/ExperienceStep";
+// ExperienceStep 비활성화
 import JobPostCard from "../../components/JobPost/JobPostCard";
 import JobTypeStep from "../../components/JobPost/JobTypeStep";
 import PersonCountStep from "../../components/JobPost/PersonCountStep";
 import SelectedItemsDisplay from "../../components/JobPost/SelectedItemsDisplay";
+import SpecialNoteStep from "../../components/JobPost/SpecialNoteStep";
 import WorkTimeStep from "../../components/JobPost/WorkTimeStep";
 import NavigationHeader from "../../components/NavigationHeader";
 import StepIndicator from "../../components/StepIndicator";
@@ -30,13 +31,17 @@ const JobPostingPage: React.FC<Props> = () => {
     selectedExperience,
     workStartTime,
     workEndTime,
+    workMonth,
+    workDay,
     selectedPersonCount,
+    // specialNote,
     isJobTypeCompleted,
     isDemolitionWorkCompleted,
     isEquipmentCompleted,
     isExperienceCompleted,
     isWorkTimeCompleted,
     isPersonCountCompleted,
+    // isSpecialNoteOpen,
     isEditing,
     jobPosts,
 
@@ -44,16 +49,19 @@ const JobPostingPage: React.FC<Props> = () => {
     handleJobTypeToggle,
     handleDemolitionWorkToggle,
     handleEquipmentToggle,
-    handleExperienceToggle,
+    // handleExperienceToggle,
     handleWorkTimeChange,
+    handleWorkDateChange,
     handlePersonCountChange,
     handleCategoryChange,
     handleJobTypeConfirm,
     handleDemolitionWorkConfirm,
     handleEquipmentConfirm,
-    handleExperienceConfirm,
+    // handleExperienceConfirm,
     handleWorkTimeConfirm,
     handlePersonCountConfirm,
+    // setSpecialNote,
+    // setIsSpecialNoteOpen,
 
     // 편집 핸들러
     handleJobTypeEdit,
@@ -67,7 +75,7 @@ const JobPostingPage: React.FC<Props> = () => {
     handleJobTypeConfirmAfterEdit,
     handleDemolitionWorkConfirmAfterEdit,
     handleEquipmentConfirmAfterEdit,
-    handleExperienceConfirmAfterEdit,
+    // handleExperienceConfirmAfterEdit,
     handleWorkTimeConfirmAfterEdit,
     handlePersonCountConfirmAfterEdit,
 
@@ -90,6 +98,7 @@ const JobPostingPage: React.FC<Props> = () => {
     | "experience"
     | "workTime"
     | "personCount"
+    | "specialNote"
     | null
   >(null);
 
@@ -124,15 +133,7 @@ const JobPostingPage: React.FC<Props> = () => {
     isJobTypeCompleted ||
     isDemolitionWorkCompleted ||
     isEquipmentCompleted ||
-    isExperienceCompleted ||
     isWorkTimeCompleted ||
-    isPersonCountCompleted;
-  const allCompleted =
-    isJobTypeCompleted &&
-    isDemolitionWorkCompleted &&
-    isEquipmentCompleted &&
-    isExperienceCompleted &&
-    isWorkTimeCompleted &&
     isPersonCountCompleted;
 
   // 다음 미완료 스텝 계산
@@ -140,16 +141,15 @@ const JobPostingPage: React.FC<Props> = () => {
     | "jobType"
     | "demolitionWork"
     | "equipment"
-    | "experience"
     | "workTime"
-    | "personCount";
+    | "personCount"
+    | "specialNote";
 
   const getNextIncompleteSection = (
     overrides?: Partial<{
       isJobTypeCompleted: boolean;
       isDemolitionWorkCompleted: boolean;
       isEquipmentCompleted: boolean;
-      isExperienceCompleted: boolean;
       isWorkTimeCompleted: boolean;
       isPersonCountCompleted: boolean;
     }>,
@@ -158,7 +158,6 @@ const JobPostingPage: React.FC<Props> = () => {
       isJobTypeCompleted,
       isDemolitionWorkCompleted,
       isEquipmentCompleted,
-      isExperienceCompleted,
       isWorkTimeCompleted,
       isPersonCountCompleted,
       ...overrides,
@@ -168,9 +167,9 @@ const JobPostingPage: React.FC<Props> = () => {
       { key: "jobType", done: flags.isJobTypeCompleted },
       { key: "demolitionWork", done: flags.isDemolitionWorkCompleted },
       { key: "equipment", done: flags.isEquipmentCompleted },
-      { key: "experience", done: flags.isExperienceCompleted },
       { key: "workTime", done: flags.isWorkTimeCompleted },
       { key: "personCount", done: flags.isPersonCountCompleted },
+      { key: "specialNote", done: true },
     ];
 
     for (const item of order) {
@@ -179,9 +178,30 @@ const JobPostingPage: React.FC<Props> = () => {
     return null;
   };
 
+  // 5개 스텝이 모두 완료되었을 때 자동으로 작업 특이사항 열기
+  useEffect(() => {
+    if (
+      isJobTypeCompleted &&
+      isDemolitionWorkCompleted &&
+      isEquipmentCompleted &&
+      isWorkTimeCompleted &&
+      isPersonCountCompleted &&
+      expandedSection === null
+    ) {
+      setExpandedSection("specialNote");
+    }
+  }, [
+    isJobTypeCompleted,
+    isDemolitionWorkCompleted,
+    isEquipmentCompleted,
+    isWorkTimeCompleted,
+    isPersonCountCompleted,
+    expandedSection,
+  ]);
+
   return (
     <>
-      <div className="flex min-h-screen w-full flex-col justify-start overflow-y-auto bg-gray-200">
+      <div className="flex min-h-screen w-full flex-col justify-start overflow-y-auto bg-white">
         <div className="bg-white px-6 pt-12">
           <NavigationHeader
             title="인력 구하기"
@@ -195,7 +215,7 @@ const JobPostingPage: React.FC<Props> = () => {
 
         {shouldShowCards ? (
           // 카드 화면
-          <div className="flex-1 bg-white px-6 py-9 pb-32">
+          <div className="flex-1 px-6 py-9 pb-32">
             {/* 기존 구인 게시물 카드들 */}
             {jobPosts.map((jobPost) => (
               <JobPostCard
@@ -227,6 +247,8 @@ const JobPostingPage: React.FC<Props> = () => {
               selectedExperience={selectedExperience}
               workStartTime={workStartTime}
               workEndTime={workEndTime}
+              workMonth={workMonth}
+              workDay={workDay}
               selectedPersonCount={selectedPersonCount}
               isJobTypeCompleted={isJobTypeCompleted}
               isDemolitionWorkCompleted={isDemolitionWorkCompleted}
@@ -305,39 +327,19 @@ const JobPostingPage: React.FC<Props> = () => {
                   />
                 )
               }
-              renderExperienceEditor={
-                isJobTypeCompleted &&
-                isDemolitionWorkCompleted &&
-                isEquipmentCompleted &&
-                (!isExperienceCompleted ||
-                  expandedSection === "experience") && (
-                  <ExperienceStep
-                    selectedExperience={selectedExperience}
-                    onExperienceToggle={handleExperienceToggle}
-                    onConfirm={() => {
-                      if (isEditing) {
-                        handleExperienceConfirmAfterEdit();
-                      } else {
-                        handleExperienceConfirm();
-                      }
-                      const next = getNextIncompleteSection({
-                        isExperienceCompleted: true,
-                      });
-                      setExpandedSection(next);
-                    }}
-                  />
-                )
-              }
+              renderExperienceEditor={null}
               renderWorkTimeEditor={
                 isJobTypeCompleted &&
                 isDemolitionWorkCompleted &&
                 isEquipmentCompleted &&
-                isExperienceCompleted &&
                 (!isWorkTimeCompleted || expandedSection === "workTime") && (
                   <WorkTimeStep
                     workStartTime={workStartTime}
                     workEndTime={workEndTime}
                     onTimeChange={handleWorkTimeChange}
+                    month={workMonth}
+                    day={workDay}
+                    onDateChange={handleWorkDateChange}
                     onConfirm={() => {
                       if (isEditing) {
                         handleWorkTimeConfirmAfterEdit();
@@ -356,7 +358,6 @@ const JobPostingPage: React.FC<Props> = () => {
                 isJobTypeCompleted &&
                 isDemolitionWorkCompleted &&
                 isEquipmentCompleted &&
-                isExperienceCompleted &&
                 isWorkTimeCompleted &&
                 (!isPersonCountCompleted ||
                   expandedSection === "personCount") && (
@@ -369,7 +370,7 @@ const JobPostingPage: React.FC<Props> = () => {
                       } else {
                         handlePersonCountConfirm();
                       }
-                      setExpandedSection(null);
+                      setExpandedSection("specialNote");
                     }}
                   />
                 )
@@ -384,9 +385,22 @@ const JobPostingPage: React.FC<Props> = () => {
               onPersonCountTabClick={() => setExpandedSection("personCount")}
             />
 
+            {/* 특이사항 단계: 근무 인원 완료 후 별도로 렌더링 */}
+            {expandedSection === "specialNote" && (
+              <div className="bg-white px-6 py-4">
+                <SpecialNoteStep
+                  initialNote={""}
+                  onChange={() => {}}
+                  onConfirm={() => {
+                    setExpandedSection(null);
+                  }}
+                />
+              </div>
+            )}
+
             {/* 하단: 선택 영역 */}
             <div
-              className={`flex flex-1 flex-col bg-white px-6 py-4 ${
+              className={`flex flex-1 flex-col px-6 py-4 ${
                 isJobTypeCompleted ||
                 isDemolitionWorkCompleted ||
                 isEquipmentCompleted ||
@@ -418,8 +432,8 @@ const JobPostingPage: React.FC<Props> = () => {
               </div>
             </div>
 
-            {/* 하단 완료 바: 모든 스텝 완료 + 편집/펼침 아님 */}
-            {allCompleted && !expandedSection && (
+            {/* 하단 완료 바: 작업 특이사항 단계일 때만 표시 */}
+            {expandedSection === "specialNote" && (
               <CompleteBar onClick={handleComplete} />
             )}
           </>
