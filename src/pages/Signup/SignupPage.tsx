@@ -36,7 +36,9 @@ const SignupPageContent: React.FC = () => {
         transitionKey={step.toString()}
         variant="fadeInOut"
       >
-        {step === SignupStep.TERMS && <SignupTermsStep />}
+        {step === SignupStep.TERMS && (
+          <SignupTermsStep onNext={handleNextStep(SignupStep.PERSONAL_INFO)} />
+        )}
 
         {step === SignupStep.PERSONAL_INFO && (
           <PersonalInfoStep
@@ -46,9 +48,7 @@ const SignupPageContent: React.FC = () => {
 
         {step === SignupStep.PHONE_VERIFICATION && (
           <PhoneVerificationCodeStep
-            onValidityChange={() => {
-              /* FIXME: 유효성 검사 로직 구현 필요 */
-            }}
+            onNext={handleNextStep(SignupStep.USER_TYPE_SELECTION)}
           />
         )}
 

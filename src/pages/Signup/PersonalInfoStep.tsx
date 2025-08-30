@@ -157,7 +157,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
     event.preventDefault();
 
     try {
-      await sendSmsAsync(phoneNumber);
+      await sendSmsAsync({ phoneNumber });
 
       setVerification((prev) => ({
         ...prev,

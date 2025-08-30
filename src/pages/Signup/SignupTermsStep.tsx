@@ -7,10 +7,10 @@ import React from "react";
 
 type Props = {
   className?: string;
-  onStepChange?: () => void;
+  onNext?: () => void;
 };
 
-const SignupTermsStep: React.FC<Props> = ({ className, onStepChange }) => {
+const SignupTermsStep: React.FC<Props> = ({ className, onNext }) => {
   const {
     termsState: [terms, setTerms],
     stepState: [, setStep],
@@ -21,8 +21,8 @@ const SignupTermsStep: React.FC<Props> = ({ className, onStepChange }) => {
     .every((term) => term.checked);
 
   const handleNextStep = () => {
-    if (onStepChange) {
-      onStepChange();
+    if (onNext) {
+      onNext();
     } else {
       setStep(SignupStep.PERSONAL_INFO);
     }

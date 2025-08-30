@@ -1,4 +1,4 @@
-import { useSendSms } from "@/apis/sms";
+import { useSendSms, useVerifySms } from "@/apis/sms";
 import Button from "@/components/Button";
 import useSignupContext from "@/hooks/useSignupContext";
 import { type Nullable } from "@/types/misc";
@@ -12,14 +12,15 @@ import { useHarmonicIntervalFn } from "react-use";
 
 type PhoneVerificationCodeStepProps = {
   className?: string;
-  onNextStep: () => void;
+  onNext: () => void;
 };
 
 const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
   className,
-  onNextStep,
+  onNext,
 }) => {
   const {
+    personalInfoState: [personalInfo],
     verificationState: [verification, setVerification],
   } = useSignupContext();
 
@@ -29,13 +30,14 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
   );
 
   const { mutateAsync: sendSmsAsync } = useSendSms();
+  const { mutateAsync: verifySmsAsync } = useVerifySms();
 
   useHarmonicIntervalFn(
     () => setRemainingSeconds(getRemainingCountdown(verification.requestedAt)),
     SECOND,
   );
 
-  const isValidCode = verification.code.length === 4;
+  const showVerifyButton = verification.code.length === 4;
 
   return (
     <div className={cn("", className)}>
@@ -67,8 +69,8 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
                 maxLength={1}
                 value={verification.code[index]}
                 inputMode="numeric"
-                onChange={handleInputChange(index)}
                 onKeyDown={handleBackspaceKey(index)}
+                onChange={handleInputChange(index)}
               />
             ))}
           </div>
@@ -85,9 +87,9 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
         </div>
       </div>
 
-      {isValidCode && (
+      {showVerifyButton && (
         <div className="animate-slide-up fixed-bottom-button">
-          <Button size="md" theme="primary" block onClick={onNextStep}>
+          <Button size="md" theme="primary" block onClick={handleVerifySms}>
             다음
           </Button>
         </div>
@@ -110,7 +112,7 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
 
       setVerification((prev) => ({
         ...prev,
-        verificationCode: code.join(""),
+        code: code.join(""),
       }));
     };
   }
@@ -118,20 +120,20 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
   function handleBackspaceKey(index: number) {
     return (event: React.KeyboardEvent<HTMLInputElement>) => {
       const isBackspace = event.key === "Backspace";
-      const isEmpty = verification.code[index].length === 0;
       const isFirstIndex = index === 0;
 
-      if (!isBackspace || !isEmpty || isFirstIndex) {
+      if (!isBackspace || isFirstIndex) {
         return;
       }
 
+      event.currentTarget.value = "";
       inputsRef.current[index - 1]?.focus();
     };
   }
 
   async function handleResendSms() {
     try {
-      await sendSmsAsync(verification.code);
+      await sendSmsAsync({ phoneNumber: personalInfo.phoneNumber });
 
       setVerification((prev) => ({
         ...prev,
@@ -139,6 +141,25 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
       }));
     } catch (error) {
       console.error("Failed to send SMS", error);
+    }
+  }
+
+  async function handleVerifySms() {
+    try {
+      const result = await verifySmsAsync({
+        phoneNumber: personalInfo.phoneNumber,
+        code: verification.code,
+      });
+
+      if (!result) {
+        // TODO: handle validation error, show error modal
+        console.debug("Code does not match");
+        return;
+      }
+
+      onNext();
+    } catch (error) {
+      console.error("Error occured in our BE server", error);
     }
   }
 };
