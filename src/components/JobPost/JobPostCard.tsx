@@ -4,7 +4,6 @@ import {
   getPersonCountLabel,
   getSelectedDemolitionWorkLabels,
   getSelectedEquipmentLabels,
-  getSelectedExperienceLabels,
   getWorkTimeLabel,
 } from "../../utils/jobPostingHelpers";
 
@@ -25,7 +24,6 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
   activeCategory,
   selectedDemolitionWork,
   selectedEquipment,
-  selectedExperience,
   workStartTime,
   workEndTime,
   selectedPersonCount,
@@ -110,12 +108,12 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
             {getSelectedEquipmentLabels(selectedEquipment) || "선택 안됨"}
           </span>
         </div>
-        <div className="gap-6.5 flex">
+        {/* <div className="gap-6.5 flex">
           <span>최소 경력</span>
           <span className="font-medium text-neutral-600">
             {getSelectedExperienceLabels(selectedExperience) || "선택 안됨"}
           </span>
-        </div>
+        </div> */}
         <div className="gap-6.5 flex">
           <span>근무 시간</span>
           <span className="font-medium text-neutral-600">

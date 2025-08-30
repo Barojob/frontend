@@ -1,10 +1,13 @@
 import React from "react";
 import {
-  getCategoryLabel,
+  calculateEquipmentAddition,
+  getBaseWage,
   getPersonCountLabel,
   getSelectedDemolitionWorkLabels,
   getSelectedEquipmentLabels,
-  getSelectedExperienceLabels,
+  // getSelectedExperienceLabels,
+  getSelectedJobTypeLabels,
+  getSubAdjustment,
   getWorkTimeLabel,
 } from "../../utils/jobPostingHelpers";
 import PresenceTransition from "../PresenceTransition";
@@ -12,6 +15,7 @@ import SelectedTab from "./SelectedTab";
 
 interface SelectedItemsDisplayProps {
   activeCategory: string;
+  selectedJobTypes: string[];
   selectedDemolitionWork: string[];
   selectedEquipment: string[];
   selectedExperience: string[];
@@ -62,10 +66,9 @@ interface SelectedItemsDisplayProps {
 }
 
 const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
-  activeCategory,
+  selectedJobTypes,
   selectedDemolitionWork,
   selectedEquipment,
-  selectedExperience,
   workStartTime,
   workEndTime,
   workMonth,
@@ -81,13 +84,11 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
   onJobTypeEdit,
   onDemolitionWorkEdit,
   onEquipmentEdit,
-  onExperienceEdit,
   onWorkTimeEdit,
   onPersonCountEdit,
   onJobTypeTabClick,
   onDemolitionWorkTabClick,
   onEquipmentTabClick,
-  onExperienceTabClick,
   onWorkTimeTabClick,
   onPersonCountTabClick,
   // onSpecialNoteTabClick,
@@ -95,7 +96,6 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
   renderJobTypeEditor,
   renderDemolitionEditor,
   renderEquipmentEditor,
-  renderExperienceEditor,
   renderWorkTimeEditor,
   renderPersonCountEditor,
   // renderSpecialNoteEditor,
@@ -118,8 +118,8 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
             <SelectedTab
               title="업무"
               priceTitle="인건비 평균 금액 측정"
-              selectedContent={getCategoryLabel(activeCategory)}
-              amount={140700}
+              selectedContent={getSelectedJobTypeLabels(selectedJobTypes)}
+              amount={getBaseWage(selectedJobTypes)}
               className="py-4"
               onClick={onJobTypeTabClick ?? onJobTypeEdit}
             />
@@ -144,7 +144,7 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
               selectedContent={getSelectedDemolitionWorkLabels(
                 selectedDemolitionWork,
               )}
-              amount={3000}
+              amount={getSubAdjustment(selectedDemolitionWork)}
               className="py-4"
               onClick={onDemolitionWorkTabClick ?? onDemolitionWorkEdit}
             />
@@ -167,9 +167,9 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
           {isEquipmentCompleted && expandedSection !== "equipment" ? (
             <SelectedTab
               title="필요장비"
-              priceTitle="장비 경력 수당"
+              priceTitle="장비 수당"
               selectedContent={getSelectedEquipmentLabels(selectedEquipment)}
-              amount={100000}
+              amount={calculateEquipmentAddition(selectedEquipment)}
               className="py-4"
               onClick={onEquipmentTabClick ?? onEquipmentEdit}
             />
@@ -182,7 +182,7 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
         </>
       )}
 
-      {(isExperienceCompleted || expandedSection === "experience") && (
+      {/* {(isExperienceCompleted || expandedSection === "experience") && (
         <>
           {isExperienceCompleted && expandedSection !== "experience" ? (
             <SelectedTab
@@ -202,7 +202,7 @@ const SelectedItemsDisplay: React.FC<SelectedItemsDisplayProps> = ({
             <div className="h-px bg-gray-200"></div>
           )}
         </>
-      )}
+      )} */}
 
       {(isWorkTimeCompleted || expandedSection === "workTime") && (
         <>

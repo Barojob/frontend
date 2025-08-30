@@ -12,9 +12,12 @@ import PersonCountStep from "../../components/JobPost/PersonCountStep";
 import SelectedItemsDisplay from "../../components/JobPost/SelectedItemsDisplay";
 import SpecialNoteStep from "../../components/JobPost/SpecialNoteStep";
 import WorkTimeStep from "../../components/JobPost/WorkTimeStep";
+import Modal from "../../components/Modal";
 import NavigationHeader from "../../components/NavigationHeader";
+import PresenceTransition from "../../components/PresenceTransition";
 import StepIndicator from "../../components/StepIndicator";
 import { useJobPosting } from "../../hooks/useJobPosting";
+import { useKeyboardOpen } from "../../hooks/useKeyboardHandler";
 
 type Props = {
   className?: string;
@@ -87,6 +90,9 @@ const JobPostingPage: React.FC<Props> = () => {
 
     // 계산 함수 (현재 미사용)
   } = useJobPosting();
+
+  const { isKeyboardOpen } = useKeyboardOpen();
+  const [isSkilledModalOpen, setIsSkilledModalOpen] = useState(false);
 
   // const estimatedCost = calculateEstimatedCost();
 
@@ -242,6 +248,7 @@ const JobPostingPage: React.FC<Props> = () => {
             {/* 상단: 선택 완료된 내용들 표시 영역 */}
             <SelectedItemsDisplay
               activeCategory={activeCategory}
+              selectedJobTypes={selectedJobTypes}
               selectedDemolitionWork={selectedDemolitionWork}
               selectedEquipment={selectedEquipment}
               selectedExperience={selectedExperience}
@@ -270,6 +277,7 @@ const JobPostingPage: React.FC<Props> = () => {
                     selectedJobTypes={selectedJobTypes}
                     onCategoryChange={handleCategoryChange}
                     onJobTypeToggle={handleJobTypeToggle}
+                    onOpenSkilledModal={() => setIsSkilledModalOpen(true)}
                     onConfirm={() => {
                       if (isEditing) {
                         handleJobTypeConfirmAfterEdit();
@@ -387,16 +395,56 @@ const JobPostingPage: React.FC<Props> = () => {
 
             {/* 특이사항 단계: 근무 인원 완료 후 별도로 렌더링 */}
             {expandedSection === "specialNote" && (
-              <div className="bg-white px-6 py-4">
-                <SpecialNoteStep
-                  initialNote={""}
-                  onChange={() => {}}
-                  onConfirm={() => {
-                    setExpandedSection(null);
-                  }}
-                />
-              </div>
+              <PresenceTransition
+                transitionKey="specialNote-block"
+                variant="subtleRise"
+              >
+                <div className="bg-white px-6 py-4 pb-28">
+                  <SpecialNoteStep
+                    initialNote={""}
+                    onChange={() => {}}
+                    onConfirm={() => {
+                      setExpandedSection(null);
+                    }}
+                  />
+                </div>
+              </PresenceTransition>
             )}
+
+            {/* 하단 완료 바: 작업 특이사항 단계일 때만 표시, 키보드 열림 시 숨김 */}
+            {expandedSection === "specialNote" && !isKeyboardOpen && (
+              <PresenceTransition
+                transitionKey="complete-bar"
+                variant="fadeInOut"
+              >
+                <CompleteBar
+                  onClick={handleComplete}
+                  selectedJobTypes={selectedJobTypes}
+                  selectedDemolitionWork={selectedDemolitionWork}
+                  selectedEquipment={selectedEquipment}
+                />
+              </PresenceTransition>
+            )}
+            {/* 기능공 모달 */}
+            <Modal
+              visible={isSkilledModalOpen}
+              onClose={() => setIsSkilledModalOpen(false)}
+            >
+              <div className="px-6 py-6">
+                <h2 className="mb-3 text-xl font-bold text-neutral-700">
+                  기능공 선택
+                </h2>
+                <p className="text-sm text-neutral-500">준비중입니다.</p>
+                <div className="mt-5">
+                  <button
+                    className="w-full rounded-xl bg-blue-600 py-3 text-white"
+                    onClick={() => setIsSkilledModalOpen(false)}
+                  >
+                    닫기
+                  </button>
+                </div>
+              </div>
+            </Modal>
 
             {/* 하단: 선택 영역 */}
             <div
@@ -431,11 +479,6 @@ const JobPostingPage: React.FC<Props> = () => {
                 )}
               </div>
             </div>
-
-            {/* 하단 완료 바: 작업 특이사항 단계일 때만 표시 */}
-            {expandedSection === "specialNote" && (
-              <CompleteBar onClick={handleComplete} />
-            )}
           </>
         )}
 

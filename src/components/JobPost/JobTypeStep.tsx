@@ -8,6 +8,7 @@ interface JobTypeStepProps {
   onCategoryChange: (category: string) => void;
   onJobTypeToggle: (jobTypeId: string) => void;
   onConfirm: () => void;
+  onOpenSkilledModal?: () => void;
 }
 
 const JobTypeStep: React.FC<JobTypeStepProps> = ({
@@ -16,6 +17,7 @@ const JobTypeStep: React.FC<JobTypeStepProps> = ({
   onCategoryChange,
   onJobTypeToggle,
   onConfirm,
+  onOpenSkilledModal,
 }) => {
   return (
     <>
@@ -34,6 +36,7 @@ const JobTypeStep: React.FC<JobTypeStepProps> = ({
         onItemToggle={onJobTypeToggle}
         type="jobType"
         category={activeCategory}
+        onOpenSkilledModal={onOpenSkilledModal}
         className="mb-8"
       />
 

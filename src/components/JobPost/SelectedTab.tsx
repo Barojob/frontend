@@ -35,9 +35,12 @@ const SelectedTab: React.FC<SelectedTabProps> = ({
           {priceTitle}
         </div>
         <span className="text-lg font-bold text-blue-600">
-          {typeof amount === "number" ? `+ ${amount.toLocaleString()}` : amount}
+          {typeof amount === "number"
+            ? `${amount > 0 ? "+" : amount < 0 ? "-" : "+"}${Math.abs(
+                amount,
+              ).toLocaleString()}원`
+            : amount}
         </span>
-        {amount && <span className="text-lg font-bold text-blue-600">원</span>}
       </div>
     </div>
   );

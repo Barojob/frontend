@@ -21,16 +21,16 @@ const SpecialNoteStep: React.FC<Props> = ({
 
   return (
     <div className={className}>
-      <div className="mb-4 text-2xl font-bold text-neutral-600">
+      <div className="mb-3 text-[1.375rem] font-bold text-neutral-600">
         <span className="text-blue-600">작업 특이사항</span>을 작성해주세요
-        (선택)
+        <span className="text-base font-normal text-neutral-600"> (선택)</span>
       </div>
       <textarea
         value={note}
         onChange={handleChange}
         rows={4}
         placeholder="ex. 그라인더를 사용한 벽면 면갈이 작업입니다."
-        className="w-full resize-none rounded-lg border border-gray-200 bg-white p-3 text-sm text-gray-700 outline-none placeholder:text-gray-400"
+        className="w-full resize-none rounded-lg border border-gray-100 bg-gray-100 p-3 text-sm text-gray-700 outline-none placeholder:text-zinc-500"
       />
     </div>
   );
