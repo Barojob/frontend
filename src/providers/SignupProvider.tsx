@@ -16,7 +16,7 @@ export const SignupContext =
 
 const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const termsState = React.useState<CheckItem[]>(TERMS_FIXTURE);
-  const stepState = React.useState<SignupStep>(SignupStep.TERMS);
+  const stepState = React.useState<SignupStep>(SignupStep.USER_TYPE_SELECTION);
   const personalInfoState = React.useState<PersonalInfo>({
     name: "",
     birthDate: "",
@@ -24,7 +24,7 @@ const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
     carrier: null,
   });
   const verificationState = React.useState<VerificationInfo>({
-    verificationCode: "",
+    code: "",
     requestedAt: null,
     verifiedAt: null,
   });

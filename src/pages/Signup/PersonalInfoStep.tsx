@@ -33,7 +33,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
   } = usePersonalInfoForm();
 
   const {
-    verificationState: [, setVerificationInfo],
+    verificationState: [, setVerification],
   } = useSignupContext();
 
   const {
@@ -159,7 +159,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
     try {
       await sendSmsAsync(phoneNumber);
 
-      setVerificationInfo((prev) => ({
+      setVerification((prev) => ({
         ...prev,
         requestedAt: new Date(),
       }));

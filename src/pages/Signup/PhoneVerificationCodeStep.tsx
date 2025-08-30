@@ -1,29 +1,41 @@
+import { useSendSms } from "@/apis/sms";
 import Button from "@/components/Button";
-import { usePhoneVerification } from "@/hooks/usePhoneVerification";
+import useSignupContext from "@/hooks/useSignupContext";
+import { type Nullable } from "@/types/misc";
 import { cn } from "@/utils/classname";
-import { formatTime } from "@/utils/formatters";
-import React, { useRef } from "react";
+import { formatMinuteSecond } from "@/utils/formatters";
+import { SECOND } from "@/utils/misc";
+import dayjs from "dayjs";
+import { range } from "lodash-es";
+import React, { useRef, useState } from "react";
+import { useHarmonicIntervalFn } from "react-use";
 
 type PhoneVerificationCodeStepProps = {
   className?: string;
-  // FIXME: remove this event handler
-  onValidityChange: (isValid: boolean) => void;
+  onNextStep: () => void;
 };
 
 const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
   className,
-  onValidityChange,
+  onNextStep,
 }) => {
   const {
-    verificationInfo,
-    setVerificationInfo,
-    timer,
-    isVerificationCodeValid,
-    handleResendVerification,
-    handleNextStep,
-  } = usePhoneVerification(onValidityChange);
+    verificationState: [verification, setVerification],
+  } = useSignupContext();
 
   const inputsRef = useRef<HTMLInputElement[]>([]);
+  const [remainingSeconds, setRemainingSeconds] = useState(
+    getRemainingCountdown(verification.requestedAt),
+  );
+
+  const { mutateAsync: sendSmsAsync } = useSendSms();
+
+  useHarmonicIntervalFn(
+    () => setRemainingSeconds(getRemainingCountdown(verification.requestedAt)),
+    SECOND,
+  );
+
+  const isValidCode = verification.code.length === 4;
 
   return (
     <div className={cn("", className)}>
@@ -40,10 +52,11 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
       </div>
 
       <div className="mt-12">
-        <div className="animate-slide-up">
+        <div>
           <div className="flex justify-center gap-3">
-            {[0, 1, 2, 3].map((index) => (
+            {range(4).map((index) => (
               <input
+                className="h-16 w-16 rounded-lg border border-gray-200 bg-gray-100 text-center text-2xl font-bold transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 key={index}
                 ref={(el) => {
                   if (el) {
@@ -52,30 +65,29 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
                 }}
                 type="text"
                 maxLength={1}
-                value={verificationInfo.verificationCode[index] || ""}
-                onChange={(e) => handleInputChange(e, index)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-                className="h-16 w-16 rounded-lg border border-gray-200 bg-gray-100 text-center text-2xl font-bold transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={verification.code[index]}
                 inputMode="numeric"
+                onChange={handleInputChange(index)}
+                onKeyDown={handleBackspaceKey(index)}
               />
             ))}
           </div>
 
           <div className="mt-4 flex justify-center">
             <button
-              onClick={handleResendVerification}
-              disabled={timer > 0}
               className="text-xs text-neutral-500 underline disabled:cursor-not-allowed disabled:text-neutral-300"
+              disabled={remainingSeconds > 0}
+              onClick={handleResendSms}
             >
-              인증번호 다시 받기 ({formatTime(timer)})
+              인증번호 다시 받기 ({formatMinuteSecond(remainingSeconds)})
             </button>
           </div>
         </div>
       </div>
 
-      {isVerificationCodeValid && (
+      {isValidCode && (
         <div className="animate-slide-up fixed-bottom-button">
-          <Button size="md" theme="primary" block onClick={handleNextStep}>
+          <Button size="md" theme="primary" block onClick={onNextStep}>
             다음
           </Button>
         </div>
@@ -83,34 +95,58 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
     </div>
   );
 
-  function handleInputChange(
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
-  ) {
-    const newCode = verificationInfo.verificationCode.split("");
-    newCode[index] = e.target.value;
-    setVerificationInfo((prev) => ({
-      ...prev,
-      verificationCode: newCode.join(""),
-    }));
+  function handleInputChange(index: number) {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      const isEmpty = event.target.value.length === 0;
+      const isLastIndex = index === 3;
+      const continueToNextInput = !isEmpty && !isLastIndex;
 
-    if (e.target.value && index < 3) {
-      inputsRef.current[index + 1]?.focus();
-    }
+      if (continueToNextInput) {
+        inputsRef.current[index + 1]?.focus();
+      }
+
+      const code = verification.code.split("");
+      code[index] = event.target.value;
+
+      setVerification((prev) => ({
+        ...prev,
+        verificationCode: code.join(""),
+      }));
+    };
   }
 
-  function handleKeyDown(
-    e: React.KeyboardEvent<HTMLInputElement>,
-    index: number,
-  ) {
-    if (
-      e.key === "Backspace" &&
-      !verificationInfo.verificationCode[index] &&
-      index > 0
-    ) {
+  function handleBackspaceKey(index: number) {
+    return (event: React.KeyboardEvent<HTMLInputElement>) => {
+      const isBackspace = event.key === "Backspace";
+      const isEmpty = verification.code[index].length === 0;
+      const isFirstIndex = index === 0;
+
+      if (!isBackspace || !isEmpty || isFirstIndex) {
+        return;
+      }
+
       inputsRef.current[index - 1]?.focus();
+    };
+  }
+
+  async function handleResendSms() {
+    try {
+      await sendSmsAsync(verification.code);
+
+      setVerification((prev) => ({
+        ...prev,
+        requestedAt: new Date(),
+      }));
+    } catch (error) {
+      console.error("Failed to send SMS", error);
     }
   }
 };
+
+function getRemainingCountdown(requestedAt: Nullable<Date>) {
+  const validUntil = dayjs(requestedAt).add(5, "minutes");
+  const remaningSeconds = Math.max(0, validUntil.diff(dayjs(), "seconds"));
+  return remaningSeconds;
+}
 
 export default PhoneVerificationCodeStep;

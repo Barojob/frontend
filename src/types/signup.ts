@@ -35,7 +35,7 @@ export type PersonalInfo = {
 };
 
 export type VerificationInfo = {
-  verificationCode: string;
+  code: string;
   requestedAt: Nullable<Date>;
   verifiedAt: Nullable<Date>;
 };

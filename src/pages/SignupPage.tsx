@@ -34,6 +34,17 @@ const SignupPageContent: React.FC = () => {
         transitionKey={step.toString()}
         variant="fadeInOut"
       >
+        {step === SignupStep.USER_TYPE_SELECTION && (
+          <UserTypeSelectionStep
+            onValidityChange={() => {
+              /* FIXME: 유효성 검사 로직 구현 필요 */
+            }}
+            onUserTypeChange={() => {
+              /* FIXME: 사용자 유형 변경 로직 구현 필요 */
+            }}
+          />
+        )}
+
         {step === SignupStep.TERMS && <SignupTermsStep />}
 
         {step === SignupStep.PERSONAL_INFO && (
@@ -43,24 +54,15 @@ const SignupPageContent: React.FC = () => {
         )}
 
         {step === SignupStep.PHONE_VERIFICATION && (
-          <PhoneVerificationCodeStep onValidityChange={() => {}} />
+          <PhoneVerificationCodeStep
+            onNextStep={handleNextStep(SignupStep.USER_TYPE_SELECTION)}
+          />
         )}
 
         {step === SignupStep.PHONE_VERIFICATION_SUCCESS && (
           <SignupGeneralStep
             title="인증 완료"
             description="휴대폰 인증이 완료되었습니다."
-          />
-        )}
-
-        {step === SignupStep.USER_TYPE_SELECTION && (
-          <UserTypeSelectionStep
-            onValidityChange={() => {
-              /* FIXME: 유효성 검사 로직 구현 필요 */
-            }}
-            onUserTypeChange={() => {
-              /* FIXME: 사용자 유형 변경 로직 구현 필요 */
-            }}
           />
         )}
 
