@@ -13,7 +13,6 @@ interface MultiSelectorProps {
   category?: string;
   selectedJobTypes?: string[];
   className?: string;
-  onOpenSkilledModal?: () => void;
 }
 
 const MultiSelector: React.FC<MultiSelectorProps> = ({
@@ -23,7 +22,6 @@ const MultiSelector: React.FC<MultiSelectorProps> = ({
   category,
   selectedJobTypes,
   className = "",
-  onOpenSkilledModal,
 }) => {
   const generalJobTypes: SelectOption[] = [
     { id: "general-labor", label: "보통인부" },
@@ -34,7 +32,12 @@ const MultiSelector: React.FC<MultiSelectorProps> = ({
   ];
 
   const skilledJobTypes: SelectOption[] = [
-    { id: "skilled", label: "기능공 (준비중)" },
+    { id: "carpenter", label: "목수" },
+    { id: "rebar", label: "철근" },
+    { id: "concrete", label: "콘크리트" },
+    { id: "tile", label: "타일" },
+    { id: "plumber", label: "배관공" },
+    { id: "electrician", label: "전기공" },
   ];
 
   // 세부 업무
@@ -84,15 +87,6 @@ const MultiSelector: React.FC<MultiSelectorProps> = ({
         const isSelected = selectedItems.includes(option.id);
 
         const handleClick = () => {
-          if (
-            type === "jobType" &&
-            category !== "general" &&
-            onOpenSkilledModal
-          ) {
-            onOpenSkilledModal();
-            return;
-          }
-
           if (type === "demolitionWork") {
             if (isSelected) {
               onItemToggle(option.id);

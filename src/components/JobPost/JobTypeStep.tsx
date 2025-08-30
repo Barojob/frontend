@@ -27,7 +27,13 @@ const JobTypeStep: React.FC<JobTypeStepProps> = ({
 
       <CategoryTabs
         activeCategory={activeCategory}
-        onCategoryChange={onCategoryChange}
+        onCategoryChange={(category) => {
+          if (category === "skilled" && onOpenSkilledModal) {
+            onOpenSkilledModal();
+            return;
+          }
+          onCategoryChange(category);
+        }}
         className="mb-6"
       />
 
@@ -36,7 +42,6 @@ const JobTypeStep: React.FC<JobTypeStepProps> = ({
         onItemToggle={onJobTypeToggle}
         type="jobType"
         category={activeCategory}
-        onOpenSkilledModal={onOpenSkilledModal}
         className="mb-8"
       />
 

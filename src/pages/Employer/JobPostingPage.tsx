@@ -445,7 +445,6 @@ const JobPostingPage: React.FC<Props> = () => {
                 </div>
               </div>
             </Modal>
-
             {/* 하단: 선택 영역 */}
             <div
               className={`flex flex-1 flex-col px-6 py-4 ${
@@ -467,6 +466,7 @@ const JobPostingPage: React.FC<Props> = () => {
                     selectedJobTypes={selectedJobTypes}
                     onCategoryChange={handleCategoryChange}
                     onJobTypeToggle={handleJobTypeToggle}
+                    onOpenSkilledModal={() => setIsSkilledModalOpen(true)}
                     onConfirm={() => {
                       if (isEditing) {
                         handleJobTypeConfirmAfterEdit();
