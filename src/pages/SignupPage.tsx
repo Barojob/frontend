@@ -43,11 +43,7 @@ const SignupPageContent: React.FC = () => {
         )}
 
         {step === SignupStep.PHONE_VERIFICATION && (
-          <PhoneVerificationCodeStep
-            onValidityChange={() => {
-              /* FIXME: 유효성 검사 로직 구현 필요 */
-            }}
-          />
+          <PhoneVerificationCodeStep onValidityChange={() => {}} />
         )}
 
         {step === SignupStep.PHONE_VERIFICATION_SUCCESS && (

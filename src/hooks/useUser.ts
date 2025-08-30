@@ -1,4 +1,4 @@
-import { configs } from "@/configs";
+import { configs } from "@/configs/environments";
 import { type User, userSchema } from "@/types/user";
 import { useQuery } from "@tanstack/react-query";
 

@@ -6,6 +6,7 @@ import React, { useRef } from "react";
 
 type PhoneVerificationCodeStepProps = {
   className?: string;
+  // FIXME: remove this event handler
   onValidityChange: (isValid: boolean) => void;
 };
 

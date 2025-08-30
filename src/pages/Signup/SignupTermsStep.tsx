@@ -49,12 +49,12 @@ const SignupTermsStep: React.FC<Props> = ({ className, onStepChange }) => {
 
       <div className="fixed-bottom-button">
         <Button
+          className="transition-transform duration-150 active:scale-[0.95]"
           theme="primary"
           size="md"
           block
           disabled={!isRequiredAllChecked}
           onClick={handleNextStep}
-          className="transition-transform duration-150 active:scale-[0.95]"
         >
           동의합니다
         </Button>
