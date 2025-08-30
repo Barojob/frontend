@@ -1,8 +1,10 @@
+import { useSendSms } from "@/apis/sms";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import PresenceTransition from "@/components/PresenceTransition";
 import SelectCarrierDrawer from "@/components/SelectCarrierDrawer";
 import { usePersonalInfoForm } from "@/hooks/usePersonalInfoForm";
+import useSignupContext from "@/hooks/useSignupContext";
 import { cn } from "@/utils/classname";
 import React, { useRef } from "react";
 
@@ -29,6 +31,16 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
     carrierField: { value: carrier, onChange: onCarrierChange },
     phoneNumberField: { value: phoneNumber, onChange: onPhoneNumberChange },
   } = usePersonalInfoForm();
+
+  const {
+    verificationState: [, setVerificationInfo],
+  } = useSignupContext();
+
+  const {
+    mutateAsync: sendSmsAsync,
+    isPending: pendingSendSms,
+    isSuccess: successSendSms,
+  } = useSendSms();
 
   return (
     <form className={cn("pt-8", className)} onSubmit={handleSubmit}>
@@ -126,7 +138,14 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         variant="subtleRise"
       >
         {isValidForm && (
-          <Button size="md" theme="primary" block type="submit">
+          <Button
+            size="md"
+            theme="primary"
+            block
+            type="submit"
+            loading={pendingSendSms || successSendSms}
+            disabled={pendingSendSms || successSendSms}
+          >
             인증번호 받기
           </Button>
         )}
@@ -134,9 +153,20 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
     </form>
   );
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onNextStep();
+
+    try {
+      await sendSmsAsync(phoneNumber);
+
+      setVerificationInfo((prev) => ({
+        ...prev,
+        requestedAt: new Date(),
+      }));
+      onNextStep();
+    } catch (error) {
+      console.error("Failed to send SMS", error);
+    }
   }
 };
 

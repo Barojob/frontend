@@ -1,4 +1,4 @@
-import { CheckItem } from "@/components/SignUpTerms";
+import { CheckItem } from "@/pages/Signup/SignUpTerms";
 import { Nullable } from "@/types/misc";
 import React from "react";
 
@@ -36,8 +36,8 @@ export type PersonalInfo = {
 
 export type VerificationInfo = {
   verificationCode: string;
-  verificationSent: boolean;
-  isVerified: boolean;
+  requestedAt: Nullable<Date>;
+  verifiedAt: Nullable<Date>;
 };
 
 export type UserTypeInfo = {

@@ -1,5 +1,5 @@
-import { CheckItem } from "@/components/SignUpTerms";
 import TERMS_FIXTURE from "@/fixtures/terms.json";
+import { CheckItem } from "@/pages/Signup/SignUpTerms";
 import { Nullable } from "@/types/misc";
 import {
   EmployerInfo,
@@ -25,8 +25,8 @@ const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
   });
   const verificationState = React.useState<VerificationInfo>({
     verificationCode: "",
-    verificationSent: false,
-    isVerified: false,
+    requestedAt: null,
+    verifiedAt: null,
   });
   const userTypeState = React.useState<UserTypeInfo>({
     userType: "",
