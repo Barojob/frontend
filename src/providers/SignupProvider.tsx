@@ -1,5 +1,5 @@
+import { CheckItem } from "@/components/SignUpTerms";
 import TERMS_FIXTURE from "@/fixtures/terms.json";
-import { CheckItem } from "@/pages/Signup/SignUpTerms";
 import { Nullable } from "@/types/misc";
 import {
   EmployerState,

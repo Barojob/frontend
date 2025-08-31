@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
+import SignUpTerms from "@/components/SignUpTerms";
 import useSignupContext from "@/hooks/useSignupContext";
-import SignUpTerms from "@/pages/Signup/SignUpTerms";
 import { SignupStep } from "@/types/signup";
 import { cn } from "@/utils/classname";
 import React from "react";

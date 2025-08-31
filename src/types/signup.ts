@@ -1,4 +1,4 @@
-import { CheckItem } from "@/pages/Signup/SignUpTerms";
+import { CheckItem } from "@/components/SignUpTerms";
 import { Nullable } from "@/types/misc";
 import { type UserType } from "@/types/user";
 import React from "react";
