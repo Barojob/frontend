@@ -1,6 +1,7 @@
-import { useSendSms, useVerifySms } from "@/apis/sms";
 import Button from "@/components/Button";
+import { useSendSms } from "@/hooks/useSendSms";
 import useSignupContext from "@/hooks/useSignupContext";
+import { useVerifySms } from "@/hooks/useVerifySms";
 import { type Nullable } from "@/types/misc";
 import { cn } from "@/utils/classname";
 import { formatMinuteSecond } from "@/utils/formatters";

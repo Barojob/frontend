@@ -12,20 +12,18 @@ export const useUserTypeSelection = ({
   onUserTypeChange,
 }: UseUserTypeSelectionProps) => {
   const {
-    userTypeState: [userTypeInfo, setUserTypeInfo],
+    userTypeState: [userType, setUserTypeInfo],
     stepState: [, setCurrentStep],
   } = useSignupContext();
 
-  const userType = userTypeInfo.userType;
-
-  const isValid = useMemo(() => userType !== "", [userType]);
+  const isValid = useMemo(() => userType !== null, [userType]);
 
   useEffect(() => {
     onValidityChange(isValid);
   }, [isValid, onValidityChange]);
 
   const handleUserTypeSelect = (selectedType: "employer" | "worker") => {
-    setUserTypeInfo({ userType: selectedType });
+    setUserTypeInfo(selectedType);
     onUserTypeChange?.(selectedType);
   };
 

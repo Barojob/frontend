@@ -1,6 +1,6 @@
-import { useUserType } from "@/hooks/useUserType";
 import Logo from "@/svgs/LogoIcon";
 import { cn } from "@/utils/classname";
+import { noop } from "lodash-es";
 import React, { useState } from "react";
 import { IoPerson, IoSwapVertical } from "react-icons/io5";
 import { Link } from "react-router-dom";
@@ -10,7 +10,15 @@ type Props = {
 };
 
 const Header: React.FC<Props> = ({ className }) => {
-  const { isWorker, isEmployer, setWorker, setEmployer } = useUserType();
+  // FIXME: legacy code
+  // const { isWorker, isEmployer, setWorker, setEmployer } = useUserType();
+  const { isWorker, isEmployer, setWorker, setEmployer } = {
+    isWorker: false,
+    isEmployer: false,
+    setWorker: noop,
+    setEmployer: noop,
+  };
+
   const [showTypeSelector, setShowTypeSelector] = useState(false);
 
   const handleTypeChange = () => {

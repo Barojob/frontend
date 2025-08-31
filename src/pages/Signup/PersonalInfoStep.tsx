@@ -1,9 +1,9 @@
-import { useSendSms } from "@/apis/sms";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import PresenceTransition from "@/components/PresenceTransition";
 import SelectCarrierDrawer from "@/components/SelectCarrierDrawer";
 import { usePersonalInfoForm } from "@/hooks/usePersonalInfoForm";
+import { useSendSms } from "@/hooks/useSendSms";
 import useSignupContext from "@/hooks/useSignupContext";
 import { cn } from "@/utils/classname";
 import React, { useRef } from "react";
