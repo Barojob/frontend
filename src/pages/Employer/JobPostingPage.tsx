@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AddJobPostCard from "../../components/JobPost/AddJobPostCard";
 import DemolitionWorkStep from "../../components/JobPost/DemolitionWorkStep";
 import EquipmentStep from "../../components/JobPost/EquipmentStep";
 // import EstimatedCostDisplay from "../../components/JobPost/EstimatedCostDisplay";
@@ -26,7 +25,6 @@ type Props = {
 const JobPostingPage: React.FC<Props> = () => {
   const navigate = useNavigate();
   const {
-    // 상태
     activeCategory,
     selectedDemolitionWork,
     selectedJobTypes,
@@ -37,14 +35,12 @@ const JobPostingPage: React.FC<Props> = () => {
     workMonth,
     workDay,
     selectedPersonCount,
-    // specialNote,
     isJobTypeCompleted,
     isDemolitionWorkCompleted,
     isEquipmentCompleted,
     isExperienceCompleted,
     isWorkTimeCompleted,
     isPersonCountCompleted,
-    // isSpecialNoteOpen,
     isEditing,
     jobPosts,
 
@@ -66,7 +62,6 @@ const JobPostingPage: React.FC<Props> = () => {
     // setSpecialNote,
     // setIsSpecialNoteOpen,
 
-    // 편집 핸들러
     handleJobTypeEdit,
     handleDemolitionWorkEdit,
     handleEquipmentEdit,
@@ -74,7 +69,6 @@ const JobPostingPage: React.FC<Props> = () => {
     handleWorkTimeEdit,
     handlePersonCountEdit,
 
-    // 편집 후 자동 완료 핸들러
     handleJobTypeConfirmAfterEdit,
     handleDemolitionWorkConfirmAfterEdit,
     handleEquipmentConfirmAfterEdit,
@@ -82,31 +76,30 @@ const JobPostingPage: React.FC<Props> = () => {
     handleWorkTimeConfirmAfterEdit,
     handlePersonCountConfirmAfterEdit,
 
-    // 구인 게시물 핸들러
     handleComplete,
     handleDeleteJobPost,
     handleEditJobPost,
     handleAddNewJobPost,
-
-    // 계산 함수 (현재 미사용)
+    restoreCurrentState,
+    expandedSection,
+    setExpandedSection,
   } = useJobPosting();
 
   const { isKeyboardOpen } = useKeyboardOpen();
   const [isSkilledModalOpen, setIsSkilledModalOpen] = useState(false);
 
-  // const estimatedCost = calculateEstimatedCost();
+  // setExpandedSection을 useRef로 안정화
+  const setExpandedSectionRef = useRef(setExpandedSection);
 
-  // 상단 선택 탭 클릭 시, 하단에서 해당 섹션 펼치기 관리
-  const [expandedSection, setExpandedSection] = useState<
-    | "jobType"
-    | "demolitionWork"
-    | "equipment"
-    | "experience"
-    | "workTime"
-    | "personCount"
-    | "specialNote"
-    | null
-  >(null);
+  // 페이지 로드 시 이전 상태 복원
+  useEffect(() => {
+    const loadState = async () => {
+      await restoreCurrentState();
+    };
+    loadState();
+  }, [restoreCurrentState]);
+
+  // const estimatedCost = calculateEstimatedCost();
 
   // 섹션 위치 스크롤을 위한 참조
   const jobTypeRef = useRef<HTMLDivElement | null>(null);
@@ -133,8 +126,8 @@ const JobPostingPage: React.FC<Props> = () => {
     }
   }, [expandedSection]);
 
-  // 카드 화면이 표시되어야 하는지 확인
-  const shouldShowCards = jobPosts.length > 0;
+  // 카드 화면이 표시되어야 하는지 확인 (업무가 있고 편집/추가 모드가 아닐 때만)
+  const shouldShowCards = jobPosts.length > 0 && !isEditing;
   const hasAnyCompleted =
     isJobTypeCompleted ||
     isDemolitionWorkCompleted ||
@@ -194,7 +187,7 @@ const JobPostingPage: React.FC<Props> = () => {
       isPersonCountCompleted &&
       expandedSection === null
     ) {
-      setExpandedSection("specialNote");
+      setExpandedSectionRef.current("specialNote");
     }
   }, [
     isJobTypeCompleted,
@@ -232,15 +225,28 @@ const JobPostingPage: React.FC<Props> = () => {
                 selectedExperience={jobPost.selectedExperience}
                 workStartTime={jobPost.workStartTime}
                 workEndTime={jobPost.workEndTime}
+                workMonth={jobPost.workMonth}
+                workDay={jobPost.workDay}
                 selectedPersonCount={jobPost.selectedPersonCount}
                 estimatedCost={jobPost.estimatedCost}
-                onEdit={() => handleEditJobPost(jobPost)}
-                onDelete={() => handleDeleteJobPost(jobPost.id)}
+                onEdit={() => {
+                  console.log("Edit button clicked");
+                  handleEditJobPost(jobPost);
+                }}
+                onDelete={() => {
+                  console.log("Delete button clicked");
+                  handleDeleteJobPost(jobPost.id);
+                }}
+                onChangeContent={() => {
+                  console.log("Change content button clicked");
+                  handleEditJobPost(jobPost);
+                }}
+                onAddNewJob={() => {
+                  console.log("Add new job button clicked");
+                  handleAddNewJobPost();
+                }}
               />
             ))}
-
-            {/* 새로운 구인 게시물 추가 카드 */}
-            <AddJobPostCard onClick={handleAddNewJobPost} />
           </div>
         ) : (
           // 기존 선택 화면

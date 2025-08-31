@@ -1,9 +1,11 @@
 import React from "react";
+import RightArrowIcon from "../../svgs/RightArrowIcon";
 import {
   getCategoryLabel,
   getPersonCountLabel,
   getSelectedDemolitionWorkLabels,
   getSelectedEquipmentLabels,
+  getWorkDateLabel,
   getWorkTimeLabel,
 } from "../../utils/jobPostingHelpers";
 
@@ -14,10 +16,14 @@ interface JobPostCardProps {
   selectedExperience: string[];
   workStartTime: string;
   workEndTime: string;
+  workMonth: number;
+  workDay: number;
   selectedPersonCount: number;
   estimatedCost: { min: number; max: number };
   onEdit?: () => void;
   onDelete?: () => void;
+  onChangeContent?: () => void;
+  onAddNewJob?: () => void;
 }
 
 const JobPostCard: React.FC<JobPostCardProps> = ({
@@ -26,67 +32,31 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
   selectedEquipment,
   workStartTime,
   workEndTime,
+  workMonth,
+  workDay,
   selectedPersonCount,
   estimatedCost,
   onEdit,
   onDelete,
+  onChangeContent,
+  onAddNewJob,
 }) => {
   return (
-    <div className="mb-3 rounded-[0.625rem] bg-gray-100 px-6 py-5">
+    <div className="mb-3 rounded-[0.625rem] border border-zinc-300 bg-white px-6 py-5">
       {/* 카드 헤더 */}
       <div className="mb-3.5 flex items-center justify-between">
         <div className="flex items-center">
-          <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-full">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="26"
-              height="17"
-              viewBox="0 0 26 17"
-              fill="none"
-            >
-              <path
-                d="M13.2026 2.04333C18.8374 2.04333 23.4518 6.91558 23.8726 13.101H2.53271C2.95342 6.91561 7.56788 2.04339 13.2026 2.04333Z"
-                fill="#C5D6EF"
-              />
-              <rect
-                x="0.480957"
-                y="12.7468"
-                width="25.519"
-                height="4.25316"
-                rx="2.12658"
-                fill="#247AF2"
-              />
-              <path
-                d="M9.69031 1.82452C9.61743 0.94999 10.3076 0.199951 11.1851 0.199951H15.2969C16.1744 0.199951 16.8646 0.94999 16.7917 1.82452L16.1202 9.88274C16.0554 10.6602 15.4055 11.2582 14.6254 11.2582H11.8566C11.0765 11.2582 10.4266 10.6602 10.3618 9.88274L9.69031 1.82452Z"
-                fill="#247AF2"
-              />
-            </svg>
-          </div>
           <span className="text-lg font-bold text-neutral-700">
             {getCategoryLabel(activeCategory)}
           </span>
           {onEdit && (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="9"
-              height="14"
-              viewBox="0 0 9 14"
-              fill="none"
-              className="ml-2 cursor-pointer"
-            >
-              <path
-                d="M1 13L7 7L1 1"
-                stroke="#6B7684"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
+            <RightArrowIcon className="ml-3 cursor-pointer text-gray-500" />
           )}
         </div>
         {onDelete && (
           <button
             onClick={onDelete}
-            className="rounded-full bg-white px-2.5 py-1 text-xs text-neutral-400"
+            className="rounded-full bg-gray-100 px-2.5 py-0.5 text-[0.625rem] text-neutral-400"
           >
             삭제
           </button>
@@ -94,7 +64,7 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
       </div>
 
       {/* 카드 내용 */}
-      <div className="space-y-2.5 px-1 text-sm text-zinc-500">
+      <div className="space-y-2.5 text-sm text-zinc-500">
         <div className="gap-6.5 flex">
           <span>세부 업무</span>
           <span className="font-medium text-neutral-600">
@@ -121,6 +91,12 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
           </span>
         </div>
         <div className="gap-6.5 flex">
+          <span>근무 날짜</span>
+          <span className="font-medium text-neutral-600">
+            {getWorkDateLabel(workMonth, workDay)}
+          </span>
+        </div>
+        <div className="gap-6.5 flex">
           <span>근무 인원</span>
           <span className="font-medium text-neutral-600">
             {getPersonCountLabel(selectedPersonCount)}
@@ -129,12 +105,32 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
       </div>
 
       {/* 예상 금액 */}
-      <div className="mt-3 border-t border-slate-300 pt-1">
+      <div className="mt-3">
         <div className="text-right">
           <span className="font-bold text-blue-600">
             총 {estimatedCost.min.toLocaleString()}원
           </span>
         </div>
+      </div>
+
+      {/* 버튼 영역 */}
+      <div className="mt-2 flex flex-col items-end justify-center space-y-3">
+        {onChangeContent && (
+          <button
+            onClick={onChangeContent}
+            className="flex w-fit justify-end rounded-[0.625rem] bg-slate-100 px-3 py-2 text-xs font-medium text-neutral-400"
+          >
+            내용 변경
+          </button>
+        )}
+        {onAddNewJob && (
+          <button
+            onClick={onAddNewJob}
+            className="w-full border-t border-neutral-200 pt-3 text-sm font-medium text-zinc-500"
+          >
+            + 다른 업무 추가
+          </button>
+        )}
       </div>
     </div>
   );

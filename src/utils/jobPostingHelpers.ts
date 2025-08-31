@@ -74,6 +74,10 @@ export const getWorkTimeLabel = (
   return "";
 };
 
+export const getWorkDateLabel = (workMonth: number, workDay: number) => {
+  return `${workMonth}월 ${workDay}일`;
+};
+
 export const getPersonCountLabel = (selectedPersonCount: number) => {
   return `${selectedPersonCount}명`;
 };
