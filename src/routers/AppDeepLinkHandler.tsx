@@ -1,4 +1,4 @@
-import { configs } from "@/configs";
+import { configs } from "@/configs/environments";
 import DeepLinkListener from "@/routers/DeepLinkListener";
 import { DeepLinkTarget } from "@/utils/url";
 import React from "react";

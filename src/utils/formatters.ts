@@ -28,8 +28,8 @@ export const formatPhoneNumber = (value: string): string => {
   )}-${numericValue.slice(7)}`;
 };
 
-export const formatTime = (timeInSeconds: number): string => {
-  const minutes = Math.floor(timeInSeconds / 60);
-  const seconds = timeInSeconds % 60;
-  return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+export const formatMinuteSecond = (seconds: number): string => {
+  const remainingMinutes = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const remainingSeconds = String(seconds % 60).padStart(2, "0");
+  return `${remainingMinutes}:${remainingSeconds}`;
 };

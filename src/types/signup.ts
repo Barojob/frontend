@@ -1,5 +1,6 @@
 import { CheckItem } from "@/components/SignUpTerms";
 import { Nullable } from "@/types/misc";
+import { type UserType } from "@/types/user";
 import React from "react";
 
 export enum SignupStep {
@@ -27,24 +28,22 @@ export enum Carrier {
   SKT_ALIM = "SKT 알뜰폰",
 }
 
-export type PersonalInfo = {
+export type UserTypeState = Nullable<UserType>;
+
+export type PersonalInfoState = {
   name: string;
   birthDate: string;
   phoneNumber: string;
   carrier: Nullable<Carrier>;
 };
 
-export type VerificationInfo = {
-  verificationCode: string;
-  verificationSent: boolean;
-  isVerified: boolean;
+export type VerificationState = {
+  code: string;
+  requestedAt: Nullable<Date>;
+  verifiedAt: Nullable<Date>;
 };
 
-export type UserTypeInfo = {
-  userType: "employer" | "worker" | "";
-};
-
-export type EmployerInfo = {
+export type EmployerState = {
   position: string;
   email: string;
   businessNumber: string;
@@ -54,19 +53,19 @@ export type SignUpContextType = {
   termsState: [CheckItem[], React.Dispatch<React.SetStateAction<CheckItem[]>>];
   stepState: [SignupStep, React.Dispatch<React.SetStateAction<SignupStep>>];
   personalInfoState: [
-    PersonalInfo,
-    React.Dispatch<React.SetStateAction<PersonalInfo>>,
+    PersonalInfoState,
+    React.Dispatch<React.SetStateAction<PersonalInfoState>>,
   ];
   verificationState: [
-    VerificationInfo,
-    React.Dispatch<React.SetStateAction<VerificationInfo>>,
+    VerificationState,
+    React.Dispatch<React.SetStateAction<VerificationState>>,
   ];
   userTypeState: [
-    UserTypeInfo,
-    React.Dispatch<React.SetStateAction<UserTypeInfo>>,
+    UserTypeState,
+    React.Dispatch<React.SetStateAction<UserTypeState>>,
   ];
   employerInfoState: [
-    EmployerInfo,
-    React.Dispatch<React.SetStateAction<EmployerInfo>>,
+    EmployerState,
+    React.Dispatch<React.SetStateAction<EmployerState>>,
   ];
 };

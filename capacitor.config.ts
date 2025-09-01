@@ -25,6 +25,9 @@ const config: CapacitorConfig = {
     App: {
       launchAutoHide: true,
     },
+    CapacitorHttp: {
+      enabled: true,
+    },
   },
 };
 

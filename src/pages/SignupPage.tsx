@@ -1,16 +1,16 @@
+import EmployerInfoStep from "@/components/EmployerInfoStep";
+import PersonalInfoStep from "@/components/PersonalInfoStep";
+import PhoneVerificationCodeStep from "@/components/PhoneVerificationCodeStep";
 import PresenceTransition from "@/components/PresenceTransition";
+import SignupGeneralStep from "@/components/SignupGeneralStep";
 import SignupHeader from "@/components/SignupHeader";
+import SignupSuccessStep from "@/components/SignupSuccessStep";
+import SignupTermsStep from "@/components/SignupTermsStep";
+import UserTypeSelectionStep from "@/components/UserTypeSelectionStep";
+import WorkerAccountStep from "@/components/WorkerAccountStep";
+import WorkerExperienceStep from "@/components/WorkerExperienceStep";
+import WorkerLicenseStep from "@/components/WorkerLicenseStep";
 import useSignupContext from "@/hooks/useSignupContext";
-import EmployerInfoStep from "@/pages/Signup/EmployerInfoStep";
-import PersonalInfoStep from "@/pages/Signup/PersonalInfoStep";
-import PhoneVerificationCodeStep from "@/pages/Signup/PhoneVerificationCodeStep";
-import SignupGeneralStep from "@/pages/Signup/SignupGeneralStep";
-import SignupSuccessStep from "@/pages/Signup/SignupSuccessStep";
-import SignupTermsStep from "@/pages/Signup/SignupTermsStep";
-import UserTypeSelectionStep from "@/pages/Signup/UserTypeSelectionStep";
-import WorkerAccountStep from "@/pages/Signup/WorkerAccountStep";
-import WorkerExperienceStep from "@/pages/Signup/WorkerExperienceStep";
-import WorkerLicenseStep from "@/pages/Signup/WorkerLicenseStep";
 import SignupProvider from "@/providers/SignupProvider";
 import { SignupStep } from "@/types/signup";
 import React from "react";
@@ -27,14 +27,18 @@ const SignupPageContent: React.FC = () => {
   } = useSignupContext();
 
   return (
-    <main className="keyboard-avoiding flex min-h-screen flex-col">
-      <SignupHeader className="mt-3 px-6" step={step} onStepChange={setStep} />
+    // 👇 pt-[env(safe-area-inset-top)]를 추가하여 안전 영역 확보
+    <main className="keyboard-avoiding flex min-h-screen flex-col pt-[env(safe-area-inset-top)]">
+      {/* 👇 mt-3 클래스 제거 */}
+      <SignupHeader className="px-6" step={step} onStepChange={setStep} />
       <PresenceTransition
         className="mobile-scroll flex-1 overflow-y-auto px-6"
         transitionKey={step.toString()}
         variant="fadeInOut"
       >
-        {step === SignupStep.TERMS && <SignupTermsStep />}
+        {step === SignupStep.TERMS && (
+          <SignupTermsStep onNext={handleNextStep(SignupStep.PERSONAL_INFO)} />
+        )}
 
         {step === SignupStep.PERSONAL_INFO && (
           <PersonalInfoStep
@@ -44,9 +48,7 @@ const SignupPageContent: React.FC = () => {
 
         {step === SignupStep.PHONE_VERIFICATION && (
           <PhoneVerificationCodeStep
-            onValidityChange={() => {
-              /* FIXME: 유효성 검사 로직 구현 필요 */
-            }}
+            onNext={handleNextStep(SignupStep.USER_TYPE_SELECTION)}
           />
         )}
 

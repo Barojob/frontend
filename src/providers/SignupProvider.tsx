@@ -2,36 +2,35 @@ import { CheckItem } from "@/components/SignUpTerms";
 import TERMS_FIXTURE from "@/fixtures/terms.json";
 import { Nullable } from "@/types/misc";
 import {
-  EmployerInfo,
-  PersonalInfo,
+  EmployerState,
+  PersonalInfoState,
   SignUpContextType,
   SignupStep,
-  UserTypeInfo,
-  VerificationInfo,
+  VerificationState,
 } from "@/types/signup";
+import { type UserType } from "@/types/user";
 import React, { PropsWithChildren } from "react";
 
 export const SignupContext =
   React.createContext<Nullable<SignUpContextType>>(null);
 
 const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const userTypeState = React.useState<UserType>(null);
   const termsState = React.useState<CheckItem[]>(TERMS_FIXTURE);
   const stepState = React.useState<SignupStep>(SignupStep.TERMS);
-  const personalInfoState = React.useState<PersonalInfo>({
+  const personalInfoState = React.useState<PersonalInfoState>({
     name: "",
     birthDate: "",
     phoneNumber: "",
     carrier: null,
   });
-  const verificationState = React.useState<VerificationInfo>({
-    verificationCode: "",
-    verificationSent: false,
-    isVerified: false,
+  const verificationState = React.useState<VerificationState>({
+    code: "",
+    requestedAt: null,
+    verifiedAt: null,
   });
-  const userTypeState = React.useState<UserTypeInfo>({
-    userType: "",
-  });
-  const employerInfoState = React.useState<EmployerInfo>({
+
+  const employerInfoState = React.useState<EmployerState>({
     position: "",
     email: "",
     businessNumber: "",
