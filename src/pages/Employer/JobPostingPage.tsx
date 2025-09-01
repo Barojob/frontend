@@ -15,8 +15,8 @@ import Modal from "../../components/Modal";
 import NavigationHeader from "../../components/NavigationHeader";
 import PresenceTransition from "../../components/PresenceTransition";
 import StepIndicator from "../../components/StepIndicator";
-import { useJobPosting } from "../../hooks/useJobPosting";
 import { useKeyboardOpen } from "../../hooks/useKeyboardHandler";
+import { useJobPosting } from "../../providers/JobPostingProvider";
 
 type Props = {
   className?: string;
@@ -42,6 +42,7 @@ const JobPostingPage: React.FC<Props> = () => {
     isWorkTimeCompleted,
     isPersonCountCompleted,
     isEditing,
+    isAddingNewJob,
     jobPosts,
 
     // 핸들러
@@ -80,7 +81,6 @@ const JobPostingPage: React.FC<Props> = () => {
     handleDeleteJobPost,
     handleEditJobPost,
     handleAddNewJobPost,
-    restoreCurrentState,
     expandedSection,
     setExpandedSection,
   } = useJobPosting();
@@ -92,12 +92,6 @@ const JobPostingPage: React.FC<Props> = () => {
   const setExpandedSectionRef = useRef(setExpandedSection);
 
   // 페이지 로드 시 이전 상태 복원
-  useEffect(() => {
-    const loadState = async () => {
-      await restoreCurrentState();
-    };
-    loadState();
-  }, [restoreCurrentState]);
 
   // const estimatedCost = calculateEstimatedCost();
 
@@ -127,7 +121,7 @@ const JobPostingPage: React.FC<Props> = () => {
   }, [expandedSection]);
 
   // 카드 화면이 표시되어야 하는지 확인 (업무가 있고 편집/추가 모드가 아닐 때만)
-  const shouldShowCards = jobPosts.length > 0 && !isEditing;
+  const shouldShowCards = jobPosts.length > 0 && !isEditing && !isAddingNewJob;
   const hasAnyCompleted =
     isJobTypeCompleted ||
     isDemolitionWorkCompleted ||
@@ -216,19 +210,18 @@ const JobPostingPage: React.FC<Props> = () => {
           // 카드 화면
           <div className="flex-1 px-6 py-9 pb-32">
             {/* 기존 구인 게시물 카드들 */}
-            {jobPosts.map((jobPost) => (
+            {jobPosts.map((jobPost, index) => (
               <JobPostCard
                 key={jobPost.id}
                 activeCategory={jobPost.activeCategory}
                 selectedDemolitionWork={jobPost.selectedDemolitionWork}
+                selectedJobTypes={jobPost.selectedJobTypes}
                 selectedEquipment={jobPost.selectedEquipment}
-                selectedExperience={jobPost.selectedExperience}
                 workStartTime={jobPost.workStartTime}
                 workEndTime={jobPost.workEndTime}
                 workMonth={jobPost.workMonth}
                 workDay={jobPost.workDay}
                 selectedPersonCount={jobPost.selectedPersonCount}
-                estimatedCost={jobPost.estimatedCost}
                 onEdit={() => {
                   console.log("Edit button clicked");
                   handleEditJobPost(jobPost);
@@ -241,10 +234,14 @@ const JobPostingPage: React.FC<Props> = () => {
                   console.log("Change content button clicked");
                   handleEditJobPost(jobPost);
                 }}
-                onAddNewJob={() => {
-                  console.log("Add new job button clicked");
-                  handleAddNewJobPost();
-                }}
+                onAddNewJob={
+                  index === jobPosts.length - 1
+                    ? () => {
+                        console.log("Add new job button clicked");
+                        handleAddNewJobPost();
+                      }
+                    : undefined
+                }
               />
             ))}
           </div>

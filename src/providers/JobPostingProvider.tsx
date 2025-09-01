@@ -1,5 +1,5 @@
-import { Preferences } from "@capacitor/preferences";
-import { useEffect, useState } from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
+import { getPerPersonAmount } from "../utils/jobPostingHelpers";
 
 export interface JobPost {
   id: string;
@@ -16,10 +16,111 @@ export interface JobPost {
   estimatedCost: { min: number; max: number };
 }
 
-const STORAGE_KEY = "jobPosts";
-const CURRENT_STATE_KEY = "currentJobPostingState";
+interface JobPostingContextType {
+  // 상태
+  activeCategory: string;
+  selectedDemolitionWork: string[];
+  selectedJobTypes: string[];
+  selectedEquipment: string[];
+  selectedExperience: string[];
+  workStartTime: string;
+  workEndTime: string;
+  workMonth: number;
+  workDay: number;
+  selectedPersonCount: number;
+  specialNote: string;
+  isPersonCountSelected: boolean;
+  isJobTypeCompleted: boolean;
+  isDemolitionWorkCompleted: boolean;
+  isEquipmentCompleted: boolean;
+  isExperienceCompleted: boolean;
+  isWorkTimeCompleted: boolean;
+  isPersonCountCompleted: boolean;
+  isSpecialNoteOpen: boolean;
+  isEditing: boolean;
+  isAddingNewJob: boolean;
+  jobPosts: JobPost[];
+  expandedSection:
+    | "jobType"
+    | "demolitionWork"
+    | "equipment"
+    | "experience"
+    | "workTime"
+    | "personCount"
+    | "specialNote"
+    | null;
+
+  // 핸들러
+  handleJobTypeToggle: (jobTypeId: string) => void;
+  handleDemolitionWorkToggle: (demolitionWorkId: string) => void;
+  handleEquipmentToggle: (equipmentId: string) => void;
+  handleExperienceToggle: (experienceId: string) => void;
+  handleWorkTimeChange: (startTime: string, endTime: string) => void;
+  handleWorkDateChange: (month: number, day: number) => void;
+  handlePersonCountChange: (count: number) => void;
+  handleCategoryChange: (category: string) => void;
+  handleJobTypeConfirm: () => void;
+  handleDemolitionWorkConfirm: () => void;
+  handleEquipmentConfirm: () => void;
+  handleExperienceConfirm: () => void;
+  handleWorkTimeConfirm: () => void;
+  handlePersonCountConfirm: () => void;
+  setSpecialNote: (note: string) => void;
+  setIsSpecialNoteOpen: (isOpen: boolean) => void;
+
+  // 편집 핸들러
+  handleJobTypeEdit: () => void;
+  handleDemolitionWorkEdit: () => void;
+  handleEquipmentEdit: () => void;
+  handleExperienceEdit: () => void;
+  handleWorkTimeEdit: () => void;
+  handlePersonCountEdit: () => void;
+
+  // 편집 후 자동 완료 핸들러
+  handleJobTypeConfirmAfterEdit: () => void;
+  handleDemolitionWorkConfirmAfterEdit: () => void;
+  handleEquipmentConfirmAfterEdit: () => void;
+  handleExperienceConfirmAfterEdit: () => void;
+  handleWorkTimeConfirmAfterEdit: () => void;
+  handlePersonCountConfirmAfterEdit: () => void;
+
+  // 주요 액션
+  handleComplete: () => void;
+  handleDeleteJobPost: (id: string) => void;
+  handleEditJobPost: (jobPost: JobPost) => void;
+  handleAddNewJobPost: () => void;
+  setExpandedSection: (
+    section:
+      | "jobType"
+      | "demolitionWork"
+      | "equipment"
+      | "experience"
+      | "workTime"
+      | "personCount"
+      | "specialNote"
+      | null,
+  ) => void;
+}
+
+const JobPostingContext = createContext<JobPostingContextType | undefined>(
+  undefined,
+);
 
 export const useJobPosting = () => {
+  const context = useContext(JobPostingContext);
+  if (context === undefined) {
+    throw new Error("useJobPosting must be used within a JobPostingProvider");
+  }
+  return context;
+};
+
+interface JobPostingProviderProps {
+  children: ReactNode;
+}
+
+export const JobPostingProvider: React.FC<JobPostingProviderProps> = ({
+  children,
+}) => {
   const [activeCategory, setActiveCategory] = useState("general");
   const [selectedDemolitionWork, setSelectedDemolitionWork] = useState<
     string[]
@@ -46,10 +147,10 @@ export const useJobPosting = () => {
   const [isSpecialNoteOpen, setIsSpecialNoteOpen] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isAddingNewJob, setIsAddingNewJob] = useState(false);
 
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
 
-  // 상단 선택 탭 클릭 시, 하단에서 해당 섹션 펼치기 관리
   const [expandedSection, setExpandedSection] = useState<
     | "jobType"
     | "demolitionWork"
@@ -61,95 +162,20 @@ export const useJobPosting = () => {
     | null
   >(null);
 
-  // 로컬 스토리지에서 jobPosts 불러오기
-  useEffect(() => {
-    const loadJobPosts = async () => {
-      try {
-        const { value } = await Preferences.get({ key: STORAGE_KEY });
-        if (value) {
-          const parsedJobPosts = JSON.parse(value);
-          setJobPosts(parsedJobPosts);
-        }
-      } catch (error) {
-        console.error("Failed to load job posts:", error);
-      }
-    };
-    loadJobPosts();
-  }, []);
+  const calculateEstimatedCost = () => {
+    if (!isPersonCountSelected) return { min: 0, max: 0 };
 
-  // jobPosts가 변경될 때마다 로컬 스토리지에 저장
-  useEffect(() => {
-    const saveJobPosts = async () => {
-      try {
-        await Preferences.set({
-          key: STORAGE_KEY,
-          value: JSON.stringify(jobPosts),
-        });
-      } catch (error) {
-        console.error("Failed to save job posts:", error);
-      }
-    };
-    saveJobPosts();
-  }, [jobPosts]);
+    const perPersonAmount = getPerPersonAmount({
+      selectedJobTypes,
+      selectedDemolitionWork,
+      selectedEquipment,
+    });
 
-  // 현재 상태를 로컬 스토리지에 저장하는 함수
-  const saveCurrentState = async () => {
-    try {
-      const currentState = {
-        activeCategory,
-        selectedDemolitionWork,
-        selectedJobTypes,
-        selectedEquipment,
-        selectedExperience,
-        workStartTime,
-        workEndTime,
-        workMonth,
-        workDay,
-        selectedPersonCount,
-        isJobTypeCompleted,
-        isDemolitionWorkCompleted,
-        isEquipmentCompleted,
-        isExperienceCompleted,
-        isWorkTimeCompleted,
-        isPersonCountCompleted,
-      };
-      await Preferences.set({
-        key: CURRENT_STATE_KEY,
-        value: JSON.stringify(currentState),
-      });
-    } catch (error) {
-      console.error("Failed to save current state:", error);
-    }
-  };
+    const totalCost = perPersonAmount * selectedPersonCount;
+    const minCost = Math.floor(totalCost * 0.9);
+    const maxCost = Math.floor(totalCost * 1.1);
 
-  // 현재 상태를 로컬 스토리지에서 복원하는 함수
-  const restoreCurrentState = async () => {
-    try {
-      const { value } = await Preferences.get({ key: CURRENT_STATE_KEY });
-      if (value) {
-        const parsedState = JSON.parse(value);
-        setActiveCategory(parsedState.activeCategory || "general");
-        setSelectedDemolitionWork(parsedState.selectedDemolitionWork || []);
-        setSelectedJobTypes(parsedState.selectedJobTypes || []);
-        setSelectedEquipment(parsedState.selectedEquipment || []);
-        setSelectedExperience(parsedState.selectedExperience || []);
-        setWorkStartTime(parsedState.workStartTime || "09:00");
-        setWorkEndTime(parsedState.workEndTime || "18:00");
-        setWorkMonth(parsedState.workMonth || today.getMonth() + 1);
-        setWorkDay(parsedState.workDay || today.getDate());
-        setSelectedPersonCount(parsedState.selectedPersonCount || 1);
-        setIsJobTypeCompleted(parsedState.isJobTypeCompleted || false);
-        setIsDemolitionWorkCompleted(
-          parsedState.isDemolitionWorkCompleted || false,
-        );
-        setIsEquipmentCompleted(parsedState.isEquipmentCompleted || false);
-        setIsExperienceCompleted(parsedState.isExperienceCompleted || false);
-        setIsWorkTimeCompleted(parsedState.isWorkTimeCompleted || false);
-        setIsPersonCountCompleted(parsedState.isPersonCountCompleted || false);
-      }
-    } catch (error) {
-      console.error("Failed to restore current state:", error);
-    }
+    return { min: minCost, max: maxCost };
   };
 
   const handleJobTypeToggle = (jobTypeId: string) => {
@@ -306,17 +332,6 @@ export const useJobPosting = () => {
     setIsPersonCountCompleted(true);
   };
 
-  const calculateEstimatedCost = () => {
-    if (!isPersonCountSelected) return { min: 0, max: 0 };
-
-    const baseCost = 150000;
-    const totalCost = baseCost * selectedPersonCount;
-    const minCost = Math.floor(totalCost * 0.9);
-    const maxCost = Math.floor(totalCost * 1.1);
-
-    return { min: minCost, max: maxCost };
-  };
-
   const handleComplete = () => {
     if (isEditing) {
       // 편집 모드일 때: 기존 jobPost 업데이트
@@ -392,9 +407,10 @@ export const useJobPosting = () => {
     setIsWorkTimeCompleted(false);
     setIsPersonCountCompleted(false);
     setIsEditing(false);
+    setIsAddingNewJob(false);
     setSpecialNote("");
     setIsSpecialNoteOpen(false);
-    setExpandedSection(null); // 설정완료 후 하단바 닫기
+    setExpandedSection(null);
   };
 
   const handleDeleteJobPost = (id: string) => {
@@ -430,10 +446,6 @@ export const useJobPosting = () => {
   };
 
   const handleEditJobPost = (jobPost: JobPost) => {
-    console.log("handleEditJobPost called with:", jobPost);
-    // 현재 상태를 저장
-    saveCurrentState();
-
     // 편집할 jobPost의 상태로 설정
     setActiveCategory(jobPost.activeCategory);
     setSelectedDemolitionWork(jobPost.selectedDemolitionWork);
@@ -446,6 +458,7 @@ export const useJobPosting = () => {
     setWorkDay(jobPost.workDay);
     setSelectedPersonCount(jobPost.selectedPersonCount);
     setIsPersonCountSelected(true);
+    // 편집 모드에서는 모든 스텝을 완료된 상태로 설정하여 기존 내용이 선택된 상태로 표시
     setIsJobTypeCompleted(true);
     setIsDemolitionWorkCompleted(true);
     setIsEquipmentCompleted(true);
@@ -457,10 +470,6 @@ export const useJobPosting = () => {
   };
 
   const handleAddNewJobPost = () => {
-    console.log("handleAddNewJobPost called");
-    // 현재 상태를 저장
-    saveCurrentState();
-
     // 새로운 업무를 위한 초기 상태로 설정
     setActiveCategory("general");
     setSelectedDemolitionWork([]);
@@ -480,10 +489,11 @@ export const useJobPosting = () => {
     setIsWorkTimeCompleted(false);
     setIsPersonCountCompleted(false);
     setIsEditing(false);
-    setExpandedSection(null); // 새 업무 추가 시 하단바 숨김
+    setIsAddingNewJob(true);
+    setExpandedSection("jobType");
   };
 
-  return {
+  const value: JobPostingContextType = {
     // 상태
     activeCategory,
     selectedDemolitionWork,
@@ -505,9 +515,9 @@ export const useJobPosting = () => {
     isPersonCountCompleted,
     isSpecialNoteOpen,
     isEditing,
+    isAddingNewJob,
     jobPosts,
     expandedSection,
-    setExpandedSection,
 
     // 핸들러
     handleJobTypeToggle,
@@ -543,15 +553,17 @@ export const useJobPosting = () => {
     handleWorkTimeConfirmAfterEdit,
     handlePersonCountConfirmAfterEdit,
 
-    // 구인 게시물 핸들러
+    // 주요 액션
     handleComplete,
     handleDeleteJobPost,
     handleEditJobPost,
     handleAddNewJobPost,
-    saveCurrentState,
-    restoreCurrentState,
-
-    // 계산 함수
-    calculateEstimatedCost,
+    setExpandedSection,
   };
+
+  return (
+    <JobPostingContext.Provider value={value}>
+      {children}
+    </JobPostingContext.Provider>
+  );
 };

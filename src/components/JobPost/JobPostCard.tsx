@@ -1,10 +1,13 @@
 import React from "react";
 import RightArrowIcon from "../../svgs/RightArrowIcon";
 import {
+  calculateEquipmentAddition,
+  getBaseWage,
   getCategoryLabel,
   getPersonCountLabel,
   getSelectedDemolitionWorkLabels,
   getSelectedEquipmentLabels,
+  getSubAdjustment,
   getWorkDateLabel,
   getWorkTimeLabel,
 } from "../../utils/jobPostingHelpers";
@@ -12,14 +15,14 @@ import {
 interface JobPostCardProps {
   activeCategory: string;
   selectedDemolitionWork: string[];
+  selectedJobTypes: string[];
   selectedEquipment: string[];
-  selectedExperience: string[];
+  selectedExperience?: string[];
   workStartTime: string;
   workEndTime: string;
   workMonth: number;
   workDay: number;
   selectedPersonCount: number;
-  estimatedCost: { min: number; max: number };
   onEdit?: () => void;
   onDelete?: () => void;
   onChangeContent?: () => void;
@@ -29,13 +32,13 @@ interface JobPostCardProps {
 const JobPostCard: React.FC<JobPostCardProps> = ({
   activeCategory,
   selectedDemolitionWork,
+  selectedJobTypes,
   selectedEquipment,
   workStartTime,
   workEndTime,
   workMonth,
   workDay,
   selectedPersonCount,
-  estimatedCost,
   onEdit,
   onDelete,
   onChangeContent,
@@ -108,7 +111,14 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
       <div className="mt-3">
         <div className="text-right">
           <span className="font-bold text-blue-600">
-            총 {estimatedCost.min.toLocaleString()}원
+            총{" "}
+            {(
+              (getBaseWage(selectedJobTypes) +
+                getSubAdjustment(selectedDemolitionWork) +
+                calculateEquipmentAddition(selectedEquipment)) *
+              selectedPersonCount
+            ).toLocaleString()}
+            원
           </span>
         </div>
       </div>
@@ -123,15 +133,19 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
             내용 변경
           </button>
         )}
-        {onAddNewJob && (
+      </div>
+
+      {/* 다른 업무 추가 버튼 */}
+      {onAddNewJob && (
+        <div className="mt-3 border-t border-neutral-200 pt-3">
           <button
             onClick={onAddNewJob}
-            className="w-full border-t border-neutral-200 pt-3 text-sm font-medium text-zinc-500"
+            className="w-full cursor-pointer text-sm font-medium text-zinc-500 hover:text-blue-600"
           >
             + 다른 업무 추가
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
