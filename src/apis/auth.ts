@@ -31,6 +31,7 @@ export interface SignUpRequest {
   phoneNumber: string;
   name: string;
   businessName?: string;
+  role: string;
 }
 
 export interface SignUpResponse {
@@ -40,12 +41,12 @@ export interface SignUpResponse {
 // 개발 환경에서 사용할 mock 데이터 (auth/test용)
 const MOCK_USERS = {
   worker: {
-    email: "worker@example.com",
     nickname: "김근로자",
+    accountType: "worker" as const,
   },
   employer: {
-    email: "employer@example.com",
     nickname: "박고용주",
+    accountType: "employer" as const,
   },
 } as const;
 
@@ -113,8 +114,8 @@ export const authApi = {
         setTimeout(() => {
           resolve({
             user: {
-              email: data.email,
               nickname: data.nickname,
+              accountType: data.role === "employer" ? "employer" : "worker",
             },
           });
         }, 1000);

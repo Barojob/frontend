@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
+import { configs } from "../configs/environments";
 import { type User, userSchema } from "../types/user";
-import { configs } from "../utils/configs";
 
 const fetchUser = async (): Promise<User> => {
-  const response = await fetch(`${configs.BACKEND_BASE_URL}/auth/test`);
+  const response = await fetch(`${configs.API_BASE_URL}/auth/test`);
   const data = await response.json();
   return userSchema.parse(data);
 };

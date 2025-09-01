@@ -7,7 +7,7 @@ export const useAuth = () => {
   // 로그인 mutation
   const signInMutation = useMutation({
     mutationFn: authApi.signIn,
-    onSuccess: (data, variables) => {
+    onSuccess: (_data, variables) => {
       // 로그인 성공 시 role 정보를 세션스토리지에 저장
       const userType = variables.role === "employer" ? "employer" : "worker";
       sessionStorage.setItem("userType", JSON.stringify(userType));
@@ -20,7 +20,7 @@ export const useAuth = () => {
   // 회원가입 mutation
   const signUpMutation = useMutation({
     mutationFn: authApi.signUp,
-    onSuccess: (data, variables) => {
+    onSuccess: (_data, variables) => {
       // 회원가입 성공 시 businessName 유무로 role 결정하여 저장
       const userType = variables.businessName ? "employer" : "worker";
       sessionStorage.setItem("userType", JSON.stringify(userType));

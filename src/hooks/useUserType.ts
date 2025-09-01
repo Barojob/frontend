@@ -33,7 +33,7 @@ const updateUserType = (newType: UserType) => {
 
 export const useUserType = () => {
   const [userType, setUserType] = useState<UserType>(globalUserType);
-  const { userType: backendUserType, isLoading } = useUser();
+  const { account, isLoading } = useUser();
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 리스너 등록
@@ -53,12 +53,12 @@ export const useUserType = () => {
   useEffect(() => {
     if (
       !isLoading &&
-      backendUserType !== null &&
-      backendUserType !== globalUserType
+      account?.accountType &&
+      account.accountType !== globalUserType
     ) {
-      updateUserType(backendUserType);
+      updateUserType(account.accountType);
     }
-  }, [backendUserType, isLoading]);
+  }, [account, isLoading]);
 
   const setWorker = () => updateUserType("worker");
   const setEmployer = () => updateUserType("employer");
