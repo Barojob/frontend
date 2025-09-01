@@ -1,416 +1,164 @@
-import { cva, VariantProps } from "class-variance-authority";
-import React, { createContext, useContext, useState } from "react";
-import { cn } from "../utils/classname";
+import Portal from "@/components/Portal";
+import { assert } from "@/utils/assert";
+import { cn } from "@/utils/classname";
+import {
+  animate,
+  AnimatePresence,
+  motion,
+  useDragControls,
+} from "framer-motion";
+import React, { type PropsWithChildren } from "react";
+import { useKeyPressEvent } from "react-use";
 
-// Drawer Variants
-const DrawerContentVariant = cva(
-  "relative bg-white shadow-lg transform transition-all duration-300 ease-out max-h-[85vh] overflow-hidden",
-  {
-    variants: {
-      position: {
-        bottom: "w-full max-w-lg rounded-t-lg",
-        top: "w-full max-w-lg rounded-b-lg",
-        left: "h-full max-w-sm rounded-r-lg",
-        right: "h-full max-w-sm rounded-l-lg",
-      },
-      size: {
-        sm: "max-w-sm",
-        md: "max-w-lg",
-        lg: "max-w-xl",
-        xl: "max-w-2xl",
-      },
-    },
-    defaultVariants: {
-      position: "bottom",
-      size: "md",
-    },
-  },
-);
-
-const DrawerOverlayVariant = cva(
-  "fixed inset-0 bg-black/50 transition-opacity duration-300",
-  {
-    variants: {
-      blur: {
-        none: "",
-        sm: "backdrop-blur-sm",
-        md: "backdrop-blur-md",
-      },
-    },
-    defaultVariants: {
-      blur: "none",
-    },
-  },
-);
-
-// Drawer Context
-interface DrawerContextType {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  closeDrawer: () => void;
-  isAnimating: boolean;
-}
-
-const DrawerContext = createContext<DrawerContextType | undefined>(undefined);
-
-const useDrawer = () => {
-  const context = useContext(DrawerContext);
-  if (!context) {
-    throw new Error("useDrawer must be used within a Drawer");
-  }
-  return context;
+type Props = {
+  className?: string;
+  panelClassName?: string;
+  overlayClassName?: string;
+  visible: boolean;
+  title?: string;
+  onClose: () => void;
 };
 
-// Main Drawer Component
-interface DrawerProps {
-  children: React.ReactNode;
-  defaultOpen?: boolean;
-}
-
-export const Drawer: React.FC<DrawerProps> = ({
-  children,
-  defaultOpen = false,
+const Drawer: React.FC<PropsWithChildren<Props>> = ({
+  className,
+  panelClassName,
+  overlayClassName,
+  visible,
+  onClose,
+  ...props
 }) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  React.useEffect(() => {
-    if (isOpen) {
-      setIsAnimating(true);
-    }
-  }, [isOpen]);
-
-  const closeDrawer = () => {
-    setIsAnimating(false);
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 300);
-  };
+  useKeyPressEvent("Escape", onClose);
 
   return (
-    <DrawerContext.Provider
-      value={{ isOpen, setIsOpen, closeDrawer, isAnimating }}
-    >
-      {children}
-    </DrawerContext.Provider>
+    <Portal>
+      <AnimatePresence>
+        {visible && (
+          <div className={cn("relative z-50", className)}>
+            <DrawerOverlay
+              className={overlayClassName}
+              visible={visible}
+              onClose={onClose}
+            />
+
+            <DrawerPanel
+              className={panelClassName}
+              visible={visible}
+              onClose={onClose}
+              {...props}
+            />
+          </div>
+        )}
+      </AnimatePresence>
+    </Portal>
   );
 };
 
-// DrawerTrigger Component
-export type DrawerTriggerProps = {
-  className?: string;
-  children: React.ReactNode;
-  asChild?: boolean;
-  disabled?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-};
+const DrawerPanel: React.FC<
+  Omit<PropsWithChildren<Props>, "overlayClassName">
+> = ({ className, visible, title, onClose, children }) => {
+  const id = React.useId();
+  const drawerRef = React.useRef<HTMLDivElement>(null);
+  const controls = useDragControls();
 
-const DrawerTrigger = React.forwardRef<HTMLButtonElement, DrawerTriggerProps>(
-  (
-    {
-      className,
-      children,
-      asChild = false,
-      disabled = false,
-      onClick,
-      ...props
-    },
-    ref,
-  ) => {
-    const { setIsOpen } = useDrawer();
+  return (
+    <motion.aside
+      className={cn(
+        "bg-gray-0 fixed bottom-0 left-0 w-full rounded-t-3xl px-5 pb-12 shadow-[0px_0px_16px_0px_#999999CC]",
+        "after:absolute after:bottom-0 after:-mx-5 after:h-[100vh] after:w-full after:translate-y-full after:bg-inherit",
+        className,
+      )}
+      key={`bottom-sheet-${id}`}
+      ref={drawerRef}
+      transition={{
+        ease: "easeInOut",
+        duration: 0.3,
+      }}
+      variants={{
+        visible: {
+          translateY: "0%",
+        },
+        hidden: {
+          translateY: "100%",
+        },
+      }}
+      initial="hidden"
+      exit="hidden"
+      animate={visible ? "visible" : "hidden"}
+      drag="y"
+      dragElastic={0.4}
+      dragControls={controls}
+      dragListener={false}
+      dragConstraints={{ top: 0 }}
+      dragTransition={{ bounceStiffness: 600, bounceDamping: 30 }}
+      onDragEnd={(_, info) => {
+        assert(!!drawerRef.current, "drawerRef is not set");
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (disabled) return;
-      setIsOpen(true);
-      onClick?.(e);
-    };
+        const CLOSE_THRESHOLD = 60;
+        const shouldClose = info.offset.y > CLOSE_THRESHOLD;
+        if (shouldClose) {
+          onClose();
+          return;
+        }
 
-    if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children, {
-        onClick: handleClick,
-        className: cn((children.props as any)?.className, className),
-        disabled,
-      } as any);
-    }
-
-    return (
-      <button
-        ref={ref}
-        onClick={handleClick}
-        disabled={disabled}
-        className={cn(
-          "inline-flex items-center justify-center font-medium transition-colors",
-          "focus:outline-none focus:ring-2 focus:ring-offset-2",
-          "disabled:pointer-events-none disabled:opacity-50",
-          className,
-        )}
-        {...props}
-      >
-        {children}
-      </button>
-    );
-  },
-);
-
-DrawerTrigger.displayName = "DrawerTrigger";
-
-export { DrawerTrigger };
-
-// DrawerContent Component
-export type DrawerContentProps = VariantProps<typeof DrawerContentVariant> & {
-  className?: string;
-  children: React.ReactNode;
-  closeOnOverlayClick?: boolean;
-  showHandle?: boolean;
-  blur?: "none" | "sm" | "md";
-};
-
-const DrawerContent = React.forwardRef<HTMLDivElement, DrawerContentProps>(
-  (
-    {
-      className,
-      children,
-      position = "bottom",
-      size = "md",
-      closeOnOverlayClick = true,
-      showHandle = true,
-      blur = "none",
-      ...props
-    },
-    ref,
-  ) => {
-    const { isOpen, isAnimating, closeDrawer } = useDrawer();
-
-    const handleOverlayClick = () => {
-      if (closeOnOverlayClick) {
-        closeDrawer();
-      }
-    };
-
-    if (!isOpen) return null;
-
-    const getPositionClasses = () => {
-      switch (position) {
-        case "top":
-          return {
-            container: "flex items-start justify-center",
-            transform: isAnimating ? "translate-y-0" : "-translate-y-full",
-          };
-        case "left":
-          return {
-            container: "flex items-center justify-start",
-            transform: isAnimating ? "translate-x-0" : "-translate-x-full",
-          };
-        case "right":
-          return {
-            container: "flex items-center justify-end",
-            transform: isAnimating ? "translate-x-0" : "translate-x-full",
-          };
-        default: // bottom
-          return {
-            container: "flex items-end justify-center",
-            transform: isAnimating ? "translate-y-0" : "translate-y-full",
-          };
-      }
-    };
-
-    const positionClasses = getPositionClasses();
-
-    return (
-      <div className={cn("fixed inset-0 z-50", positionClasses.container)}>
-        {/* Backdrop */}
+        animate(drawerRef.current, {
+          y: 0,
+        });
+      }}
+    >
+      <section>
         <div
-          className={cn(
-            DrawerOverlayVariant({ blur }),
-            isAnimating ? "opacity-100" : "opacity-0",
-          )}
-          onClick={handleOverlayClick}
-        />
-
-        {/* Drawer Content */}
-        <div
-          ref={ref}
-          className={cn(
-            DrawerContentVariant({ position, size }),
-            positionClasses.transform,
-            className,
-          )}
-          {...props}
+          className="-mx-5 touch-none pb-4 pt-3"
+          aria-label="drawer handle bar"
+          onPointerDown={handleDragStart}
         >
-          {/* Handle */}
-          {showHandle && position === "bottom" && (
-            <div className="flex justify-center pb-2 pt-4">
-              <div className="h-1 w-10 rounded-full bg-gray-300" />
-            </div>
-          )}
-          {showHandle && position === "top" && (
-            <div className="flex justify-center pb-4 pt-2">
-              <div className="h-1 w-10 rounded-full bg-gray-300" />
-            </div>
-          )}
-          {children}
+          <div className="mx-auto h-1 w-8 rounded-full bg-gray-600" />
         </div>
-      </div>
-    );
-  },
-);
 
-DrawerContent.displayName = "DrawerContent";
+        <div className="relative">
+          {title && (
+            <div className="text-lg font-semibold text-gray-900">{title}</div>
+          )}
+        </div>
+      </section>
 
-export { DrawerContent };
-
-// DrawerHeader Component
-export type DrawerHeaderProps = {
-  className?: string;
-  children: React.ReactNode;
-};
-
-const DrawerHeader = React.forwardRef<HTMLDivElement, DrawerHeaderProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn("border-b border-gray-200 px-6 py-4", className)}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  },
-);
-
-DrawerHeader.displayName = "DrawerHeader";
-
-// DrawerTitle Component
-export type DrawerTitleProps = {
-  className?: string;
-  children: React.ReactNode;
-};
-
-const DrawerTitle = React.forwardRef<HTMLHeadingElement, DrawerTitleProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <h2
-        ref={ref}
-        className={cn("text-lg font-semibold text-gray-900", className)}
-        {...props}
-      >
-        {children}
-      </h2>
-    );
-  },
-);
-
-DrawerTitle.displayName = "DrawerTitle";
-
-// DrawerDescription Component
-export type DrawerDescriptionProps = {
-  className?: string;
-  children: React.ReactNode;
-};
-
-const DrawerDescription = React.forwardRef<
-  HTMLParagraphElement,
-  DrawerDescriptionProps
->(({ className, children, ...props }, ref) => {
-  return (
-    <p
-      ref={ref}
-      className={cn("mt-1 text-sm text-gray-600", className)}
-      {...props}
-    >
-      {children}
-    </p>
+      <section className="mt-6">{children}</section>
+    </motion.aside>
   );
-});
 
-DrawerDescription.displayName = "DrawerDescription";
-
-// DrawerFooter Component
-export type DrawerFooterProps = {
-  className?: string;
-  children: React.ReactNode;
+  function handleDragStart(event: React.PointerEvent<HTMLDivElement>) {
+    controls.start(event);
+  }
 };
 
-const DrawerFooter = React.forwardRef<HTMLDivElement, DrawerFooterProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          "flex gap-2 border-t border-gray-200 px-6 py-4",
-          className,
-        )}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  },
-);
-
-DrawerFooter.displayName = "DrawerFooter";
-
-export { DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle };
-
-// DrawerClose Component
-export type DrawerCloseProps = {
+const DrawerOverlay: React.FC<{
   className?: string;
-  children: React.ReactNode;
-  asChild?: boolean;
-  disabled?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  visible: boolean;
+  onClose: () => void;
+}> = ({ className, visible, onClose }) => {
+  const id = React.useId();
+
+  return (
+    <motion.div
+      className={cn(
+        "fixed inset-0 bg-black/50",
+        !visible && "pointer-events-none",
+        className,
+      )}
+      key={`bottom-sheet-overlay-${id}`}
+      transition={{
+        ease: "easeInOut",
+        duration: 0.3,
+      }}
+      animate={visible ? "visible" : "hidden"}
+      variants={{
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+      }}
+      initial="hidden"
+      exit="hidden"
+      onClick={onClose}
+    />
+  );
 };
-
-const DrawerClose = React.forwardRef<HTMLButtonElement, DrawerCloseProps>(
-  (
-    {
-      className,
-      children,
-      asChild = false,
-      disabled = false,
-      onClick,
-      ...props
-    },
-    ref,
-  ) => {
-    const { closeDrawer } = useDrawer();
-
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (disabled) return;
-      closeDrawer();
-      onClick?.(e);
-    };
-
-    if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children, {
-        onClick: handleClick,
-        className: cn((children.props as any)?.className, className),
-        disabled,
-      } as any);
-    }
-
-    return (
-      <button
-        ref={ref}
-        onClick={handleClick}
-        disabled={disabled}
-        className={cn(
-          "inline-flex items-center justify-center font-medium transition-colors",
-          "focus:outline-none focus:ring-2 focus:ring-offset-2",
-          "disabled:pointer-events-none disabled:opacity-50",
-          className,
-        )}
-        {...props}
-      >
-        {children}
-      </button>
-    );
-  },
-);
-
-DrawerClose.displayName = "DrawerClose";
-
-export { DrawerClose };
 
 export default Drawer;

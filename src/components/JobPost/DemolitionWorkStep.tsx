@@ -1,5 +1,5 @@
+import MultiSelector from "@/components/JobPost/MultiSelector";
 import React from "react";
-import MultiSelector from "./MultiSelector";
 
 interface DemolitionWorkStepProps {
   selectedDemolitionWork: string[];

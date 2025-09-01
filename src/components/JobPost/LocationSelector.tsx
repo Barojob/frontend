@@ -1,13 +1,13 @@
+import LocationSearchBar from "@/components/LocationSearchBar";
+import LocationSearchScreen from "@/components/LocationSearchScreen";
+import Map from "@/components/Map";
+import type { KakaoGeocoderResult } from "@/types/kakao";
+import { MapHandle } from "@/types/map";
+import { Nullable } from "@/types/misc";
 import { Geolocation } from "@capacitor/geolocation";
 import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
-import type { KakaoGeocoderResult } from "../../types/kakao";
-import { MapHandle } from "../../types/map";
-import { Nullable } from "../../types/misc";
-import LocationSearchBar from "../LocationSearchBar";
-import LocationSearchScreen from "../LocationSearchScreen";
-import Map from "../Map";
 
 type LocationData = {
   address: string;

@@ -1,6 +1,6 @@
+import CategoryTabs from "@/components/JobPost/CategoryTabs";
+import MultiSelector from "@/components/JobPost/MultiSelector";
 import React from "react";
-import CategoryTabs from "./CategoryTabs";
-import MultiSelector from "./MultiSelector";
 
 interface JobTypeStepProps {
   activeCategory: string;

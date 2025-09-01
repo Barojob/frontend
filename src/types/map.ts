@@ -1,4 +1,4 @@
-import type { Nullable } from "./misc";
+import type { Nullable } from "@/types/misc";
 
 export type MapHandle = {
   map: Nullable<kakao.maps.Map>;

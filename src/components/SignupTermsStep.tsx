@@ -1,16 +1,16 @@
+import Button from "@/components/Button";
+import SignUpTerms from "@/components/SignUpTerms";
+import useSignupContext from "@/hooks/useSignupContext";
+import { SignupStep } from "@/types/signup";
+import { cn } from "@/utils/classname";
 import React from "react";
-import useSignupContext from "../hooks/useSignupContext";
-import { SignupStep } from "../types/signup";
-import { cn } from "../utils/classname";
-import Button from "./Button";
-import SignUpTerms from "./SignUpTerms";
 
 type Props = {
   className?: string;
-  onStepChange?: () => void; // 이제 선택적으로 만듦
+  onNext?: () => void;
 };
 
-const SignupTermsStep: React.FC<Props> = ({ className, onStepChange }) => {
+const SignupTermsStep: React.FC<Props> = ({ className, onNext }) => {
   const {
     termsState: [terms, setTerms],
     stepState: [, setStep],
@@ -21,10 +21,10 @@ const SignupTermsStep: React.FC<Props> = ({ className, onStepChange }) => {
     .every((term) => term.checked);
 
   const handleNextStep = () => {
-    if (onStepChange) {
-      onStepChange(); // 기존 prop이 있으면 사용
+    if (onNext) {
+      onNext();
     } else {
-      setStep(SignupStep.PERSONAL_INFO); // Context를 통해 다음 단계로 이동
+      setStep(SignupStep.PERSONAL_INFO);
     }
   };
 
@@ -49,12 +49,12 @@ const SignupTermsStep: React.FC<Props> = ({ className, onStepChange }) => {
 
       <div className="fixed-bottom-button">
         <Button
+          className="transition-transform duration-150 active:scale-[0.95]"
           theme="primary"
           size="md"
           block
           disabled={!isRequiredAllChecked}
           onClick={handleNextStep}
-          className="transition-transform duration-150 active:scale-[0.95]"
         >
           동의합니다
         </Button>

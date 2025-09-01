@@ -1,6 +1,6 @@
+import Chip from "@/components/Chip";
 import { cn } from "@/utils/classname";
 import React from "react";
-import Chip from "./Chip";
 
 type Props = {
   className?: string;

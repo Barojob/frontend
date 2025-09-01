@@ -1,9 +1,9 @@
+import Button from "@/components/Button";
+import Chip from "@/components/Chip";
+import { cn } from "@/utils/classname";
 import React, { useEffect, useState } from "react";
 import { IoMdLocate } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { cn } from "../utils/classname";
-import Button from "./Button";
-import Chip from "./Chip";
 
 type LocationData = {
   address: string;

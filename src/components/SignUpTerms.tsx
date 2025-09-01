@@ -1,7 +1,7 @@
+import CheckBoxWithLabel from "@/components/CheckBoxWithLabel";
+import TermCheckBox from "@/components/TermCheckBox";
+import { cn } from "@/utils/classname";
 import React from "react";
-import { cn } from "../utils/classname";
-import CheckBoxWithLabel from "./CheckBoxWithLabel";
-import TermCheckBox from "./TermCheckBox";
 
 export type CheckItem = {
   label: string;
@@ -71,7 +71,6 @@ const SignUpTerms: React.FC<Props> = ({
 
   function handleViewItem(term: CheckItem) {
     return () => {
-      // TODO: 모달이나 새 페이지로 상세 내용 표시
       alert(`${term.label}\n\n${term.content}`);
     };
   }

@@ -1,5 +1,5 @@
+import WorkTimeSelector from "@/components/JobPost/WorkTimeSelector";
 import React from "react";
-import WorkTimeSelector from "./WorkTimeSelector";
 
 interface WorkTimeStepProps {
   workStartTime: string;

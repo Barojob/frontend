@@ -1,7 +1,7 @@
+import Portal from "@/components/Portal";
+import PresenceTransition from "@/components/PresenceTransition";
+import { cn } from "@/utils/classname";
 import React, { PropsWithChildren } from "react";
-import { cn } from "../utils/classname";
-import Portal from "./Portal";
-import PresenceTransition from "./PresenceTransition";
 
 type ModalProps = {
   className?: string;

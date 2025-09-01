@@ -1,4 +1,5 @@
-import React from "react";
+import SelectedTab from "@/components/JobPost/SelectedTab";
+import PresenceTransition from "@/components/PresenceTransition";
 import {
   calculateEquipmentAddition,
   getBaseWage,
@@ -9,9 +10,8 @@ import {
   getSelectedJobTypeLabels,
   getSubAdjustment,
   getWorkTimeLabel,
-} from "../../utils/jobPostingHelpers";
-import PresenceTransition from "../PresenceTransition";
-import SelectedTab from "./SelectedTab";
+} from "@/utils/jobPostingHelpers";
+import React from "react";
 
 interface SelectedItemsDisplayProps {
   activeCategory: string;

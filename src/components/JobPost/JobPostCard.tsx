@@ -1,5 +1,4 @@
-import React from "react";
-import RightArrowIcon from "../../svgs/RightArrowIcon";
+import RightArrowIcon from "@/svgs/RightArrowIcon";
 import {
   calculateEquipmentAddition,
   getBaseWage,
@@ -10,7 +9,8 @@ import {
   getSubAdjustment,
   getWorkDateLabel,
   getWorkTimeLabel,
-} from "../../utils/jobPostingHelpers";
+} from "@/utils/jobPostingHelpers";
+import React from "react";
 
 interface JobPostCardProps {
   activeCategory: string;

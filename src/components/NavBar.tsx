@@ -1,8 +1,8 @@
+import HomeIcon from "@/svgs/HomeIcon";
+import MatchIcon from "@/svgs/MatchIcon";
+import TotalIcon from "@/svgs/TotalIcon";
+import { cn } from "@/utils/classname";
 import React from "react";
-import HomeIcon from "../svgs/HomeIcon";
-import MatchIcon from "../svgs/MatchIcon";
-import TotalIcon from "../svgs/TotalIcon";
-import { cn } from "../utils/classname";
 
 type Props = {
   className?: string;

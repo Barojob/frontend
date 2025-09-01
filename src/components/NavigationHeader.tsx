@@ -1,3 +1,4 @@
+import { cn } from "@/utils/classname";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import SmallLeftIcon from "../svgs/SmallLeftIcon";

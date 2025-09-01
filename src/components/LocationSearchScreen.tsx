@@ -1,8 +1,8 @@
+import NavigationHeader from "@/components/NavigationHeader";
+import type { KakaoPlaceSearchResult } from "@/types/kakao";
 import React, { useEffect, useState } from "react";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { IoClose, IoSearch } from "react-icons/io5";
-import type { KakaoPlaceSearchResult } from "../types/kakao";
-import NavigationHeader from "./NavigationHeader";
 
 type LocationData = {
   address: string;

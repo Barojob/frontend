@@ -1,18 +1,25 @@
+import EmployerInfoStep from "@/components/EmployerInfoStep";
+import PersonalInfoStep from "@/components/PersonalInfoStep";
+import PhoneVerificationCodeStep from "@/components/PhoneVerificationCodeStep";
+import PresenceTransition from "@/components/PresenceTransition";
+import SignupGeneralStep from "@/components/SignupGeneralStep";
+import SignupHeader from "@/components/SignupHeader";
+import SignupSuccessStep from "@/components/SignupSuccessStep";
+import SignupTermsStep from "@/components/SignupTermsStep";
+import UserTypeSelectionStep from "@/components/UserTypeSelectionStep";
+import WorkerAccountStep from "@/components/WorkerAccountStep";
+import WorkerExperienceStep from "@/components/WorkerExperienceStep";
+import WorkerLicenseStep from "@/components/WorkerLicenseStep";
+import useSignupContext from "@/hooks/useSignupContext";
+import SignupProvider from "@/providers/SignupProvider";
+import { SignupStep } from "@/types/signup";
 import React from "react";
-import EmployerInfoStep from "../components/EmployerInfoStep";
-import PersonalInfoStep from "../components/PersonalInfoStep";
-import PhoneVerificationCodeStep from "../components/PhoneVerificationCodeStep";
-import PresenceTransition from "../components/PresenceTransition";
-import SignupHeader from "../components/SignupHeader";
-import SignupTermsStep from "../components/SignupTermsStep";
-import UserTypeSelectionStep from "../components/UserTypeSelectionStep";
-import WorkerAccountStep from "../components/WorkerAccountStep";
-import WorkerExperienceStep from "../components/WorkerExperienceStep";
-import WorkerLicenseStep from "../components/WorkerLicenseStep";
-import useSignupContext from "../hooks/useSignupContext";
-import SignupProvider from "../providers/SignupProvider";
-import { SignupStep } from "../types/signup";
-import SignupSuccessPage from "./SignupSuccessPage";
+
+const SignupPage: React.FC = () => (
+  <SignupProvider>
+    <SignupPageContent />
+  </SignupProvider>
+);
 
 const SignupPageContent: React.FC = () => {
   const {
@@ -20,97 +27,115 @@ const SignupPageContent: React.FC = () => {
   } = useSignupContext();
 
   return (
-    <main className="keyboard-avoiding mobile-scroll relative flex min-h-screen flex-col">
-      {/* SIGNUP_SUCCESS 단계일 때는 전체 화면으로 표시 */}
-      {step === SignupStep.SIGNUP_SUCCESS ? (
-        <div className="absolute inset-0">
-          <SignupSuccessPage />
-        </div>
-      ) : (
-        <>
-          <SignupHeader
-            className="mt-2 px-6"
-            step={step}
-            onStepChange={setStep}
+    // 👇 pt-[env(safe-area-inset-top)]를 추가하여 안전 영역 확보
+    <main className="keyboard-avoiding flex min-h-screen flex-col pt-[env(safe-area-inset-top)]">
+      {/* 👇 mt-3 클래스 제거 */}
+      <SignupHeader className="px-6" step={step} onStepChange={setStep} />
+      <PresenceTransition
+        className="mobile-scroll flex-1 overflow-y-auto px-6"
+        transitionKey={step.toString()}
+        variant="fadeInOut"
+      >
+        {step === SignupStep.TERMS && (
+          <SignupTermsStep onNext={handleNextStep(SignupStep.PERSONAL_INFO)} />
+        )}
+
+        {step === SignupStep.PERSONAL_INFO && (
+          <PersonalInfoStep
+            onNextStep={handleNextStep(SignupStep.PHONE_VERIFICATION)}
           />
-          <PresenceTransition
-            className="mobile-scroll flex-1 overflow-y-auto px-6"
-            transitionKey={step.toString()}
-            variant="fadeInOut"
-          >
-            {step === SignupStep.TERMS && <SignupTermsStep />}
-            {step === SignupStep.PERSONAL_INFO && (
-              <PersonalInfoStep onValidityChange={() => {}} />
-            )}
-            {step === SignupStep.PHONE_VERIFICATION && (
-              <PhoneVerificationCodeStep onValidityChange={() => {}} />
-            )}
-            {step === SignupStep.PHONE_VERIFICATION_SUCCESS && (
-              <div className="flex min-h-screen items-center justify-center">
-                <div className="text-center">
-                  <h2 className="text-xl font-bold">인증 완료</h2>
-                  <p>휴대폰 인증이 완료되었습니다.</p>
-                </div>
-              </div>
-            )}
-            {step === SignupStep.USER_TYPE_SELECTION && (
-              <UserTypeSelectionStep
-                onValidityChange={() => {}}
-                onUserTypeChange={() => {}}
-              />
-            )}
-            {step === SignupStep.ALREADY_REGISTERED && (
-              <div className="flex min-h-screen items-center justify-center">
-                <div className="text-center">
-                  <h2 className="text-xl font-bold">기존 회원</h2>
-                  <p>이미 가입된 회원입니다.</p>
-                </div>
-              </div>
-            )}
-            {step === SignupStep.EMPLOYER_INFO && (
-              <EmployerInfoStep onValidityChange={() => {}} />
-            )}
-            {step === SignupStep.WORKER_INFO && (
-              <div className="flex min-h-screen items-center justify-center">
-                <div className="text-center">
-                  <h2 className="text-xl font-bold">근로자 정보</h2>
-                  <p>근로자 정보 입력 페이지입니다.</p>
-                </div>
-              </div>
-            )}
-            {step === SignupStep.WORKER_EXPERIENCE && (
-              <WorkerExperienceStep
-                onValidityChange={() => {}}
-                onSelectedJobsChange={() => {}}
-              />
-            )}
-            {step === SignupStep.WORKER_LICENSE && (
-              <WorkerLicenseStep onValidityChange={() => {}} />
-            )}
-            {step === SignupStep.WORKER_ACCOUNT && (
-              <WorkerAccountStep onValidityChange={() => {}} />
-            )}
-            {step === SignupStep.PROFILE_SETUP && (
-              <div className="flex min-h-screen items-center justify-center">
-                <div className="text-center">
-                  <h2 className="text-xl font-bold">프로필 설정</h2>
-                  <p>프로필 설정 페이지입니다.</p>
-                </div>
-              </div>
-            )}
-          </PresenceTransition>
-        </>
-      )}
+        )}
+
+        {step === SignupStep.PHONE_VERIFICATION && (
+          <PhoneVerificationCodeStep
+            onNext={handleNextStep(SignupStep.USER_TYPE_SELECTION)}
+          />
+        )}
+
+        {step === SignupStep.PHONE_VERIFICATION_SUCCESS && (
+          <SignupGeneralStep
+            title="인증 완료"
+            description="휴대폰 인증이 완료되었습니다."
+          />
+        )}
+
+        {step === SignupStep.USER_TYPE_SELECTION && (
+          <UserTypeSelectionStep
+            onValidityChange={() => {
+              /* FIXME: 유효성 검사 로직 구현 필요 */
+            }}
+            onUserTypeChange={() => {
+              /* FIXME: 사용자 유형 변경 로직 구현 필요 */
+            }}
+          />
+        )}
+
+        {step === SignupStep.ALREADY_REGISTERED && (
+          <SignupGeneralStep
+            title="기존 회원"
+            description="이미 가입된 회원입니다."
+          />
+        )}
+
+        {step === SignupStep.EMPLOYER_INFO && (
+          <EmployerInfoStep
+            onValidityChange={() => {
+              /* FIXME: 유효성 검사 로직 구현 필요 */
+            }}
+          />
+        )}
+
+        {step === SignupStep.WORKER_INFO && (
+          <SignupGeneralStep
+            title="근로자 정보"
+            description="근로자 정보 입력 페이지입니다."
+          />
+        )}
+
+        {step === SignupStep.WORKER_EXPERIENCE && (
+          <WorkerExperienceStep
+            onValidityChange={() => {
+              /* FIXME: 유효성 검사 로직 구현 필요 */
+            }}
+            onSelectedJobsChange={() => {
+              /* FIXME: 선택 직종 변경 로직 구현 필요 */
+            }}
+          />
+        )}
+
+        {step === SignupStep.WORKER_LICENSE && (
+          <WorkerLicenseStep
+            onValidityChange={() => {
+              /* FIXME: 유효성 검사 로직 구현 필요 */
+            }}
+          />
+        )}
+
+        {step === SignupStep.WORKER_ACCOUNT && (
+          <WorkerAccountStep
+            onValidityChange={() => {
+              /* FIXME: 유효성 검사 로직 구현 필요 */
+            }}
+          />
+        )}
+
+        {step === SignupStep.PROFILE_SETUP && (
+          <SignupGeneralStep
+            title="프로필 설정"
+            description="프로필 설정 페이지입니다."
+          />
+        )}
+
+        {step === SignupStep.SIGNUP_SUCCESS && <SignupSuccessStep />}
+      </PresenceTransition>
     </main>
   );
-};
 
-const SignupPage: React.FC = () => {
-  return (
-    <SignupProvider>
-      <SignupPageContent />
-    </SignupProvider>
-  );
+  function handleNextStep(step: SignupStep) {
+    return () => {
+      setStep(step);
+    };
+  }
 };
 
 export default SignupPage;

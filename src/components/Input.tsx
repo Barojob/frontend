@@ -1,7 +1,7 @@
+import { cn } from "@/utils/classname";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
-import { cn } from "../utils/classname";
 
 const InputVariant = cva(
   "w-full text-left border border-gray-200 focus:outline-hidden",

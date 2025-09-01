@@ -1,4 +1,6 @@
 import "@/globals-core.css";
+import TanstackProvider from "@/providers/TanstackProvider";
+import AppRouter from "@/routers/AppRouter";
 import React from "react";
 import { JobPostingProvider } from "./providers/JobPostingProvider";
 import TanstackProvider from "./providers/TanstackProvider";

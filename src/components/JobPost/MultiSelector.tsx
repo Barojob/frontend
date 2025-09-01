@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
 import {
   getDemolitionWorkOptions,
   SelectOption,
-} from "../../utils/jobTypeDemolitionMap";
+} from "@/utils/jobTypeDemolitionMap";
+import React, { useMemo } from "react";
 
 // SelectOption은 공용 타입 사용
 

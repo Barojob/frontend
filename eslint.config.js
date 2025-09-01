@@ -19,6 +19,18 @@ export default tsEslint.config(
       "react/react-in-jsx-scope": "off",
       "react-refresh/only-export-components": "off",
       "react/prop-types": "off",
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [".*"],
+              message:
+                "Use path imports (~/@) instead of relative imports (../)",
+            },
+          ],
+        },
+      ],
     },
   },
 );

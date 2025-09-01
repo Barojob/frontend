@@ -1,8 +1,8 @@
+import { configs } from "@/configs/environments";
+import { MapHandle } from "@/types/map";
+import { Nullable } from "@/types/misc";
+import { cn } from "@/utils/classname";
 import React from "react";
-import { configs } from "../configs";
-import { MapHandle } from "../types/map";
-import { Nullable } from "../types/misc";
-import { cn } from "../utils/classname";
 
 type Props = {
   className?: string;

@@ -1,13 +1,13 @@
+import Button from "@/components/Button";
+import JobRequestCard from "@/components/JobRequestCard";
+import MainCarousel from "@/components/MainCarousel";
 import NavBar from "@/components/NavBar";
+import UrgentRecruitmentCard from "@/components/UrgentRecruitmentCard";
+import BrandIcon from "@/svgs/BrandIcon";
+import { cn } from "@/utils/classname";
 import { BellIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { Link } from "react-router-dom";
-import Button from "../components/Button";
-import JobRequestCard from "../components/JobRequestCard";
-import MainCarousel from "../components/MainCarousel";
-import UrgentRecruitmentCard from "../components/UrgentRecruitmentCard";
-import BrandIcon from "../svgs/BrandIcon";
-import { cn } from "../utils/classname";
 
 const MainPage: React.FC = () => {
   return (
@@ -24,6 +24,14 @@ const MainPage: React.FC = () => {
         <Link to="/intro">
           <Button theme="primary" size="sm" block>
             🧪 테스트: Intro 페이지로 이동
+          </Button>
+        </Link>
+      </div>
+
+      <div className="mt-6">
+        <Link to="/worker-detail">
+          <Button theme="primary" size="sm" block>
+            🧪 테스트: 출퇴근 범위 설정 페이지로 이동
           </Button>
         </Link>
       </div>

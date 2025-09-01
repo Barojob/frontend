@@ -1,4 +1,4 @@
-import { cn } from "../../utils/classname";
+import { cn } from "@/utils/classname";
 
 type SelectedTabProps = {
   title: string;

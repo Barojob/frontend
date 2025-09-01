@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import useSignupContext from "../hooks/useSignupContext";
-import { SignupStep } from "../types/signup";
-import { cn } from "../utils/classname";
-import BoxButton from "./BoxButton";
-import Button from "./Button";
+import BoxButton from "@/components/BoxButton";
+import Button from "@/components/Button";
+import { useUserTypeSelection } from "@/hooks/useUserTypeSelection";
+import { cn } from "@/utils/classname";
+import React from "react";
 
 type UserTypeSelectionStepProps = {
   className?: string;
@@ -16,35 +15,11 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
   onValidityChange,
   onUserTypeChange,
 }) => {
-  const {
-    userTypeState: [userTypeInfo, setUserTypeInfo],
-    stepState: [, setCurrentStep],
-  } = useSignupContext();
-
-  // 유효성 검사 - 유형이 선택되었을 때만 유효
-  const isValid = userTypeInfo.userType !== "";
-
-  useEffect(() => {
-    onValidityChange(isValid);
-  }, [isValid, onValidityChange]);
-
-  const handleUserTypeSelect = (userType: "employer" | "worker") => {
-    setUserTypeInfo({ userType });
-    onUserTypeChange?.(userType);
-  };
-
-  // 다음 스텝으로 이동
-  const handleNextStep = () => {
-    if (userTypeInfo.userType === "employer") {
-      setCurrentStep(SignupStep.EMPLOYER_INFO);
-    } else if (userTypeInfo.userType === "worker") {
-      setCurrentStep(SignupStep.WORKER_EXPERIENCE);
-    }
-  };
+  const { userType, isValid, handleUserTypeSelect, handleNextStep } =
+    useUserTypeSelection({ onValidityChange, onUserTypeChange });
 
   return (
-    <div className={cn("", className)}>
-      {/* 상단 타이틀 */}
+    <div className={cn("flex h-screen flex-col", className)}>
       <div className="mt-8">
         <div className="text-2xl font-bold text-gray-900">
           <span className="text-blue-500">회원가입 유형</span>을
@@ -54,36 +29,28 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
         </div>
       </div>
 
-      {/* 유형 선택 버튼들 - 화면 중단에 배치 */}
-      <div className="mt-40 flex justify-center">
-        <div className="flex w-full max-w-md gap-4">
+      <div className="flex flex-1 items-center justify-center">
+        <div className="mb-40 flex w-full max-w-md gap-4">
           <BoxButton
             name="구인자"
             onClick={() => handleUserTypeSelect("employer")}
-            selected={userTypeInfo.userType === "employer"}
+            selected={userType === "employer"}
             className="flex-1"
-            image="/images/employer.svg" // 구인자 SVG 이미지
+            image="/images/employer.svg"
           />
-
           <BoxButton
             name="근로자"
             onClick={() => handleUserTypeSelect("worker")}
-            selected={userTypeInfo.userType === "worker"}
+            selected={userType === "worker"}
             className="flex-1"
-            image="/images/worker.svg" // 근로자 SVG 이미지
+            image="/images/worker.svg"
           />
         </div>
       </div>
 
-      {/* 다음 버튼 */}
       {isValid && (
         <div className="animate-slide-up fixed-bottom-button">
-          <Button
-            size="md"
-            theme="primary"
-            onClick={handleNextStep}
-            className="w-full"
-          >
+          <Button size="md" theme="primary" block onClick={handleNextStep}>
             다음
           </Button>
         </div>
