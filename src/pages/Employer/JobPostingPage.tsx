@@ -85,18 +85,6 @@ const JobPostingPage: React.FC<Props> = () => {
   const { isKeyboardOpen } = useKeyboardOpen();
   const [isSkilledModalOpen, setIsSkilledModalOpen] = useState(false);
 
-  // 뒤로가기 핸들러
-  const handleBackNavigation = () => {
-    // 새 업무 추가 중이거나 편집 중일 때는 취소 처리
-    if (isAddingNewJob || isEditing) {
-      handleCancelEditOrAdd();
-      return;
-    }
-
-    // 일반적인 경우 지도 페이지로 이동
-    navigate("/job-post-location");
-  };
-
   // setExpandedSection을 useRef로 안정화
   const setExpandedSectionRef = useRef(setExpandedSection);
 
@@ -108,22 +96,17 @@ const JobPostingPage: React.FC<Props> = () => {
   const workTimeRef = useRef<HTMLDivElement | null>(null);
   const personCountRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (!expandedSection) return;
-    const sectionToElement: Record<string, HTMLDivElement | null> = {
-      jobType: jobTypeRef.current,
-      demolitionWork: demolitionRef.current,
-      equipment: equipmentRef.current,
-      experience: experienceRef.current,
-      workTime: workTimeRef.current,
-      personCount: personCountRef.current,
-    } as const;
-
-    const el = sectionToElement[expandedSection];
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+  // 뒤로가기 핸들러
+  const handleBackNavigation = () => {
+    // 새 업무 추가 중이거나 편집 중일 때는 취소 처리
+    if (isAddingNewJob || isEditing) {
+      handleCancelEditOrAdd();
+      return;
     }
-  }, [expandedSection]);
+
+    // 일반적인 경우 지도 페이지로 이동
+    navigate("/job-post-location");
+  };
 
   // 카드 화면이 표시되어야 하는지 확인 (업무가 있고 편집/추가 모드가 아닐 때만)
   const shouldShowCards = jobPosts.length > 0 && !isEditing && !isAddingNewJob;
@@ -175,27 +158,6 @@ const JobPostingPage: React.FC<Props> = () => {
     }
     return null;
   };
-
-  // 5개 스텝이 모두 완료되었을 때 자동으로 작업 특이사항 열기
-  useEffect(() => {
-    if (
-      isJobTypeCompleted &&
-      isDemolitionWorkCompleted &&
-      isEquipmentCompleted &&
-      isWorkTimeCompleted &&
-      isPersonCountCompleted &&
-      expandedSection === null
-    ) {
-      setExpandedSectionRef.current("specialNote");
-    }
-  }, [
-    isJobTypeCompleted,
-    isDemolitionWorkCompleted,
-    isEquipmentCompleted,
-    isWorkTimeCompleted,
-    isPersonCountCompleted,
-    expandedSection,
-  ]);
 
   const renderJobTypeEditor = () => {
     if (isJobTypeCompleted && expandedSection !== "jobType") return null;
@@ -461,10 +423,48 @@ const JobPostingPage: React.FC<Props> = () => {
     </>
   );
 
+  // Place effect functions to the bottom, before returning value
+  useEffect(() => {
+    if (!expandedSection) return;
+    const sectionToElement: Record<string, HTMLDivElement | null> = {
+      jobType: jobTypeRef.current,
+      demolitionWork: demolitionRef.current,
+      equipment: equipmentRef.current,
+      experience: experienceRef.current,
+      workTime: workTimeRef.current,
+      personCount: personCountRef.current,
+    } as const;
+
+    const el = sectionToElement[expandedSection];
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [expandedSection]);
+
+  // 5개 스텝이 모두 완료되었을 때 자동으로 작업 특이사항 열기
+  useEffect(() => {
+    if (
+      isJobTypeCompleted &&
+      isDemolitionWorkCompleted &&
+      isEquipmentCompleted &&
+      isWorkTimeCompleted &&
+      isPersonCountCompleted &&
+      expandedSection === null
+    ) {
+      setExpandedSectionRef.current("specialNote");
+    }
+  }, [
+    isJobTypeCompleted,
+    isDemolitionWorkCompleted,
+    isEquipmentCompleted,
+    isWorkTimeCompleted,
+    isPersonCountCompleted,
+    expandedSection,
+  ]);
+
   return (
     <>
       <div className="flex h-screen w-full flex-col bg-white">
-        {/* 고정 헤더 영역 */}
         <div className="flex-shrink-0 bg-white px-6 pt-12">
           <NavigationHeader
             title="인력 구하기"
@@ -517,7 +517,6 @@ const JobPostingPage: React.FC<Props> = () => {
           )}
         </div>
 
-        {/* 기능공 모달 */}
         <Modal
           visible={isSkilledModalOpen}
           onClose={() => setIsSkilledModalOpen(false)}
