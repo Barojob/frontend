@@ -9,6 +9,7 @@ import MainPage from "@/pages/MainPage";
 import SignupPage from "@/pages/SignupPage";
 import WorkerDetailsPage from "@/pages/WorkerDetailsPage";
 import { type RouteObject } from "react-router-dom";
+import WorkerMatchHistoryPage from "../pages/Worker/WorkerMatchHistoryPage ";
 
 export const routes = [
   {
@@ -51,5 +52,9 @@ export const routes = [
   {
     path: "/worker-detail",
     element: <WorkerDetailsPage />,
+  },
+  {
+    path: "/worker-match-history",
+    element: <WorkerMatchHistoryPage />,
   },
 ] satisfies RouteObject[];
