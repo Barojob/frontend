@@ -6,7 +6,7 @@ type Tab = (typeof TABS)[number];
 
 export const useWorkerMatchHistory = () => {
   const [activeTab, setActiveTab] = useState<Tab>("리스트");
-  const [jobHistory, setJobHistory] = useState<JobHistory[]>(DUMMY_JOB_HISTORY);
+  const [jobHistory] = useState<JobHistory[]>(DUMMY_JOB_HISTORY);
 
   return {
     tabs: TABS,

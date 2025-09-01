@@ -14,6 +14,8 @@ type LocationData = {
 type RecentSearchData = {
   placeName: string;
   address: string;
+  latitude: number;
+  longitude: number;
 };
 
 type Props = {
@@ -37,17 +39,49 @@ const LocationSearchScreen: React.FC<Props> = ({
     const saved = localStorage.getItem("recentLocationSearches");
     if (saved) {
       try {
-        const parsedData = JSON.parse(saved);
-        // 기존 string 배열 형태의 데이터를 새로운 구조로 마이그레이션
-        if (Array.isArray(parsedData) && parsedData.length > 0) {
-          if (typeof parsedData[0] === "string") {
-            // 기존 string 배열 형태인 경우 빈 배열로 초기화
-            setRecentSearches([]);
-            localStorage.removeItem("recentLocationSearches");
-          } else {
-            // 새로운 구조인 경우 그대로 사용
-            setRecentSearches(parsedData);
-          }
+        const parsed = JSON.parse(saved) as unknown;
+        if (Array.isArray(parsed)) {
+          const normalized: RecentSearchData[] = parsed
+            .map((item): RecentSearchData | null => {
+              if (
+                item &&
+                typeof item === "object" &&
+                "placeName" in item &&
+                "address" in item &&
+                "latitude" in item &&
+                "longitude" in item
+              ) {
+                const placeName = String(
+                  (item as Record<string, unknown>).placeName ?? "",
+                );
+                const address = String(
+                  (item as Record<string, unknown>).address ?? "",
+                );
+                const latitude = Number(
+                  (item as Record<string, unknown>).latitude,
+                );
+                const longitude = Number(
+                  (item as Record<string, unknown>).longitude,
+                );
+                if (
+                  placeName &&
+                  address &&
+                  Number.isFinite(latitude) &&
+                  Number.isFinite(longitude)
+                ) {
+                  return { placeName, address, latitude, longitude };
+                }
+              }
+              return null;
+            })
+            .filter((v): v is RecentSearchData => v !== null)
+            .slice(0, 5);
+
+          setRecentSearches(normalized);
+          localStorage.setItem(
+            "recentLocationSearches",
+            JSON.stringify(normalized),
+          );
         } else {
           setRecentSearches([]);
         }
@@ -165,10 +199,12 @@ const LocationSearchScreen: React.FC<Props> = ({
       placeName: result.place_name,
     };
 
-    // 최근 검색어에 추가
+    // 최근 검색어에 추가 (좌표 포함)
     const newSearchData: RecentSearchData = {
       placeName: result.place_name,
       address: result.road_address_name || result.address_name,
+      latitude: parseFloat(result.y),
+      longitude: parseFloat(result.x),
     };
 
     const newRecentSearches = [
@@ -191,7 +227,7 @@ const LocationSearchScreen: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-white px-5 py-2">
+    <div className="fixed inset-0 z-50 flex flex-col bg-white px-5 py-11">
       {/* 헤더 */}
       <NavigationHeader title="" onBack={onClose} />
 
@@ -221,7 +257,7 @@ const LocationSearchScreen: React.FC<Props> = ({
         {!searchKeyword && recentSearches.length > 0 && (
           <div className="mt-3 py-3">
             <div className="text-xs font-medium text-neutral-400">
-              최근 일한 위치
+              최근 검색 기록
             </div>
             <div className="mt-2 space-y-2 px-2">
               {recentSearches.map((searchData, index) => (

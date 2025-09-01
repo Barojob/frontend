@@ -1,0 +1,105 @@
+---
+alwaysApply: true
+---
+
+## 프론트엔드 코딩 기본 가이드라인
+
+1. 우리 프로젝트는 리액트 19 기반, 타입스크립트를 사용 중.
+2. 시니어 개발자인 것처럼 코딩할 것. 프로젝트 아키텍쳐에 대해 심도있게 고민할 것. 클린코드 신경쓸 것.
+3. 기본적으로 리액트 스탠다드 컨벤셔넹 맞게 코딩하기.
+4. 변수 이름을 지을 때는 주석을 대신할 수 있게 의미와 의도를 나타내는 이름을 선택할 것. Self-documented.
+5. 변수 선언할 때 되도록이면 let은 지양하기.
+6. Early return 패턴을 애용하기.
+7. SOLID 원칙에 맞기 컴포넌트를 구성하도록 노력하기.
+8. enum을 쓸 때 다음과 같은 패턴으로 사용하기
+
+```javascript
+  enum Step = {
+    FORM_DETAILS = 'form-details'
+    CONFIRM = 'confirm'
+  }
+```
+
+9. 목업 데이터(json데이터)들 `/fixtures` 폴더로 분리하기.
+10. any 절대 쓰지 않기
+11. 자주 쓰는/쓰일 수 있는 util 함수들 분리하기 ex) formatDate
+12. 이벤트 콜백 함수를 만들 때 네이밍 규칙은 `handle*` prefix를 지킬것. ex) `handleClick`, `handleSubmit`
+13. loading 상태는 `<Skeleton />` 컴포넌트로 처리하기
+14. axios, dayjs, lodash 라이브러리 적극 활용하기.
+15. 스타일링은 테일윈드로 하기.
+16. ref를 사용해서 css 변경하거나 이벤트 핸들러를 추가하는 패턴 지양하기.
+17. 폰트, 스페이싱 단위는 rem을 되도록이면 쓰기(픽셀 단위로 2의 배수인 경우에 rem 사용하고 아닌 경우에는 px unit을 사용)
+
+## Capacitor
+
+1. 시뮬레이터는 `pnpm ios:run` `pnpm android:run`으로 실행
+2. 네이티브 프로젝트 폴더를 `pnpm ios:open` `pnpm android:open` 으로 열 수 있음. 안드로이트 슈튜디오, xcode 사용.
+3. 코드 변경 후 `pnpm sync` 입력 필수,네이티브 앱에도 적용해주어야함.
+
+## 폴더 구조
+
+- 우리 프로젝트는 폴더구조를 최대한 flat한 구조로 정리하고 있습니다.(feature 단위 x)
+- /src
+
+  - /types (커스텀으로 정의한 타입)
+  - /utils (커스텀 유틸)
+  - /components
+  - /pages
+  - /svgs
+  - /styles
+  - /configs
+  - /hooks
+  - /providers
+  - /stories (스토리북)
+  - /routers
+
+- 컴포넌트 정의 컨벤션
+
+  ```javascript
+  type Props = {
+    className?: string;
+    additionalClassName?: string;
+  };
+
+  const SomeComponent: ReactFC<PropsWichCildren<Props>> = ({
+    className,
+    additionalClassName,
+    children
+  }) => {
+    // Place state declarations at the top of the function
+    const [state, setState] = useState(1);
+
+    // Place effect functions to the bottom, before returning value
+    useEffect(() => {
+
+      return () => {
+        // Do not skip clean up
+      }
+    }, [])
+
+    return (
+      <div>
+        <div>...</div>
+        <div>...</div>
+        <SomeOtherComponent
+          className={cn('',additonalClassName)}
+          onChange={handleChange}
+        />
+        <AnotherComponent
+          onSuccess={handleSuccess('GOOD')}
+        />
+      </div>
+    )
+
+    function handleChange(event: React.ChangeEventM<HTMLInputElement>) {
+      setState(event.target.value);
+    }
+
+    // Function curring
+    function handleSuccess(result: string) {
+      return () => {
+        console.log(result);
+      }
+    }
+  }
+  ```

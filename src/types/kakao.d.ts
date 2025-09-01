@@ -18,6 +18,10 @@ export interface KakaoGeocoderResult {
     region_2depth_name: string;
     region_3depth_name: string;
   };
+  road_address: {
+    address_name: string;
+    building_name?: string;
+  } | null;
 }
 
 // 전역 kakao 객체 타입 정의
@@ -56,6 +60,15 @@ declare global {
         Places: new () => {
           keywordSearch(
             keyword: string,
+            callback: (data: KakaoPlaceSearchResult[], status: string) => void,
+            options?: {
+              location?: unknown;
+              radius?: number;
+              sort?: number;
+            },
+          ): void;
+          categorySearch(
+            category: string,
             callback: (data: KakaoPlaceSearchResult[], status: string) => void,
             options?: {
               location?: unknown;

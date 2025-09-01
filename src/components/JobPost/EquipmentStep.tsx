@@ -15,7 +15,7 @@ const EquipmentStep: React.FC<EquipmentStepProps> = ({
   return (
     <>
       <div className="mb-4 text-2xl font-bold text-neutral-600">
-        <span className="text-blue-600">필요하신 장비</span>를 선택해주세요
+        <span className="text-blue-600">사용할 장비</span>를 선택해주세요
       </div>
       <MultiSelector
         selectedItems={selectedEquipment}

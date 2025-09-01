@@ -1,15 +1,16 @@
-import JobPostLocation from "@/components/JobPostLocation";
 import CommuteRangePage from "@/pages/CommuteRangePage";
+import JobPostingPage from "@/pages/Employer/JobPostingPage";
+import JobPostLocation from "@/pages/Employer/JobPostLocation";
+import MatchingResultsPage from "@/pages/Employer/MatchingResultsPage";
 import IntroPage from "@/pages/IntroPage";
-import JobPostingPage from "@/pages/JobPostingPage";
 import JobRequestPage from "@/pages/JobRequestPage";
 import LoginPage from "@/pages/LoginPage";
 import LoginSuccessPage from "@/pages/LoginSuccessPage";
 import MainPage from "@/pages/MainPage";
 import SignupPage from "@/pages/SignupPage";
+import WorkerMatchHistoryPage from "@/pages/Worker/WorkerMatchHistoryPage ";
 import WorkerDetailsPage from "@/pages/WorkerDetailsPage";
 import { type RouteObject } from "react-router-dom";
-import WorkerMatchHistoryPage from "../pages/Worker/WorkerMatchHistoryPage ";
 
 export const routes = [
   {
@@ -44,6 +45,10 @@ export const routes = [
   {
     path: "/job-post-location",
     element: <JobPostLocation />,
+  },
+  {
+    path: "/matching-results",
+    element: <MatchingResultsPage />,
   },
   {
     path: "/commute-range",

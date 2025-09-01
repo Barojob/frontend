@@ -1,15 +1,17 @@
-import React from "react";
+import {
+  getDemolitionWorkOptions,
+  SelectOption,
+} from "@/utils/jobTypeDemolitionMap";
+import React, { useMemo } from "react";
 
-interface SelectOption {
-  id: string;
-  label: string;
-}
+// SelectOption은 공용 타입 사용
 
 interface MultiSelectorProps {
   selectedItems: string[];
   onItemToggle: (itemId: string) => void;
   type: "jobType" | "demolitionWork" | "equipment" | "experience";
   category?: string;
+  selectedJobTypes?: string[];
   className?: string;
 }
 
@@ -18,17 +20,15 @@ const MultiSelector: React.FC<MultiSelectorProps> = ({
   onItemToggle,
   type,
   category,
+  selectedJobTypes,
   className = "",
 }) => {
-  // 어떤 사람?
   const generalJobTypes: SelectOption[] = [
-    { id: "general-labor", label: "보통 인부" },
-    { id: "material-mgmt", label: "자재 정리" },
-    { id: "signal-worker", label: "신호수" },
-    { id: "demolition", label: "해체 정리" },
-    { id: "kitchen", label: "곰방" },
-    { id: "cleaning", label: "양중" },
-    { id: "demolition-work", label: "철거" },
+    { id: "general-labor", label: "보통인부" },
+    { id: "signal", label: "신호수" },
+    { id: "lifting", label: "양중" },
+    { id: "gombang", label: "곰방" },
+    { id: "demolition", label: "철거" },
   ];
 
   const skilledJobTypes: SelectOption[] = [
@@ -36,32 +36,33 @@ const MultiSelector: React.FC<MultiSelectorProps> = ({
     { id: "rebar", label: "철근" },
     { id: "concrete", label: "콘크리트" },
     { id: "tile", label: "타일" },
+    { id: "plumber", label: "배관공" },
+    { id: "electrician", label: "전기공" },
   ];
 
   // 세부 업무
-  const demolitionWorkOptions: SelectOption[] = [
-    { id: "clean-up", label: "자재 정리" },
-    { id: "spadework", label: "삽질" },
-    { id: "sawing", label: "톱질" },
-    { id: "sickle", label: "낫질" },
-  ];
+  // 세부 업무: 선택된 직업(업무)에 따라 동적 생성
+  const demolitionWorkOptions: SelectOption[] = useMemo(() => {
+    return type === "demolitionWork"
+      ? getDemolitionWorkOptions(selectedJobTypes)
+      : [];
+  }, [type, selectedJobTypes]);
 
   // 장비 옵션들
   const equipmentOptions: SelectOption[] = [
     { id: "none", label: "없음" },
-    { id: "hammer-drill", label: "함마드릴" },
     { id: "grinder", label: "그라인더" },
+    { id: "hammer-drill", label: "헤머드릴" },
     { id: "hydraulic-crusher", label: "유압크라샤" },
-    { id: "tower-crane-signal", label: "타워크레인 신호수 자격" },
   ];
 
-  // 경력 옵션들
-  const experienceOptions: SelectOption[] = [
-    { id: "unverified", label: "미검증" },
-    { id: "general", label: "일반" },
-    { id: "intermediate", label: "중급" },
-    { id: "advanced", label: "고급" },
-  ];
+  // // 경력 옵션들
+  // const experienceOptions: SelectOption[] = [
+  //   { id: "unverified", label: "미검증" },
+  //   { id: "general", label: "일반" },
+  //   { id: "intermediate", label: "중급" },
+  //   { id: "advanced", label: "고급" },
+  // ];
 
   const getOptions = (): SelectOption[] => {
     switch (type) {
@@ -71,8 +72,8 @@ const MultiSelector: React.FC<MultiSelectorProps> = ({
         return demolitionWorkOptions;
       case "equipment":
         return equipmentOptions;
-      case "experience":
-        return experienceOptions;
+      // case "experience":
+      //   return experienceOptions;
       default:
         return [];
     }
@@ -85,10 +86,27 @@ const MultiSelector: React.FC<MultiSelectorProps> = ({
       {options.map((option) => {
         const isSelected = selectedItems.includes(option.id);
 
+        const handleClick = () => {
+          if (type === "demolitionWork") {
+            if (isSelected) {
+              onItemToggle(option.id);
+              return;
+            }
+            // 단일 선택 강제: 기존 선택 해제 후 현재만 선택
+            selectedItems.forEach((selectedId) => {
+              if (selectedId !== option.id) onItemToggle(selectedId);
+            });
+            onItemToggle(option.id);
+            return;
+          }
+
+          onItemToggle(option.id);
+        };
+
         return (
           <button
             key={option.id}
-            onClick={() => onItemToggle(option.id)}
+            onClick={handleClick}
             className={`w-fit rounded-[0.625rem] px-3.5 py-2.5 text-sm font-normal transition-all duration-200 ${
               isSelected
                 ? "bg-blue-600 text-white"

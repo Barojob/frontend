@@ -34,7 +34,7 @@ const PersonCountSelector: React.FC<PersonCountSelectorProps> = ({
   const countOptions = Array.from({ length: 50 }, (_, i) => i + 1);
 
   return (
-    <div className={`flex items-center gap-10 ${className}`}>
+    <div className={`flex items-center gap-16 ${className}`}>
       {/* 감소 버튼 */}
       <button
         onClick={handleDecrease}

@@ -9,7 +9,6 @@ type SelectedTabProps = {
   onClick?: () => void;
 };
 
-/* eslint-disable react/prop-types */
 const SelectedTab: React.FC<SelectedTabProps> = ({
   title,
   selectedContent,
@@ -27,7 +26,7 @@ const SelectedTab: React.FC<SelectedTabProps> = ({
         <span className="text-base font-normal text-gray-500">{title}</span>
       </div>
       <div className="flex-1">
-        <span className="text-base font-bold text-neutral-600">
+        <span className="truncate text-base font-bold text-neutral-600">
           {selectedContent}
         </span>
       </div>
@@ -36,9 +35,12 @@ const SelectedTab: React.FC<SelectedTabProps> = ({
           {priceTitle}
         </div>
         <span className="text-lg font-bold text-blue-600">
-          {typeof amount === "number" ? `+ ${amount.toLocaleString()}` : amount}
+          {typeof amount === "number"
+            ? `${amount > 0 ? "+" : amount < 0 ? "-" : "+"}${Math.abs(
+                amount,
+              ).toLocaleString()}원`
+            : amount}
         </span>
-        {amount && <span className="text-lg font-bold text-blue-600">원</span>}
       </div>
     </div>
   );
