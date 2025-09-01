@@ -3,11 +3,14 @@ import Map from "@/components/Map";
 import NavigationHeader from "@/components/NavigationHeader";
 import { COMMUTE_RANGE_ORDER } from "@/fixtures/commuteAreas";
 import { useCommuteRangePage } from "@/hooks/useCommuteRangePage";
+import { MapHandle } from "@/types/map";
+import { Nullable } from "@/types/misc";
 import { cn } from "@/utils/classname";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 const CommuteRangePage: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
+  const mapRef = useRef<Nullable<MapHandle>>(null);
   const {
     selectedRange,
     handleSliderChange,
@@ -22,10 +25,13 @@ const CommuteRangePage: React.FC = () => {
       <NavigationHeader title="출퇴근 가능 범위" backTo="/" />
 
       <div className="relative flex-1">
-        {/* initialLevel prop 제거 */}
-        <Map>
-          <CommuteRangePolygon radiusKm={currentStepInfo.radius / 1000} />
-        </Map>
+        <Map className="h-full w-full" ref={mapRef} />
+        {mapRef.current?.map && (
+          <CommuteRangePolygon
+            radiusKm={currentStepInfo.radius / 1000}
+            map={mapRef.current.map}
+          />
+        )}
       </div>
 
       <div className="border-t bg-white p-6">

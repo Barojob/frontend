@@ -1,16 +1,17 @@
-import { useMap } from "@/components/Map";
 import { AREA_BOUNDARIES, CENTER_COORDINATES } from "@/fixtures/commuteAreas";
+import { Nullable } from "@/types/misc";
 import { getAreasInRadius, getConvexHull } from "@/utils/geolocation";
 import React, { useEffect, useRef } from "react";
 
 type CommuteRangePolygonProps = {
   radiusKm: number;
+  map: Nullable<kakao.maps.Map>;
 };
 
 const CommuteRangePolygon: React.FC<CommuteRangePolygonProps> = ({
   radiusKm,
+  map,
 }) => {
-  const map = useMap();
   const mapPolygonRef = useRef<kakao.maps.Polygon | null>(null);
 
   useEffect(() => {
@@ -52,22 +53,16 @@ const CommuteRangePolygon: React.FC<CommuteRangePolygonProps> = ({
       bounds.extend(point);
     });
 
-    // --- 부드러운 이동 및 줌을 위한 수정된 로직 ---
-
-    // 1. 현재 지도 상태를 잠시 저장
     const lastCenter = map.getCenter();
     const lastLevel = map.getLevel();
 
-    // 2. setBounds를 호출하여 API가 최적의 중심/레벨을 계산하도록 함
     map.setBounds(bounds);
-    const targetLevel = map.getLevel(); // 계산된 목표 줌 레벨
-    const targetCenter = map.getCenter(); // 계산된 목표 중심 좌표
+    const targetLevel = map.getLevel();
+    const targetCenter = map.getCenter();
 
-    // 3. 사용자가 눈치채지 못하게 즉시 원래 상태로 되돌림
     map.setCenter(lastCenter);
     map.setLevel(lastLevel);
 
-    // 4. 계산된 목표 값으로 부드럽게 이동 및 줌
     map.panTo(targetCenter);
     map.setLevel(targetLevel, { animate: true });
   }, [map, radiusKm]);
