@@ -2,6 +2,7 @@ import { type RouteObject } from "react-router-dom";
 import CommuteRangePage from "../pages/CommuteRangePage";
 import JobPostingPage from "../pages/Employer/JobPostingPage";
 import JobPostLocation from "../pages/Employer/JobPostLocation";
+import MatchingResultsPage from "../pages/Employer/MatchingResultsPage";
 import IntroPage from "../pages/IntroPage";
 import JobRequestPage from "../pages/JobRequestPage";
 import LoginPage from "../pages/LoginPage";
@@ -48,6 +49,10 @@ export const routes = [
   {
     path: "/job-post-location",
     element: <JobPostLocation />,
+  },
+  {
+    path: "/matching-results",
+    element: <MatchingResultsPage />,
   },
   {
     path: "/commute-range",

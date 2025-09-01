@@ -49,6 +49,7 @@ interface JobPostingContextType {
     | "personCount"
     | "specialNote"
     | null;
+  selectedMatchingType: "smart" | "direct" | null;
 
   // 핸들러
   handleJobTypeToggle: (jobTypeId: string) => void;
@@ -89,6 +90,7 @@ interface JobPostingContextType {
   handleDeleteJobPost: (id: string) => void;
   handleEditJobPost: (jobPost: JobPost) => void;
   handleAddNewJobPost: () => void;
+  handleCancelEditOrAdd: () => void;
   setExpandedSection: (
     section:
       | "jobType"
@@ -100,6 +102,7 @@ interface JobPostingContextType {
       | "specialNote"
       | null,
   ) => void;
+  handleMatchingTypeSelect: (type: "smart" | "direct") => void;
 }
 
 const JobPostingContext = createContext<JobPostingContextType | undefined>(
@@ -150,6 +153,11 @@ export const JobPostingProvider: React.FC<JobPostingProviderProps> = ({
   const [isAddingNewJob, setIsAddingNewJob] = useState(false);
 
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
+
+  // 매칭 방식 선택 상태
+  const [selectedMatchingType, setSelectedMatchingType] = useState<
+    "smart" | "direct" | null
+  >(null);
 
   const [expandedSection, setExpandedSection] = useState<
     | "jobType"
@@ -493,6 +501,39 @@ export const JobPostingProvider: React.FC<JobPostingProviderProps> = ({
     setExpandedSection("jobType");
   };
 
+  const handleMatchingTypeSelect = (type: "smart" | "direct") => {
+    setSelectedMatchingType(type);
+  };
+
+  const handleCancelEditOrAdd = () => {
+    // 편집 또는 새 업무 추가 모드 취소
+    setIsEditing(false);
+    setIsAddingNewJob(false);
+
+    // 모든 완료 상태 초기화
+    setIsJobTypeCompleted(false);
+    setIsDemolitionWorkCompleted(false);
+    setIsEquipmentCompleted(false);
+    setIsExperienceCompleted(false);
+    setIsWorkTimeCompleted(false);
+    setIsPersonCountCompleted(false);
+
+    // 선택된 항목들 초기화
+    setSelectedJobTypes([]);
+    setSelectedDemolitionWork([]);
+    setSelectedEquipment([]);
+    setSelectedExperience([]);
+    setWorkStartTime("09:00");
+    setWorkEndTime("18:00");
+    setWorkMonth(today.getMonth() + 1);
+    setWorkDay(today.getDate());
+    setSelectedPersonCount(1);
+    setActiveCategory("general");
+
+    // 확장된 섹션 닫기
+    setExpandedSection(null);
+  };
+
   const value: JobPostingContextType = {
     // 상태
     activeCategory,
@@ -518,6 +559,7 @@ export const JobPostingProvider: React.FC<JobPostingProviderProps> = ({
     isAddingNewJob,
     jobPosts,
     expandedSection,
+    selectedMatchingType,
 
     // 핸들러
     handleJobTypeToggle,
@@ -558,7 +600,9 @@ export const JobPostingProvider: React.FC<JobPostingProviderProps> = ({
     handleDeleteJobPost,
     handleEditJobPost,
     handleAddNewJobPost,
+    handleCancelEditOrAdd,
     setExpandedSection,
+    handleMatchingTypeSelect,
   };
 
   return (

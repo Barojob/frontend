@@ -8,6 +8,9 @@ type Props = {
   selectedJobTypes?: string[];
   selectedDemolitionWork?: string[];
   selectedEquipment?: string[];
+  selectedMatchingType?: "smart" | "direct" | null;
+  totalPersonCount?: number;
+  isMatchingStep?: boolean;
 };
 
 const CompleteBar: React.FC<Props> = ({
@@ -16,12 +19,42 @@ const CompleteBar: React.FC<Props> = ({
   selectedJobTypes,
   selectedDemolitionWork,
   selectedEquipment,
+  selectedMatchingType,
+  totalPersonCount,
+  isMatchingStep = false,
 }) => {
   const perPerson = getPerPersonAmount({
     selectedJobTypes,
     selectedDemolitionWork,
     selectedEquipment,
   });
+
+  const totalAmount = perPerson * (totalPersonCount || 1);
+
+  const getButtonText = () => {
+    if (!isMatchingStep) return "설정 완료";
+    if (!selectedMatchingType) return "매칭 선택";
+    if (selectedMatchingType === "smart") return "스마트 매칭";
+    if (selectedMatchingType === "direct") return "직접 매칭";
+    return "매칭 선택";
+  };
+
+  const isButtonDisabled = isMatchingStep ? !selectedMatchingType : false;
+
+  const getDisplayText = () => {
+    if (!isMatchingStep) {
+      return {
+        countText: "1인당",
+        amount: perPerson,
+      };
+    }
+    return {
+      countText: `총 ${totalPersonCount || 1}명`,
+      amount: totalAmount,
+    };
+  };
+
+  const { countText, amount } = getDisplayText();
   return (
     <div
       className={cn(
@@ -30,14 +63,20 @@ const CompleteBar: React.FC<Props> = ({
       )}
     >
       <div className="flex flex-col justify-start font-semibold">
-        <p className="text-base text-neutral-600">1인당</p>
-        <p className="text-xl text-blue-600">{perPerson.toLocaleString()}원</p>
+        <p className="text-base text-neutral-600">{countText}</p>
+        <p className="text-xl text-blue-600">{amount.toLocaleString()}원</p>
       </div>
       <button
         onClick={onClick}
-        className="w-fit rounded-[0.625rem] bg-blue-600 px-11 py-3 font-bold text-white"
+        disabled={isButtonDisabled}
+        className={cn(
+          "w-fit rounded-[0.625rem] px-11 py-3 font-bold text-white",
+          isButtonDisabled
+            ? "cursor-not-allowed bg-gray-400"
+            : "bg-blue-600 hover:bg-blue-700",
+        )}
       >
-        설정 완료
+        {getButtonText()}
       </button>
     </div>
   );
