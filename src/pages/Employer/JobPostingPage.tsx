@@ -1,21 +1,21 @@
+import CompleteBar from "@/components/JobPost/CompleteBar";
+import DemolitionWorkStep from "@/components/JobPost/DemolitionWorkStep";
+import EquipmentStep from "@/components/JobPost/EquipmentStep";
+import JobPostCard from "@/components/JobPost/JobPostCard";
+import JobTypeStep from "@/components/JobPost/JobTypeStep";
+import MatchingCard from "@/components/JobPost/MatchingCard";
+import PersonCountStep from "@/components/JobPost/PersonCountStep";
+import SelectedItemsDisplay from "@/components/JobPost/SelectedItemsDisplay";
+import SpecialNoteStep from "@/components/JobPost/SpecialNoteStep";
+import WorkTimeStep from "@/components/JobPost/WorkTimeStep";
+import Modal from "@/components/Modal";
+import NavigationHeader from "@/components/NavigationHeader";
+import PresenceTransition from "@/components/PresenceTransition";
+import StepIndicator from "@/components/StepIndicator";
+import { useKeyboardOpen } from "@/hooks/useKeyboardHandler";
+import { useJobPosting } from "@/providers/JobPostingProvider";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CompleteBar from "../../components/JobPost/CompleteBar";
-import DemolitionWorkStep from "../../components/JobPost/DemolitionWorkStep";
-import EquipmentStep from "../../components/JobPost/EquipmentStep";
-import JobPostCard from "../../components/JobPost/JobPostCard";
-import JobTypeStep from "../../components/JobPost/JobTypeStep";
-import MatchingCard from "../../components/JobPost/MatchingCard";
-import PersonCountStep from "../../components/JobPost/PersonCountStep";
-import SelectedItemsDisplay from "../../components/JobPost/SelectedItemsDisplay";
-import SpecialNoteStep from "../../components/JobPost/SpecialNoteStep";
-import WorkTimeStep from "../../components/JobPost/WorkTimeStep";
-import Modal from "../../components/Modal";
-import NavigationHeader from "../../components/NavigationHeader";
-import PresenceTransition from "../../components/PresenceTransition";
-import StepIndicator from "../../components/StepIndicator";
-import { useKeyboardOpen } from "../../hooks/useKeyboardHandler";
-import { useJobPosting } from "../../providers/JobPostingProvider";
 
 type Props = {
   className?: string;
