@@ -11,9 +11,13 @@ import {
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
 import { BANK_LIST } from "@/fixtures/banks";
+import useSignupContext from "@/hooks/useSignupContext";
 import { useWorkerAccount } from "@/hooks/useWorkerAccount";
+import { useWorkerSignUp } from "@/hooks/useWorkerSignUp";
 import WarningIcon from "@/svgs/WarningIcon";
+import { SignupStep } from "@/types/signup";
 import { cn } from "@/utils/classname";
+import { createWorkerSignUpRequest } from "@/utils/workerSignupHelpers";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
@@ -26,19 +30,46 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
   className,
   onValidityChange,
 }) => {
+  // UI 로직은 커스텀 훅에서 관리
   const {
     selectedBank,
     setSelectedBank,
     accountNumber,
     handleAccountNumberChange,
     showConfirmModal,
+    setShowConfirmModal,
     showErrorModal,
     errorMessage,
     handleAddAccount,
     handleSkip,
-    handleConfirmModalClose,
     handleErrorModalClose,
   } = useWorkerAccount(onValidityChange);
+
+  const {
+    stepState: [, setCurrentStep],
+    personalInfoState: [personalInfo],
+    workerExperienceState: [workerExperience],
+  } = useSignupContext();
+
+  const { mutateAsync: workerSignUpAsync, isPending: isWorkerSignUpPending } =
+    useWorkerSignUp();
+
+  const handleConfirmModalClose = async () => {
+    setShowConfirmModal(false);
+
+    try {
+      const requestData = createWorkerSignUpRequest({
+        personalInfo,
+        experienceCategories: workerExperience.experienceCategories,
+        bankName: selectedBank,
+        accountNumber,
+      });
+      await workerSignUpAsync(requestData);
+      setCurrentStep(SignupStep.SIGNUP_SUCCESS);
+    } catch (error) {
+      console.error("근로자 회원가입 중 오류가 발생했습니다:", error);
+    }
+  };
 
   return (
     <div className={cn("flex h-full flex-col", className)}>
@@ -143,6 +174,8 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
             theme="primary"
             size="md"
             className="mx-auto w-full max-w-[200px]"
+            loading={isWorkerSignUpPending}
+            disabled={isWorkerSignUpPending}
           >
             확인했어요
           </Button>

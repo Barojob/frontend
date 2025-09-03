@@ -1,3 +1,4 @@
+import EmployerAccountStep from "@/components/EmployerAccountStep";
 import EmployerInfoStep from "@/components/EmployerInfoStep";
 import PersonalInfoStep from "@/components/PersonalInfoStep";
 import PhoneVerificationCodeStep from "@/components/PhoneVerificationCodeStep";
@@ -27,14 +28,12 @@ const SignupPageContent: React.FC = () => {
     userTypeState: [userType],
   } = useSignupContext();
 
-  // 전화인증 완료 후 사용자 타입에 따라 다음 단계 결정
   const handlePhoneVerificationComplete = () => {
     if (userType === "employer") {
       setStep(SignupStep.EMPLOYER_INFO);
     } else if (userType === "worker") {
       setStep(SignupStep.WORKER_EXPERIENCE);
     } else {
-      // 타입이 선택되지 않은 경우 타입 선택으로 이동
       setStep(SignupStep.USER_TYPE_SELECTION);
     }
   };
@@ -90,7 +89,7 @@ const SignupPageContent: React.FC = () => {
         )}
 
         {step === SignupStep.EMPLOYER_ACCOUNT && (
-          <WorkerAccountStep
+          <EmployerAccountStep
             onValidityChange={() => {
               /* FIXME: 유효성 검사 로직 구현 필요 */
             }}

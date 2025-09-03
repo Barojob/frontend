@@ -7,7 +7,6 @@ export const useEmployerInfoForm = (
 ) => {
   const {
     employerInfoState: [employerInfo, setEmployerInfo],
-    stepState: [, setCurrentStep],
   } = useSignupContext();
 
   const [emailLocal, setEmailLocal] = useState("");
@@ -68,7 +67,7 @@ export const useEmployerInfoForm = (
         }
       }
     }
-  }, []);
+  }, [employerInfo.position, employerInfo.email]);
 
   return {
     employerInfo,
@@ -82,6 +81,5 @@ export const useEmployerInfoForm = (
     showEmailField,
     showBusinessNumberField,
     isFormValid,
-    setCurrentStep,
   };
 };

@@ -10,6 +10,7 @@ import {
 import Input from "@/components/Input";
 import { EMAIL_DOMAIN_OPTIONS } from "@/fixtures/signup";
 import { useEmployerInfoForm } from "@/hooks/useEmployerInfoForm";
+import useSignupContext from "@/hooks/useSignupContext";
 import ArrowDownIcon from "@/svgs/DropdownArrowIcon";
 import { SignupStep } from "@/types/signup";
 import { cn } from "@/utils/classname";
@@ -26,6 +27,10 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
   onValidityChange,
 }) => {
   const {
+    stepState: [, setCurrentStep],
+  } = useSignupContext();
+
+  const {
     employerInfo,
     setEmployerInfo,
     emailLocal,
@@ -37,7 +42,6 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
     showEmailField,
     showBusinessNumberField,
     isFormValid,
-    setCurrentStep,
   } = useEmployerInfoForm(onValidityChange);
 
   const emailLocalRef = useRef<HTMLInputElement>(null);
@@ -56,7 +60,8 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
     if (showBusinessNumberField) businessNumberRef.current?.focus();
   }, [showBusinessNumberField]);
 
-  const handleEmployerSignUp = async () => {
+  const handleEmployerSignUp = () => {
+    if (!isFormValid) return;
     // 고용주 정보 입력 완료 후 계좌 등록으로 이동
     setCurrentStep(SignupStep.EMPLOYER_ACCOUNT);
   };
