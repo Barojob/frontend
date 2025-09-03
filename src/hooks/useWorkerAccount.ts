@@ -1,5 +1,9 @@
+import { useEmployerSignUp } from "@/hooks/useEmployerSignUp";
 import useSignupContext from "@/hooks/useSignupContext";
+import { useWorkerSignUp } from "@/hooks/useWorkerSignUp";
 import { SignupStep } from "@/types/signup";
+import { createEmployerSignUpRequest } from "@/utils/employerSignupHelpers";
+import { createWorkerSignUpRequest } from "@/utils/workerSignupHelpers";
 import { useEffect, useState } from "react";
 
 export const useWorkerAccount = (
@@ -7,7 +11,19 @@ export const useWorkerAccount = (
 ) => {
   const {
     stepState: [, setCurrentStep],
+    userTypeState: [userType],
+    personalInfoState: [personalInfo],
+    employerInfoState: [employerInfo],
+    workerExperienceState: [workerExperience],
   } = useSignupContext();
+
+  const {
+    mutateAsync: employerSignUpAsync,
+    isPending: isEmployerSignUpPending,
+  } = useEmployerSignUp();
+
+  const { mutateAsync: workerSignUpAsync, isPending: isWorkerSignUpPending } =
+    useWorkerSignUp();
 
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [accountNumber, setAccountNumber] = useState<string>("");
@@ -41,9 +57,30 @@ export const useWorkerAccount = (
     setShowConfirmModal(true);
   };
 
-  const handleConfirmModalClose = () => {
+  const handleConfirmModalClose = async () => {
     setShowConfirmModal(false);
-    setCurrentStep(SignupStep.SIGNUP_SUCCESS);
+
+    try {
+      if (userType === "employer") {
+        const requestData = createEmployerSignUpRequest({
+          personalInfo,
+          employerInfo,
+        });
+        await employerSignUpAsync(requestData);
+      } else {
+        const requestData = createWorkerSignUpRequest({
+          personalInfo,
+          experienceCategories: workerExperience.experienceCategories,
+          bankName: selectedBank,
+          accountNumber,
+        });
+        await workerSignUpAsync(requestData);
+      }
+
+      setCurrentStep(SignupStep.SIGNUP_SUCCESS);
+    } catch (error) {
+      console.error("회원가입 중 오류가 발생했습니다:", error);
+    }
   };
 
   const handleErrorModalClose = () => {
@@ -62,5 +99,6 @@ export const useWorkerAccount = (
     handleSkip,
     handleConfirmModalClose,
     handleErrorModalClose,
+    isSignUpPending: isEmployerSignUpPending || isWorkerSignUpPending,
   };
 };

@@ -56,6 +56,11 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
     if (showBusinessNumberField) businessNumberRef.current?.focus();
   }, [showBusinessNumberField]);
 
+  const handleEmployerSignUp = async () => {
+    // 고용주 정보 입력 완료 후 계좌 등록으로 이동
+    setCurrentStep(SignupStep.EMPLOYER_ACCOUNT);
+  };
+
   return (
     <div className={cn("flex flex-col", className)}>
       <div className="mt-8">
@@ -167,7 +172,7 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
           <Button
             size="md"
             theme="primary"
-            onClick={() => setCurrentStep(SignupStep.WORKER_ACCOUNT)}
+            onClick={handleEmployerSignUp}
             className="w-full"
           >
             다음

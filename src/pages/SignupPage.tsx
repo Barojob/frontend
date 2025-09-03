@@ -24,12 +24,23 @@ const SignupPage: React.FC = () => (
 const SignupPageContent: React.FC = () => {
   const {
     stepState: [step, setStep],
+    userTypeState: [userType],
   } = useSignupContext();
 
+  // 전화인증 완료 후 사용자 타입에 따라 다음 단계 결정
+  const handlePhoneVerificationComplete = () => {
+    if (userType === "employer") {
+      setStep(SignupStep.EMPLOYER_INFO);
+    } else if (userType === "worker") {
+      setStep(SignupStep.WORKER_EXPERIENCE);
+    } else {
+      // 타입이 선택되지 않은 경우 타입 선택으로 이동
+      setStep(SignupStep.USER_TYPE_SELECTION);
+    }
+  };
+
   return (
-    // 👇 pt-[env(safe-area-inset-top)]를 추가하여 안전 영역 확보
     <main className="keyboard-avoiding flex min-h-screen flex-col pt-[env(safe-area-inset-top)]">
-      {/* 👇 mt-3 클래스 제거 */}
       <SignupHeader className="px-6" step={step} onStepChange={setStep} />
       <PresenceTransition
         className="mobile-scroll flex-1 overflow-y-auto px-6"
@@ -37,25 +48,8 @@ const SignupPageContent: React.FC = () => {
         variant="fadeInOut"
       >
         {step === SignupStep.TERMS && (
-          <SignupTermsStep onNext={handleNextStep(SignupStep.PERSONAL_INFO)} />
-        )}
-
-        {step === SignupStep.PERSONAL_INFO && (
-          <PersonalInfoStep
-            onNextStep={handleNextStep(SignupStep.PHONE_VERIFICATION)}
-          />
-        )}
-
-        {step === SignupStep.PHONE_VERIFICATION && (
-          <PhoneVerificationCodeStep
+          <SignupTermsStep
             onNext={handleNextStep(SignupStep.USER_TYPE_SELECTION)}
-          />
-        )}
-
-        {step === SignupStep.PHONE_VERIFICATION_SUCCESS && (
-          <SignupGeneralStep
-            title="인증 완료"
-            description="휴대폰 인증이 완료되었습니다."
           />
         )}
 
@@ -70,6 +64,16 @@ const SignupPageContent: React.FC = () => {
           />
         )}
 
+        {step === SignupStep.PERSONAL_INFO && (
+          <PersonalInfoStep
+            onNextStep={handleNextStep(SignupStep.PHONE_VERIFICATION)}
+          />
+        )}
+
+        {step === SignupStep.PHONE_VERIFICATION && (
+          <PhoneVerificationCodeStep onNext={handlePhoneVerificationComplete} />
+        )}
+
         {step === SignupStep.ALREADY_REGISTERED && (
           <SignupGeneralStep
             title="기존 회원"
@@ -79,6 +83,14 @@ const SignupPageContent: React.FC = () => {
 
         {step === SignupStep.EMPLOYER_INFO && (
           <EmployerInfoStep
+            onValidityChange={() => {
+              /* FIXME: 유효성 검사 로직 구현 필요 */
+            }}
+          />
+        )}
+
+        {step === SignupStep.EMPLOYER_ACCOUNT && (
+          <WorkerAccountStep
             onValidityChange={() => {
               /* FIXME: 유효성 검사 로직 구현 필요 */
             }}

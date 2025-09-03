@@ -28,11 +28,8 @@ export const useUserTypeSelection = ({
   };
 
   const handleNextStep = () => {
-    if (userType === "employer") {
-      setCurrentStep(SignupStep.EMPLOYER_INFO);
-    } else if (userType === "worker") {
-      setCurrentStep(SignupStep.WORKER_EXPERIENCE);
-    }
+    // 새로운 플로우: 타입 선택 후 개인정보 입력으로 이동
+    setCurrentStep(SignupStep.PERSONAL_INFO);
   };
 
   return {

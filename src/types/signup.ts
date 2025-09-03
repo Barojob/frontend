@@ -5,12 +5,13 @@ import React from "react";
 
 export enum SignupStep {
   TERMS,
+  USER_TYPE_SELECTION,
   PERSONAL_INFO,
   PHONE_VERIFICATION,
   PHONE_VERIFICATION_SUCCESS,
-  USER_TYPE_SELECTION,
   ALREADY_REGISTERED,
   EMPLOYER_INFO,
+  EMPLOYER_ACCOUNT,
   WORKER_INFO,
   WORKER_EXPERIENCE,
   WORKER_LICENSE,
@@ -49,6 +50,10 @@ export type EmployerState = {
   businessNumber: string;
 };
 
+export type WorkerExperienceState = {
+  experienceCategories: string[];
+};
+
 export type SignUpContextType = {
   termsState: [CheckItem[], React.Dispatch<React.SetStateAction<CheckItem[]>>];
   stepState: [SignupStep, React.Dispatch<React.SetStateAction<SignupStep>>];
@@ -67,5 +72,9 @@ export type SignUpContextType = {
   employerInfoState: [
     EmployerState,
     React.Dispatch<React.SetStateAction<EmployerState>>,
+  ];
+  workerExperienceState: [
+    WorkerExperienceState,
+    React.Dispatch<React.SetStateAction<WorkerExperienceState>>,
   ];
 };
