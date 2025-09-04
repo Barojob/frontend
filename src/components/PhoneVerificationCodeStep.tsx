@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
-import { useSendSms } from "@/hooks/useSendSms";
+// import { useSendSms } from "@/hooks/useSendSms";
 import useSignupContext from "@/hooks/useSignupContext";
-import { useVerifySms } from "@/hooks/useVerifySms";
+// import { useVerifySms } from "@/hooks/useVerifySms";
 import { type Nullable } from "@/types/misc";
 import { cn } from "@/utils/classname";
 import { formatMinuteSecond } from "@/utils/formatters";
@@ -30,8 +30,9 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
     getRemainingCountdown(verification.requestedAt),
   );
 
-  const { mutateAsync: sendSmsAsync } = useSendSms();
-  const { mutateAsync: verifySmsAsync } = useVerifySms();
+  // SMS API 임시 주석처리
+  // const { mutateAsync: sendSmsAsync } = useSendSms();
+  // const { mutateAsync: verifySmsAsync } = useVerifySms();
 
   useHarmonicIntervalFn(
     () => setRemainingSeconds(getRemainingCountdown(verification.requestedAt)),
@@ -134,7 +135,9 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
 
   async function handleResendSms() {
     try {
-      await sendSmsAsync({ phoneNumber: personalInfo.phoneNumber });
+      // SMS API 임시 주석처리
+      // await sendSmsAsync({ phoneNumber: personalInfo.phoneNumber });
+      console.log("SMS 재전송 시뮬레이션:", personalInfo.phoneNumber);
 
       setVerification((prev) => ({
         ...prev,
@@ -147,10 +150,19 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
 
   async function handleVerifySms() {
     try {
-      const result = await verifySmsAsync({
-        phoneNumber: personalInfo.phoneNumber,
-        code: verification.code,
-      });
+      // SMS API 임시 주석처리
+      // const result = await verifySmsAsync({
+      //   phoneNumber: personalInfo.phoneNumber,
+      //   code: verification.code,
+      // });
+
+      // 임시로 항상 성공하도록 처리
+      const result = true;
+      console.log(
+        "SMS 인증 시뮬레이션:",
+        personalInfo.phoneNumber,
+        verification.code,
+      );
 
       if (!result) {
         // TODO: handle validation error, show error modal

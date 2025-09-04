@@ -140,68 +140,41 @@ const EmployerAccountStep: React.FC<EmployerAccountStepProps> = ({
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Button
-          size="md"
-          theme="primary"
-          onClick={handleAddAccount}
-          disabled={
-            !selectedBank || !accountNumber.trim() || isEmployerSignUpPending
-          }
-          className="w-full"
-        >
-          {isEmployerSignUpPending ? "등록 중..." : "계좌 등록"}
+      <div className="fixed-bottom-button flex gap-3">
+        <Button onClick={handleSkip} theme="secondary" size="md" block>
+          건너뛰기
         </Button>
-        <Button
-          size="md"
-          theme="secondary"
-          onClick={handleSkip}
-          disabled={isEmployerSignUpPending}
-          className="w-full"
-        >
-          나중에 등록하기
+        <Button onClick={handleAddAccount} theme="primary" size="md" block>
+          계좌 추가하기
         </Button>
       </div>
 
-      {/* 계좌 등록 확인 모달 */}
-      <Modal
-        visible={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-      >
-        <div className="space-y-4 p-6">
-          <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-900">
-              계좌 정보를 확인해주세요
-            </h3>
-            <div className="mt-4 space-y-2">
-              <p className="text-sm text-gray-600">은행: {selectedBank}</p>
-              <p className="text-sm text-gray-600">계좌번호: {accountNumber}</p>
-            </div>
+      <Modal visible={showConfirmModal} onClose={handleConfirmModalClose}>
+        <div className="px-8 py-10 text-center">
+          <div className="mb-6 flex justify-center">
+            <WarningIcon />
           </div>
-          <div className="flex space-x-3">
-            <Button
-              size="sm"
-              theme="secondary"
-              onClick={() => setShowConfirmModal(false)}
-              className="flex-1"
-              disabled={isEmployerSignUpPending}
-            >
-              수정
-            </Button>
-            <Button
-              size="sm"
-              theme="primary"
-              onClick={handleConfirmModalClose}
-              className="flex-1"
-              disabled={isEmployerSignUpPending}
-            >
-              {isEmployerSignUpPending ? "등록 중..." : "확인"}
-            </Button>
-          </div>
+          <h2 className="mb-3 text-xl font-bold text-gray-900">
+            본인 명의 계좌만
+            <br />
+            등록가능해요
+          </h2>
+          <p className="mb-8 text-sm text-gray-500">
+            일치 여부 확인 후 등록해드립니다
+          </p>
+          <Button
+            onClick={handleConfirmModalClose}
+            theme="primary"
+            size="md"
+            className="mx-auto w-full max-w-[200px]"
+            loading={isEmployerSignUpPending}
+            disabled={isEmployerSignUpPending}
+          >
+            확인했어요
+          </Button>
         </div>
       </Modal>
 
-      {/* 오류 모달 */}
       <Modal visible={showErrorModal} onClose={handleErrorModalClose}>
         <div className="space-y-4 p-6">
           <div className="flex items-center space-x-3">
