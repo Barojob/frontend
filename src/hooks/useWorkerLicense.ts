@@ -1,3 +1,4 @@
+import { useCertificateUpload } from "@/hooks/useCertificateUpload";
 import useSignupContext from "@/hooks/useSignupContext";
 import { SignupStep } from "@/types/signup";
 import { selectFromGallery, takePicture } from "@/utils/media";
@@ -9,6 +10,9 @@ export const useWorkerLicense = (
   const {
     stepState: [, setCurrentStep],
   } = useSignupContext();
+
+  const { mutateAsync: uploadCertificate, isPending: isUploading } =
+    useCertificateUpload();
 
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [showSkipModal, setShowSkipModal] = useState(false);
@@ -49,9 +53,22 @@ export const useWorkerLicense = (
     setUploadedImage(null);
   };
 
-  const handleComplete = () => {
-    // FIXME: 업로드된 이미지(uploadedImage)를 서버로 전송하는 로직 필요
-    setCurrentStep(SignupStep.WORKER_ACCOUNT);
+  const handleComplete = async () => {
+    if (!uploadedImage) {
+      setCurrentStep(SignupStep.WORKER_ACCOUNT);
+      return;
+    }
+
+    try {
+      await uploadCertificate({
+        certificate: uploadedImage,
+      });
+      setCurrentStep(SignupStep.WORKER_ACCOUNT);
+    } catch (error) {
+      console.error("이수증 업로드 실패:", error);
+      // 실패해도 일단 다음 단계로 진행
+      setCurrentStep(SignupStep.WORKER_ACCOUNT);
+    }
   };
 
   const handleSkipConfirm = () => {
@@ -61,6 +78,7 @@ export const useWorkerLicense = (
 
   return {
     uploadedImage,
+    isUploading,
     showSkipModal,
     setShowSkipModal,
     showCameraPermissionModal,

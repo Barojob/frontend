@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
-// import { useSendSms } from "@/hooks/useSendSms";
+import { useSendSms } from "@/hooks/useSendSms";
 import useSignupContext from "@/hooks/useSignupContext";
-// import { useVerifySms } from "@/hooks/useVerifySms";
+import { useVerifySms } from "@/hooks/useVerifySms";
 import { type Nullable } from "@/types/misc";
 import { cn } from "@/utils/classname";
 import { formatMinuteSecond } from "@/utils/formatters";
@@ -30,9 +30,8 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
     getRemainingCountdown(verification.requestedAt),
   );
 
-  // SMS API 임시 주석처리
-  // const { mutateAsync: sendSmsAsync } = useSendSms();
-  // const { mutateAsync: verifySmsAsync } = useVerifySms();
+  const { mutateAsync: sendSmsAsync } = useSendSms();
+  const { mutateAsync: verifySmsAsync } = useVerifySms();
 
   useHarmonicIntervalFn(
     () => setRemainingSeconds(getRemainingCountdown(verification.requestedAt)),
@@ -69,7 +68,7 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
                 }}
                 type="text"
                 maxLength={1}
-                value={verification.code[index]}
+                value={verification.code.padEnd(4, "")[index] || ""}
                 inputMode="numeric"
                 onKeyDown={handleBackspaceKey(index)}
                 onChange={handleInputChange(index)}
@@ -109,7 +108,7 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
         inputsRef.current[index + 1]?.focus();
       }
 
-      const code = verification.code.split("");
+      const code = verification.code.padEnd(4, "").split("");
       code[index] = event.target.value;
 
       setVerification((prev) => ({
@@ -135,9 +134,7 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
 
   async function handleResendSms() {
     try {
-      // SMS API 임시 주석처리
-      // await sendSmsAsync({ phoneNumber: personalInfo.phoneNumber });
-      console.log("SMS 재전송 시뮬레이션:", personalInfo.phoneNumber);
+      await sendSmsAsync({ phoneNumber: personalInfo.phoneNumber });
 
       setVerification((prev) => ({
         ...prev,
@@ -150,19 +147,10 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
 
   async function handleVerifySms() {
     try {
-      // SMS API 임시 주석처리
-      // const result = await verifySmsAsync({
-      //   phoneNumber: personalInfo.phoneNumber,
-      //   code: verification.code,
-      // });
-
-      // 임시로 항상 성공하도록 처리
-      const result = true;
-      console.log(
-        "SMS 인증 시뮬레이션:",
-        personalInfo.phoneNumber,
-        verification.code,
-      );
+      const result = await verifySmsAsync({
+        phoneNumber: personalInfo.phoneNumber,
+        code: verification.code,
+      });
 
       if (!result) {
         // TODO: handle validation error, show error modal

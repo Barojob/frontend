@@ -16,7 +16,7 @@ export const createEmployerSignUpRequest = ({
     nickname: personalInfo.name, // 임시: 이름을 닉네임으로 사용
     phoneNumber: personalInfo.phoneNumber,
     name: personalInfo.name,
-    businessName: employerInfo.businessNumber,
+    businessName: "미입력", // TODO: EmployerState에 businessName 필드 추가 필요
     title: employerInfo.position,
     businessRegistrationNumber: employerInfo.businessNumber,
     // FIXME: 백엔드에서 고용주 계좌 정보 지원 시 추가 예정

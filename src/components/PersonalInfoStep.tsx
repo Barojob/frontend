@@ -3,7 +3,7 @@ import Input from "@/components/Input";
 import PresenceTransition from "@/components/PresenceTransition";
 import SelectCarrierDrawer from "@/components/SelectCarrierDrawer";
 import { usePersonalInfoForm } from "@/hooks/usePersonalInfoForm";
-// import { useSendSms } from "@/hooks/useSendSms";
+import { useSendSms } from "@/hooks/useSendSms";
 import useSignupContext from "@/hooks/useSignupContext";
 import { cn } from "@/utils/classname";
 import React, { useRef } from "react";
@@ -36,12 +36,11 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
     verificationState: [, setVerification],
   } = useSignupContext();
 
-  // SMS API 임시 주석처리
-  // const {
-  //   mutateAsync: sendSmsAsync,
-  //   isPending: pendingSendSms,
-  //   isSuccess: successSendSms,
-  // } = useSendSms();
+  const {
+    mutateAsync: sendSmsAsync,
+    isPending: pendingSendSms,
+    isSuccess: successSendSms,
+  } = useSendSms();
 
   return (
     <form className={cn("pt-8", className)} onSubmit={handleSubmit}>
@@ -144,8 +143,8 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
             theme="primary"
             block
             type="submit"
-            // loading={pendingSendSms || successSendSms}
-            // disabled={pendingSendSms || successSendSms}
+            loading={pendingSendSms || successSendSms}
+            disabled={pendingSendSms || successSendSms}
           >
             인증번호 받기
           </Button>
@@ -158,9 +157,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
     event.preventDefault();
 
     try {
-      // SMS API 임시 주석처리
-      // await sendSmsAsync({ phoneNumber });
-      console.log("SMS 전송 시뮬레이션:", phoneNumber);
+      await sendSmsAsync({ phoneNumber });
 
       setVerification((prev) => ({
         ...prev,

@@ -6,7 +6,8 @@ export type WorkerSignUpRequest = {
   nickname: string;
   phoneNumber: string;
   name: string;
-  experienceCategories: string[];
+  experienceCategories: string;
+  equipmentTypes: string;
   bankName: string;
   accountNumber: string;
 };

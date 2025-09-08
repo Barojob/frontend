@@ -18,7 +18,9 @@ export const createWorkerSignUpRequest = ({
     nickname: personalInfo.name, // 임시: 이름을 닉네임으로 사용
     phoneNumber: personalInfo.phoneNumber,
     name: personalInfo.name,
-    experienceCategories,
+    experienceCategories:
+      experienceCategories.length > 0 ? experienceCategories.join(",") : "일반",
+    equipmentTypes: "없음", // 기본값
     bankName,
     accountNumber,
   };
