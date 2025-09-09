@@ -41,7 +41,6 @@ const EmployerAccountStep: React.FC<EmployerAccountStepProps> = ({
     showErrorModal,
     errorMessage,
     handleAddAccount,
-    handleSkip,
     handleErrorModalClose,
   } = useWorkerAccount(onValidityChange);
 
@@ -56,6 +55,21 @@ const EmployerAccountStep: React.FC<EmployerAccountStepProps> = ({
     isPending: isEmployerSignUpPending,
   } = useEmployerSignUp();
 
+  const handleSkipSignUp = async () => {
+    try {
+      const requestData = createEmployerSignUpRequest({
+        personalInfo,
+        employerInfo,
+        bankName: "",
+        accountNumber: "",
+      });
+      await employerSignUpAsync(requestData);
+      setCurrentStep(SignupStep.SIGNUP_SUCCESS);
+    } catch (error) {
+      console.error("고용주 회원가입 중 오류가 발생했습니다:", error);
+    }
+  };
+
   const handleConfirmModalClose = async () => {
     setShowConfirmModal(false);
 
@@ -63,7 +77,8 @@ const EmployerAccountStep: React.FC<EmployerAccountStepProps> = ({
       const requestData = createEmployerSignUpRequest({
         personalInfo,
         employerInfo,
-        // FIXME: 백엔드에서 고용주 계좌 정보 지원 시 추가 예정
+        bankName: selectedBank || "",
+        accountNumber,
       });
       await employerSignUpAsync(requestData);
       setCurrentStep(SignupStep.SIGNUP_SUCCESS);
@@ -141,7 +156,7 @@ const EmployerAccountStep: React.FC<EmployerAccountStepProps> = ({
       </div>
 
       <div className="fixed-bottom-button flex gap-3">
-        <Button onClick={handleSkip} theme="secondary" size="md" block>
+        <Button onClick={handleSkipSignUp} theme="secondary" size="md" block>
           건너뛰기
         </Button>
         <Button onClick={handleAddAccount} theme="primary" size="md" block>

@@ -3,12 +3,13 @@ import { useMutation } from "@tanstack/react-query";
 
 type EmployerSignUpArgs = {
   email: string;
-  nickname: string;
   phoneNumber: string;
   name: string;
-  businessName: string;
   title: string;
   businessRegistrationNumber: string;
+  birthDate: string;
+  bankName: string;
+  accountNumber: string;
 };
 
 type EmployerSignUpResponse = {
