@@ -3,8 +3,9 @@ import JobPostCard from "@/components/JobPost/JobPostCard";
 import NavigationHeader from "@/components/NavigationHeader";
 import StepIndicator from "@/components/StepIndicator";
 import WorkerCard from "@/components/WorkerCard";
-import { mockWorkers } from "@/fixtures/workers";
+import { mockWorkers, type Worker } from "@/fixtures/workers";
 import { useJobPosting } from "@/providers/JobPostingProvider";
+import SadIcon from "@/svgs/SadIcon";
 import { getPerPersonAmount } from "@/utils/jobPostingHelpers";
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -140,10 +141,6 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
         }, 500);
         return;
       }
-      console.log("Navigating to payment");
-      navigate("/payment");
-    } else {
-      // 직접 매칭
       if (!isSelectionComplete) {
         console.log("Selection not complete");
         return;
@@ -153,6 +150,10 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
         selectedWorkers,
       );
       navigate("/payment");
+    } else {
+      // 직접 매칭
+      console.log("Navigating to payment");
+      navigate("/payment");
     }
   };
 
@@ -161,13 +162,16 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
   }, [effectiveSelectedMatchingType, isAgreedSameDayPay]);
 
   // 추천 인력과 일반 인력 분리
-  const recommendedWorkers = useMemo(() => {
-    return mockWorkers.filter((worker) => worker.isRecommended);
+  const recommendedWorkers = useMemo((): Worker[] => {
+    return (mockWorkers as Worker[]).filter((worker) => worker.isRecommended);
   }, []);
 
-  const regularWorkers = useMemo(() => {
-    return mockWorkers.filter((worker) => !worker.isRecommended);
+  const regularWorkers = useMemo((): Worker[] => {
+    return (mockWorkers as Worker[]).filter((worker) => !worker.isRecommended);
   }, []);
+
+  // 빈 상태 여부 확인
+  const isEmpty = mockWorkers.length === 0;
 
   // 선택 완료 여부 확인
   const isSelectionComplete = useMemo(() => {
@@ -211,7 +215,7 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
         />
         <StepIndicator currentStep={2} totalSteps={3} />
       </div>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex flex-1 flex-col overflow-y-auto">
         {effectiveSelectedMatchingType === "smart" && (
           <div className="bg-gray-100">
             <div className="pt-7.5 bg-white px-6 pb-4">
@@ -312,67 +316,99 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
         )}
 
         {effectiveSelectedMatchingType === "direct" && (
-          <div className="p-6">
-            {/* 인력특공대 추천 Pick! 섹션 */}
-            <div className="mb-8">
-              <p className="mb-4 text-2xl font-bold text-neutral-700">
-                인력특공대<span className="text-blue-600"> 추천 Pick!</span>
-              </p>
-              <div className="space-y-4">
-                {recommendedWorkers.map((worker) => (
-                  <WorkerCard
-                    key={worker.id}
-                    worker={worker}
-                    isSelected={selectedWorkers.includes(worker.id)}
-                    onSelect={handleWorkerSelect}
-                    onViewDetails={(workerId) => {
-                      console.log("View details for worker:", workerId);
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
+          <div className="flex flex-1 flex-col p-6 pb-14">
+            {/* 인력 리스트가 비어있는 경우 */}
+            {isEmpty ? (
+              <>
+                {/* 중앙 콘텐츠 */}
+                <div className="flex flex-1 flex-col items-center justify-center">
+                  <SadIcon className="mb-4" />
+                  <div className="text-center">
+                    <p className="font-bold text-neutral-600">
+                      리스트가 비었여요
+                      <br />
+                      지금은 스마트 매칭을 이용해주세요
+                    </p>
+                  </div>
+                </div>
+                {/* 하단 고정 버튼 */}
+                <div className="flex-shrink-0">
+                  <button
+                    onClick={handleBackToJobPosting}
+                    className="w-full rounded-xl bg-blue-600 py-3 font-bold text-white"
+                  >
+                    돌아가기
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* 인력특공대 추천 Pick! 섹션 */}
+                <div className="mb-8">
+                  <p className="mb-4 text-2xl font-bold text-neutral-700">
+                    인력특공대<span className="text-blue-600"> 추천 Pick!</span>
+                  </p>
+                  <div className="space-y-4">
+                    {recommendedWorkers.length > 0 &&
+                      recommendedWorkers.map((worker) => (
+                        <WorkerCard
+                          key={worker.id}
+                          worker={worker}
+                          isSelected={selectedWorkers.includes(worker.id)}
+                          onSelect={handleWorkerSelect}
+                          onViewDetails={(workerId) => {
+                            console.log("View details for worker:", workerId);
+                          }}
+                        />
+                      ))}
+                  </div>
+                </div>
 
-            {/* 인력 리스트 섹션 */}
-            <div className="mb-8">
-              <h2 className="mb-4 text-xl font-bold text-neutral-700">
-                인력 리스트
-              </h2>
-              <div className="space-y-4">
-                {regularWorkers.map((worker) => (
-                  <WorkerCard
-                    key={worker.id}
-                    worker={worker}
-                    isSelected={selectedWorkers.includes(worker.id)}
-                    onSelect={handleWorkerSelect}
-                    onViewDetails={(workerId) => {
-                      console.log("View details for worker:", workerId);
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
+                {/* 인력 리스트 섹션 */}
+                <div className="mb-8">
+                  <h2 className="mb-4 text-xl font-bold text-neutral-700">
+                    인력 리스트
+                  </h2>
+                  <div className="space-y-4">
+                    {regularWorkers.length > 0 &&
+                      regularWorkers.map((worker) => (
+                        <WorkerCard
+                          key={worker.id}
+                          worker={worker}
+                          isSelected={selectedWorkers.includes(worker.id)}
+                          onSelect={handleWorkerSelect}
+                          onViewDetails={(workerId) => {
+                            console.log("View details for worker:", workerId);
+                          }}
+                        />
+                      ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
 
-      {/* 고정 하단 버튼 */}
-      <button
-        onClick={handlePaymentClick}
-        className={`absolute bottom-14 left-6 right-6 rounded-xl py-3 font-bold shadow-lg transition-all duration-150 ${
-          effectiveSelectedMatchingType === "smart"
-            ? isPaymentDisabled
-              ? "cursor-not-allowed border border-neutral-200 bg-zinc-100 text-gray-500"
-              : "bg-blue-600 text-white hover:bg-blue-700"
-            : isSelectionComplete
-              ? "bg-blue-600 text-white hover:bg-blue-700"
-              : "cursor-not-allowed border border-neutral-200 bg-zinc-100 text-gray-500"
-        }`}
-      >
-        {effectiveSelectedMatchingType === "smart"
-          ? "결제하기"
-          : `${sourceSelectedPersonCount}명 중 ${selectedWorkers.length}명 선택완료`}
-      </button>
+      {/* 고정 하단 버튼 - 직접 매칭에서 인력이 있을 때만 표시 */}
+      {!(effectiveSelectedMatchingType === "direct" && isEmpty) && (
+        <button
+          onClick={handlePaymentClick}
+          className={`absolute bottom-14 left-6 right-6 rounded-xl py-3 font-bold shadow-lg transition-all duration-150 ${
+            effectiveSelectedMatchingType === "smart"
+              ? isPaymentDisabled
+                ? "cursor-not-allowed border border-neutral-200 bg-zinc-100 text-gray-500"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+              : isSelectionComplete
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "cursor-not-allowed border border-neutral-200 bg-zinc-100 text-gray-500"
+          }`}
+        >
+          {effectiveSelectedMatchingType === "smart"
+            ? "결제하기"
+            : `${sourceSelectedPersonCount}명 중 ${selectedWorkers.length}명 선택완료`}
+        </button>
+      )}
     </div>
   );
 };

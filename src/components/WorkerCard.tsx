@@ -46,7 +46,7 @@ const WorkerCard: React.FC<Props> = ({
   return (
     <div
       className={cn(
-        "relative cursor-pointer rounded-[0.625rem] border border-neutral-200 bg-white p-4 transition-all duration-300 hover:shadow-md",
+        "relative rounded-[0.625rem] border border-neutral-200 bg-white p-4 transition-all duration-300",
         isSelected &&
           "border-blue-500 shadow-[0_0_10px_0_rgba(36,122,242,0.2)]",
         className,
