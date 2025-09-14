@@ -103,7 +103,7 @@ const LoginPage: React.FC<Props> = () => {
   }, [verificationSent]); // verificationSent가 바뀔 때 리스너 다시 설정 (inputRef가 나타날 때)
 
   return (
-    <div className="flex w-full flex-col justify-start px-6">
+    <div className="safe-area-top safe-area-bottom flex w-full flex-col justify-start px-6">
       {/* NavigationHeader는 그대로 유지 */}
       <NavigationHeader
         title={!verificationSent ? "로그인" : "휴대폰 인증"}

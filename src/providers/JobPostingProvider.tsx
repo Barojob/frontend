@@ -1,5 +1,5 @@
+import { getPerPersonAmount } from "@/utils/jobPostingHelpers";
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import { getPerPersonAmount } from "../utils/jobPostingHelpers";
 
 export interface JobPost {
   id: string;
@@ -157,7 +157,7 @@ export const JobPostingProvider: React.FC<JobPostingProviderProps> = ({
   // 매칭 방식 선택 상태
   const [selectedMatchingType, setSelectedMatchingType] = useState<
     "smart" | "direct" | null
-  >(null);
+  >("smart");
 
   const [expandedSection, setExpandedSection] = useState<
     | "jobType"
