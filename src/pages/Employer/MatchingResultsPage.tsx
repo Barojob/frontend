@@ -312,12 +312,12 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
         )}
 
         {effectiveSelectedMatchingType === "direct" && (
-          <div className="px-6 py-4">
+          <div className="p-6">
             {/* 인력특공대 추천 Pick! 섹션 */}
             <div className="mb-8">
-              <h2 className="mb-4 text-xl font-bold text-neutral-700">
-                <span className="text-blue-600">인력특공대 추천 Pick!</span>
-              </h2>
+              <p className="mb-4 text-2xl font-bold text-neutral-700">
+                인력특공대<span className="text-blue-600"> 추천 Pick!</span>
+              </p>
               <div className="space-y-4">
                 {recommendedWorkers.map((worker) => (
                   <WorkerCard
