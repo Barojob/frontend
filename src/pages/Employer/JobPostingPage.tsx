@@ -464,8 +464,8 @@ const JobPostingPageContent: React.FC<Props> = () => {
 
   return (
     <>
-      <div className="flex h-screen w-full flex-col bg-white">
-        <div className="flex-shrink-0 bg-white px-6 pt-12">
+      <div className="safe-area-top safe-area-bottom flex h-screen w-full flex-col bg-white">
+        <div className="flex-shrink-0 bg-white px-6">
           <NavigationHeader
             title="인력 구하기"
             className="mb-7"

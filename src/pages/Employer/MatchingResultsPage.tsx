@@ -3,9 +3,14 @@ import JobPostCard from "@/components/JobPost/JobPostCard";
 import NavigationHeader from "@/components/NavigationHeader";
 import StepIndicator from "@/components/StepIndicator";
 import WorkerCard from "@/components/WorkerCard";
-import { mockWorkers, type Worker } from "@/fixtures/workers";
+import { fallbackWorkers } from "@/fixtures/manualMatching";
+import {
+  useManualMatching,
+  useWorkerSelection,
+} from "@/hooks/useManualMatching";
 import { useJobPosting } from "@/providers/JobPostingProvider";
 import SadIcon from "@/svgs/SadIcon";
+import type { Worker } from "@/types/matching";
 import { getPerPersonAmount } from "@/utils/jobPostingHelpers";
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -44,7 +49,6 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
   }>;
   const [isAgreedSameDayPay, setIsAgreedSameDayPay] = useState(false);
   const [shouldShakeAgreement, setShouldShakeAgreement] = useState(false);
-  const [selectedWorkers, setSelectedWorkers] = useState<string[]>([]);
   const {
     selectedMatchingType,
     jobPosts,
@@ -123,8 +127,30 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
     return totalAmount;
   }, [effectiveJobPosts, totalAmount]);
 
+  // API 호출을 위한 매칭 요청 데이터 준비
+  const matchingRequest = useMemo(() => {
+    // TODO: 실제 neighborhoodId와 jobTypeId를 가져와야 함
+    // 현재는 임시로 기본값 사용
+    return {
+      neighborhoodId: 1, // 실제로는 선택된 지역 ID
+      jobTypeId: parseInt(sourceSelectedJobTypes[0] || "1"), // 실제로는 선택된 작업 타입 ID
+      page: 0,
+    };
+  }, [sourceSelectedJobTypes]);
+
+  // 인력 선택 훅 사용
+  const { selectedWorkers, handleWorkerSelect, isSelectionComplete } =
+    useWorkerSelection(sourceSelectedPersonCount);
+
+  // API 호출
+  const {
+    data: matchingData,
+    isLoading,
+    error,
+  } = useManualMatching(matchingRequest);
+
   const handleBackToJobPosting = () => {
-    navigate("/job-posting");
+    navigate(-1);
   };
 
   const handlePaymentClick = () => {
@@ -161,34 +187,24 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
     return effectiveSelectedMatchingType === "smart" && !isAgreedSameDayPay;
   }, [effectiveSelectedMatchingType, isAgreedSameDayPay]);
 
+  // API 데이터에서 인력 리스트 추출 (API가 비어있으면 폴백 사용)
+  const workers = useMemo(() => {
+    const apiWorkers = matchingData?.data?.workers || [];
+    if (apiWorkers.length > 0) return apiWorkers;
+    // DEV 여부와 무관하게 최소한의 리스트를 보여주기 위해 폴백 사용
+    return fallbackWorkers;
+  }, [matchingData?.data?.workers]);
+
+  const isEmpty = workers.length === 0;
+
   // 추천 인력과 일반 인력 분리
   const recommendedWorkers = useMemo((): Worker[] => {
-    return (mockWorkers as Worker[]).filter((worker) => worker.isRecommended);
-  }, []);
+    return workers.filter((worker) => worker.isRecommended);
+  }, [workers]);
 
   const regularWorkers = useMemo((): Worker[] => {
-    return (mockWorkers as Worker[]).filter((worker) => !worker.isRecommended);
-  }, []);
-
-  // 빈 상태 여부 확인
-  const isEmpty = mockWorkers.length === 0;
-
-  // 선택 완료 여부 확인
-  const isSelectionComplete = useMemo(() => {
-    return selectedWorkers.length >= sourceSelectedPersonCount;
-  }, [selectedWorkers.length, sourceSelectedPersonCount]);
-
-  // 인력 선택 핸들러
-  const handleWorkerSelect = (workerId: string) => {
-    setSelectedWorkers((prev) => {
-      if (prev.includes(workerId)) {
-        return prev.filter((id) => id !== workerId);
-      } else if (prev.length < sourceSelectedPersonCount) {
-        return [...prev, workerId];
-      }
-      return prev;
-    });
-  };
+    return workers.filter((worker) => !worker.isRecommended);
+  }, [workers]);
 
   useEffect(() => {
     console.log("shouldShakeAgreement changed:", shouldShakeAgreement);
@@ -262,7 +278,7 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
               )}
             </div>
 
-            <div className="mt-2 bg-white px-6 py-5 pb-10">
+            <div className="mt-2 bg-white px-6 py-5 pb-24">
               <p className="text-[1.375rem] font-bold text-neutral-600">
                 결제 금액을 확인 해주세요
               </p>
@@ -292,7 +308,7 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
                   </p>
                 </div>
                 <div
-                  className={`mt-2 flex items-center gap-2 ${
+                  className={`flex items-center gap-2 ${
                     shouldShakeAgreement ? "animate-shake-vertical" : ""
                   }`}
                 >
@@ -317,8 +333,27 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
 
         {effectiveSelectedMatchingType === "direct" && (
           <div className="flex flex-1 flex-col p-6 pb-14">
-            {/* 인력 리스트가 비어있는 경우 */}
-            {isEmpty ? (
+            {/* 로딩 상태 */}
+            {isLoading ? (
+              <div className="flex flex-1 items-center justify-center">
+                <div className="text-center">
+                  <p className="font-bold text-neutral-600">
+                    인력을 찾고 있어요...
+                  </p>
+                </div>
+              </div>
+            ) : error ? (
+              /* 에러 상태 */
+              <div className="flex flex-1 items-center justify-center">
+                <div className="text-center">
+                  <p className="font-bold text-red-600">
+                    인력 정보를 불러오는데 실패했습니다.
+                    <br />
+                    다시 시도해주세요.
+                  </p>
+                </div>
+              </div>
+            ) : isEmpty ? (
               <>
                 {/* 중앙 콘텐츠 */}
                 <div className="flex flex-1 flex-col items-center justify-center">
@@ -342,6 +377,7 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
                 </div>
               </>
             ) : (
+              /* 인력 리스트 표시 */
               <>
                 {/* 인력특공대 추천 Pick! 섹션 */}
                 <div className="mb-8">
@@ -390,8 +426,11 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
         )}
       </div>
 
-      {/* 고정 하단 버튼 - 직접 매칭에서 인력이 있을 때만 표시 */}
-      {!(effectiveSelectedMatchingType === "direct" && isEmpty) && (
+      {/* 고정 하단 버튼 - 직접 매칭에서 로딩 중이거나 에러가 있을 때는 표시하지 않음 */}
+      {!(
+        effectiveSelectedMatchingType === "direct" &&
+        (isLoading || error || isEmpty)
+      ) && (
         <button
           onClick={handlePaymentClick}
           className={`absolute bottom-14 left-6 right-6 rounded-xl py-3 font-bold shadow-lg transition-all duration-150 ${
