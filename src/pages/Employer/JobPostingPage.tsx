@@ -21,7 +21,7 @@ type Props = {
   className?: string;
 };
 
-const JobPostingPage: React.FC<Props> = () => {
+const JobPostingPageContent: React.FC<Props> = () => {
   const navigate = useNavigate();
   const {
     activeCategory,
@@ -464,8 +464,8 @@ const JobPostingPage: React.FC<Props> = () => {
 
   return (
     <>
-      <div className="flex h-screen w-full flex-col bg-white">
-        <div className="flex-shrink-0 bg-white px-6 pt-12">
+      <div className="safe-area-top safe-area-bottom flex h-screen w-full flex-col bg-white">
+        <div className="flex-shrink-0 bg-white px-6">
           <NavigationHeader
             title="인력 구하기"
             className="mb-7"
@@ -494,13 +494,20 @@ const JobPostingPage: React.FC<Props> = () => {
               )}
               isMatchingStep={true}
               onClick={() => {
-                if (selectedMatchingType === "smart") {
-                  console.log("스마트 매칭 시작");
-                  navigate("/matching-results");
-                } else if (selectedMatchingType === "direct") {
-                  console.log("직접 매칭 시작");
-                  navigate("/matching-results");
-                }
+                const snapshot = {
+                  selectedMatchingType,
+                  jobPosts,
+                  activeCategory,
+                  selectedDemolitionWork,
+                  selectedJobTypes,
+                  selectedEquipment,
+                  workStartTime,
+                  workEndTime,
+                  workMonth,
+                  workDay,
+                  selectedPersonCount,
+                };
+                navigate("/matching-results", { state: snapshot });
               }}
             />
           )}
@@ -539,6 +546,10 @@ const JobPostingPage: React.FC<Props> = () => {
       </div>
     </>
   );
+};
+
+const JobPostingPage: React.FC<Props> = () => {
+  return <JobPostingPageContent />;
 };
 
 export default JobPostingPage;

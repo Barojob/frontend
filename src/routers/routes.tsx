@@ -7,6 +7,7 @@ import JobRequestPage from "@/pages/JobRequestPage";
 import LoginPage from "@/pages/LoginPage";
 import LoginSuccessPage from "@/pages/LoginSuccessPage";
 import MainPage from "@/pages/MainPage";
+import PaymentPage from "@/pages/PaymentPage.tsx";
 import SignupPage from "@/pages/SignupPage";
 import WorkerMatchHistoryPage from "@/pages/Worker/WorkerMatchHistoryPage ";
 import WorkerDetailsPage from "@/pages/WorkerDetailsPage";
@@ -49,6 +50,10 @@ export const routes = [
   {
     path: "/matching-results",
     element: <MatchingResultsPage />,
+  },
+  {
+    path: "/payment",
+    element: <PaymentPage />,
   },
   {
     path: "/commute-range",

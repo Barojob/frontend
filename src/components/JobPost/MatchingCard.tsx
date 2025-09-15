@@ -1,6 +1,6 @@
-import DirectMatchIcon from "../../svgs/DirectMatchIcon";
-import SmartMatchIcon from "../../svgs/SmartMatchIcon";
-import { cn } from "../../utils/classname";
+import DirectMatchIcon from "@/svgs/DirectMatchIcon";
+import SmartMatchIcon from "@/svgs/SmartMatchIcon";
+import { cn } from "@/utils/classname";
 
 interface MatchingCardProps {
   type: "smart" | "direct";
@@ -18,7 +18,7 @@ const MatchingCard: React.FC<MatchingCardProps> = ({
   const config = {
     smart: {
       title: "스마트 매칭",
-      subtitle: "요청사항에 맞는 최기적의 근로자를 자동 배정",
+      subtitle: "요청사항에 맞는 최적의 근로자를 자동 배정",
       content: "매칭 완료시 근로자 변경이 어렵습니다",
       icon: <SmartMatchIcon />,
     },
