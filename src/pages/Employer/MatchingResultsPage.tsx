@@ -222,7 +222,7 @@ const MatchingResultsPageContent: React.FC<Props> = () => {
   ]);
 
   return (
-    <div className="safe-area-top safe-area-bottom relative flex h-screen w-full flex-col">
+    <div className="safe-area-top relative flex h-screen w-full flex-col">
       <div className="flex-shrink-0 bg-white px-6">
         <NavigationHeader
           title="매칭 결과"

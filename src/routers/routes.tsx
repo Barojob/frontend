@@ -7,6 +7,7 @@ import JobRequestPage from "@/pages/JobRequestPage";
 import LoginPage from "@/pages/LoginPage";
 import LoginSuccessPage from "@/pages/LoginSuccessPage";
 import MainPage from "@/pages/MainPage";
+import MatchingListPage from "@/pages/MatchingListPage";
 import PaymentPage from "@/pages/PaymentPage.tsx";
 import SignupPage from "@/pages/SignupPage";
 import WorkerMatchHistoryPage from "@/pages/Worker/WorkerMatchHistoryPage ";
@@ -50,6 +51,10 @@ export const routes = [
   {
     path: "/matching-results",
     element: <MatchingResultsPage />,
+  },
+  {
+    path: "/matching-list",
+    element: <MatchingListPage />,
   },
   {
     path: "/payment",
