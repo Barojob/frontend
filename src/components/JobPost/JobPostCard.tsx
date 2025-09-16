@@ -27,6 +27,7 @@ interface JobPostCardProps {
   onDelete?: () => void;
   onChangeContent?: () => void;
   onAddNewJob?: () => void;
+  variant?: "default" | "matching";
 }
 
 const JobPostCard: React.FC<JobPostCardProps> = ({
@@ -43,6 +44,7 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
   onDelete,
   onChangeContent,
   onAddNewJob,
+  variant = "default",
 }) => {
   return (
     <div className="mb-3 rounded-[0.625rem] border border-zinc-300 bg-white px-6 py-5">
@@ -52,22 +54,24 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
           <span className="text-lg font-bold text-neutral-700">
             {getCategoryLabel(activeCategory)}
           </span>
-          {onEdit && (
-            <RightArrowIcon className="ml-3 cursor-pointer text-gray-500" />
+          {onEdit && variant !== "matching" && (
+            <RightArrowIcon className="ml-3" />
           )}
         </div>
-        {onDelete && (
-          <button
-            onClick={onDelete}
-            className="rounded-full bg-gray-100 px-2.5 py-0.5 text-[0.625rem] text-neutral-400"
-          >
-            삭제
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {onDelete && (
+            <button
+              onClick={onDelete}
+              className="rounded-full bg-gray-100 px-2.5 py-0.5 text-[0.625rem] text-neutral-400"
+            >
+              삭제
+            </button>
+          )}
+        </div>
       </div>
 
       {/* 카드 내용 */}
-      <div className="space-y-2.5 text-sm text-zinc-500">
+      <div className="space-y-1 text-sm text-zinc-500">
         <div className="gap-6.5 flex">
           <span>세부 업무</span>
           <span className="font-medium text-neutral-600">
@@ -105,6 +109,9 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
             {getPersonCountLabel(selectedPersonCount)}
           </span>
         </div>
+        {variant === "matching" && (
+          <div className="mt-2.5 h-[0.5px] w-full bg-neutral-200" />
+        )}
       </div>
 
       {/* 예상 금액 */}
@@ -124,11 +131,11 @@ const JobPostCard: React.FC<JobPostCardProps> = ({
       </div>
 
       {/* 버튼 영역 */}
-      <div className="mt-2 flex flex-col items-end justify-center space-y-3">
+      <div className="flex flex-col items-end justify-center space-y-3">
         {onChangeContent && (
           <button
             onClick={onChangeContent}
-            className="flex w-fit justify-end rounded-[0.625rem] bg-slate-100 px-3 py-2 text-xs font-medium text-neutral-400"
+            className="mt-2 flex w-fit justify-end rounded-[0.625rem] bg-slate-100 px-3 py-2 text-xs font-medium text-neutral-400"
           >
             내용 변경
           </button>

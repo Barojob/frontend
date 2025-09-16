@@ -1,5 +1,5 @@
-import { createApiUrl } from "../configs/api";
-import type { User, UserResponse } from "../types/user";
+import { createApiUrl } from "@/configs/api";
+import type { User, UserResponse } from "@/types/user";
 
 // API 요청/응답 타입 정의
 export interface CheckUserRequest {
