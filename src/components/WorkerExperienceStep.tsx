@@ -65,16 +65,16 @@ const WorkerExperienceStep: React.FC<WorkerExperienceStepProps> = ({
             <div className="grid grid-cols-4 gap-3">
               {JOB_CATEGORIES[selectedCategory].map((job) => (
                 <button
-                  key={job}
-                  onClick={() => handleJobToggle(job)}
+                  key={job.id}
+                  onClick={() => handleJobToggle(job.name)}
                   className={cn(
                     "rounded-lg px-3 py-3 text-center text-sm font-medium",
-                    selectedJobs.includes(job)
+                    selectedJobs.includes(job.name)
                       ? "bg-blue-500 text-white"
                       : "bg-gray-100 text-gray-400 hover:bg-gray-200",
                   )}
                 >
-                  {job}
+                  {job.name}
                 </button>
               ))}
             </div>

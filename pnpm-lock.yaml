@@ -56,6 +56,9 @@ importers:
       framer-motion:
         specifier: ^12.23.0
         version: 12.23.12(@emotion/is-prop-valid@1.2.2)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -123,6 +126,9 @@ importers:
       '@types/classnames':
         specifier: ^2.3.0
         version: 2.3.4
+      '@types/lodash':
+        specifier: ^4.17.20
+        version: 4.17.20
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
