@@ -1,2 +1,3 @@
 // API 모듈들의 중앙 export
-export { authApi } from "./auth";
+export { authApi } from "@/apis/auth";
+export { matchingApi } from "@/apis/matching";
