@@ -4,8 +4,8 @@ import { type UserType } from "@/types/user";
 import React from "react";
 
 export enum SignupStep {
-  TERMS,
   USER_TYPE_SELECTION,
+  TERMS,
   PERSONAL_INFO,
   PHONE_VERIFICATION,
   PHONE_VERIFICATION_SUCCESS,

@@ -1,4 +1,5 @@
 import { EmployerState, PersonalInfoState } from "@/types/signup";
+import { formatBirthDate } from "@/utils/formatters";
 
 export type EmployerSignUpData = {
   personalInfo: PersonalInfoState;
@@ -19,7 +20,7 @@ export const createEmployerSignUpRequest = ({
     name: personalInfo.name,
     title: employerInfo.position,
     businessRegistrationNumber: employerInfo.businessNumber,
-    birthDate: personalInfo.birthDate,
+    birthDate: formatBirthDate(personalInfo.birthDate),
     bankName,
     accountNumber,
   };

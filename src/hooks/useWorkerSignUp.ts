@@ -5,7 +5,7 @@ export type WorkerSignUpRequest = {
   phoneNumber: string;
   name: string;
   bankName: string;
-  AccountNumber: string; // 대문자 A로 시작 (API 스키마와 일치)
+  AccountNumber: string;
   birthDate: string;
 };
 
@@ -22,7 +22,7 @@ export const useWorkerSignUp = () => {
     mutationFn: async (
       signUpData: WorkerSignUpRequest,
     ): Promise<WorkerSignUpResponse> => {
-      const response = await apiClient.post("/auth/worker/sign-up", signUpData);
+      const response = await apiClient.post("/auth/sign-up/worker", signUpData);
       return response.data;
     },
   });

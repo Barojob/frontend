@@ -19,7 +19,12 @@ const UserTypeSelectionStep: React.FC<UserTypeSelectionStepProps> = ({
     useUserTypeSelection({ onValidityChange, onUserTypeChange });
 
   return (
-    <div className={cn("flex h-screen flex-col", className)}>
+    <div
+      className={cn(
+        "safe-area-top safe-area-bottom flex h-screen flex-col",
+        className,
+      )}
+    >
       <div className="mt-8">
         <div className="text-2xl font-bold text-gray-900">
           <span className="text-blue-500">회원가입 유형</span>을

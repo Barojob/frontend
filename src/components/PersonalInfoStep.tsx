@@ -157,15 +157,19 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
     event.preventDefault();
 
     try {
+      console.log("SMS 전송 시도:", phoneNumber);
       await sendSmsAsync({ phoneNumber });
 
+      console.log("SMS 전송 성공, 다음 단계로 이동");
       setVerification((prev) => ({
         ...prev,
         requestedAt: new Date(),
       }));
       onNextStep();
     } catch (error) {
-      console.error("Failed to send SMS", error);
+      console.error("SMS 전송 실패:", error);
+      // TODO: 사용자에게 에러 알림 표시
+      alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
     }
   }
 };

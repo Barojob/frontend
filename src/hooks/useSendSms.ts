@@ -7,6 +7,6 @@ export const useSendSms = () => {
   return useMutation({
     mutationKey: ["sms:send"],
     mutationFn: ({ phoneNumber }: SendSmsArgs) =>
-      apiClient.post("/sms/send", { phoneNumber }),
+      apiClient.post("/auth/send/signup", { phoneNumber }),
   });
 };

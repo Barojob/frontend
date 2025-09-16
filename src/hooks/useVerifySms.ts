@@ -9,7 +9,7 @@ export const useVerifySms = () => {
   return useMutation({
     mutationKey: ["sms:verify"],
     mutationFn: async ({ phoneNumber, code }: VerifySmsArgs) => {
-      const response = await apiClient.post("/sms/verify", {
+      const response = await apiClient.post("/auth/verify", {
         phoneNumber,
         verificationCode: code,
       });

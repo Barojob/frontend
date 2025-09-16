@@ -28,8 +28,8 @@ export const useUserTypeSelection = ({
   };
 
   const handleNextStep = () => {
-    // 새로운 플로우: 타입 선택 후 개인정보 입력으로 이동
-    setCurrentStep(SignupStep.PERSONAL_INFO);
+    // 변경된 플로우: 타입 선택 후 약관 동의로 이동
+    setCurrentStep(SignupStep.TERMS);
   };
 
   return {

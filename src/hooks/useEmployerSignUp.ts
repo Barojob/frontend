@@ -26,7 +26,7 @@ export const useEmployerSignUp = () => {
       signUpData: EmployerSignUpArgs,
     ): Promise<EmployerSignUpResponse> => {
       const response = await apiClient.post(
-        "/auth/employer/sign-up",
+        "/auth/sign-up/employer",
         signUpData,
       );
       return response.data;

@@ -18,7 +18,7 @@ export const SignupContext =
 const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const userTypeState = React.useState<UserType>(null);
   const termsState = React.useState<CheckItem[]>(TERMS_FIXTURE);
-  const stepState = React.useState<SignupStep>(SignupStep.TERMS);
+  const stepState = React.useState<SignupStep>(SignupStep.USER_TYPE_SELECTION);
   const personalInfoState = React.useState<PersonalInfoState>({
     name: "",
     birthDate: "",

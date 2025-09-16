@@ -47,9 +47,7 @@ const SignupPageContent: React.FC = () => {
         variant="fadeInOut"
       >
         {step === SignupStep.TERMS && (
-          <SignupTermsStep
-            onNext={handleNextStep(SignupStep.USER_TYPE_SELECTION)}
-          />
+          <SignupTermsStep onNext={handleNextStep(SignupStep.PERSONAL_INFO)} />
         )}
 
         {step === SignupStep.USER_TYPE_SELECTION && (

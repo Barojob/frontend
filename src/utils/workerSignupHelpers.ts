@@ -1,4 +1,5 @@
 import { PersonalInfoState } from "@/types/signup";
+import { formatBirthDate } from "@/utils/formatters";
 
 export type WorkerSignUpData = {
   personalInfo: PersonalInfoState;
@@ -16,6 +17,6 @@ export const createWorkerSignUpRequest = ({
     name: personalInfo.name,
     bankName,
     AccountNumber: accountNumber,
-    birthDate: personalInfo.birthDate,
+    birthDate: formatBirthDate(personalInfo.birthDate),
   };
 };
