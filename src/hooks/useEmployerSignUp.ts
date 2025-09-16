@@ -15,7 +15,7 @@ type EmployerSignUpArgs = {
 type EmployerSignUpResponse = {
   user: {
     email: string;
-    nickname: string;
+    name: string;
   };
 };
 

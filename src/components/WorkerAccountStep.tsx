@@ -48,7 +48,6 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
   const {
     stepState: [, setCurrentStep],
     personalInfoState: [personalInfo],
-    workerExperienceState: [workerExperience],
   } = useSignupContext();
 
   const { mutateAsync: workerSignUpAsync, isPending: isWorkerSignUpPending } =
@@ -60,7 +59,6 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
     try {
       const requestData = createWorkerSignUpRequest({
         personalInfo,
-        experienceCategories: workerExperience.experienceCategories,
         bankName: selectedBank,
         accountNumber,
       });

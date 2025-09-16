@@ -2,20 +2,17 @@ import { apiClient } from "@/configs/apis";
 import { useMutation } from "@tanstack/react-query";
 
 export type WorkerSignUpRequest = {
-  email: string;
-  nickname: string;
   phoneNumber: string;
   name: string;
-  experienceCategories: string;
-  equipmentTypes: string;
   bankName: string;
-  accountNumber: string;
+  AccountNumber: string; // 대문자 A로 시작 (API 스키마와 일치)
+  birthDate: string;
 };
 
 export type WorkerSignUpResponse = {
   user: {
-    email: string;
-    nickname: string;
+    phoneNumber: string;
+    name: string;
   };
 };
 
