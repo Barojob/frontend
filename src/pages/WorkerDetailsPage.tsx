@@ -23,19 +23,19 @@ const WorkerDetailsPage: React.FC = () => {
   } = useWorkerDetails();
 
   const jobCategoryKeys = Object.keys(JOB_CATEGORIES) as JobCategory[];
-  const showJobs = selectedCategory === "보통인부"; // "보통인부"일 때만 직무 표시
+  const showJobs = selectedCategory === "보통인부";
   const showEquipments = selectedJobs.length > 0;
   const showSubmitSection = selectedEquipments.length > 0;
 
   return (
-    <div className="safe-area-top flex h-screen flex-col bg-white">
+    <div className="safe-area-top safe-area-bottom relative flex h-screen flex-col bg-white">
       <NavigationHeader
         className="px-6"
         title="일자리 요청하기"
         backTo="/commute-range"
       />
 
-      <main className="flex-1 overflow-y-auto px-6">
+      <main className="flex-1 overflow-y-auto px-6 pb-40">
         <h2 className="mt-4 text-2xl font-bold">
           원하시는 업무를 체크해주세요
         </h2>
@@ -109,7 +109,7 @@ const WorkerDetailsPage: React.FC = () => {
         )}
 
         {showSubmitSection && (
-          <section className="animate-slide-up mt-10 pb-10">
+          <section className="animate-slide-up mt-10">
             <h3 className="text-2xl font-bold">예상 수령 금액</h3>
             <div className="mt-4 rounded-lg bg-gray-100 px-6 py-4">
               <div className="flex items-baseline justify-between text-xl font-bold">
@@ -128,19 +128,21 @@ const WorkerDetailsPage: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div className="my-8 text-center text-sm text-blue-600">
-              <p>업무 내용에 따라 수령 금액이 달라집니다.</p>
-              <p>정확한 수령 금액은 공고에서 확인해주세요.</p>
-            </div>
-            <button
-              className="w-full rounded-lg bg-blue-600 py-3 text-lg font-bold text-white"
-              onClick={handleSubmit}
-            >
-              18시에 알려드릴게요 매칭 등록
-            </button>
           </section>
         )}
       </main>
+
+      {showSubmitSection && (
+        <footer className="absolute bottom-0 w-full bg-white px-6 pb-4 pt-2">
+          <div className="my-4 text-center text-sm text-blue-600">
+            <p>업무 내용에 따라 수령 금액이 달라집니다.</p>
+            <p>인건비는 현장에서 직접 수령하셔야 합니다.</p>
+          </div>
+          <Button onClick={handleSubmit} theme="primary" size="xl" block>
+            18시에 알려드릴게요 매칭 등록
+          </Button>
+        </footer>
+      )}
 
       <Modal
         visible={showPreparingModal}
