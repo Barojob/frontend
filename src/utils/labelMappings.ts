@@ -15,7 +15,7 @@ export const labelMappings = {
     "general-normal": "일반",
     "general-system": "시스템/아시바/폼자재정리",
     "general-spade": "삽질",
-    "general-saw": "톱질", 
+    "general-saw": "톱질",
     "general-sickle": "낫질",
     "signal-pedestrian": "보행안전도우미",
     "signal-vehicle": "차량/지게차 신호수",
