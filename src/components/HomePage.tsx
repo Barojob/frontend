@@ -62,27 +62,25 @@ const HomePage: React.FC<HomePageProps> = ({ userType }) => {
         </button>
       </div>
 
-      <div className="safe-area-top">
-        <MainHeading className="mx-2" title="경기 포천시" />
-        <Link to={mainButtonConfig.path}>
-          <div className={cn("bg-blue-1 mt-3 h-28 rounded-2xl")}>
-            <section className="flex h-full flex-col items-center justify-center">
-              <div className="flex items-center gap-x-3">
-                <span className="text-2xl font-bold text-white">
-                  {mainButtonConfig.text}
-                </span>
-                <MagnifyingGlassIcon className="size-4.5 text-[#C5D6EF]" />
-              </div>
-
-              <span className="whitespace-pre-wrap text-xs font-medium">
-                <span className="text-[#C5D6EF]">{`지금 찾으면 `}</span>
-                <span className="text-[#FFAD9C]">3시간 뒤</span>
-                <span className="text-[#C5D6EF]">에 공고를 받아요!</span>
+      <MainHeading className="mx-2" title="경기 포천시" />
+      <Link to={mainButtonConfig.path}>
+        <div className={cn("bg-blue-1 mt-3 h-28 rounded-2xl")}>
+          <section className="flex h-full flex-col items-center justify-center">
+            <div className="flex items-center gap-x-3">
+              <span className="text-2xl font-bold text-white">
+                {mainButtonConfig.text}
               </span>
-            </section>
-          </div>
-        </Link>
-      </div>
+              <MagnifyingGlassIcon className="size-4.5 text-[#C5D6EF]" />
+            </div>
+
+            <span className="whitespace-pre-wrap text-xs font-medium">
+              <span className="text-[#C5D6EF]">{`지금 찾으면 `}</span>
+              <span className="text-[#FFAD9C]">3시간 뒤</span>
+              <span className="text-[#C5D6EF]">에 공고를 받아요!</span>
+            </span>
+          </section>
+        </div>
+      </Link>
 
       {/* 기존 디자인 섹션 카드 */}
       {/* {userType === "worker" && (
