@@ -17,7 +17,7 @@ const MatchingListPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGoToMatching = () => {
-    navigate("/job-post-location");
+    navigate("/");
   };
   return (
     <div className="safe-area-top flex h-screen w-full flex-col bg-white">
@@ -45,6 +45,7 @@ const MatchingListPage: React.FC = () => {
               {matchingHistoryData.map((item) => (
                 <MathcingListCard
                   key={item.id}
+                  id={item.id}
                   date={item.date}
                   worker={item.worker}
                   address={item.address}

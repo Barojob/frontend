@@ -3,9 +3,11 @@ import MatchIcon from "@/svgs/MatchIcon";
 import { cn } from "@/utils/classname";
 import { formatCardDate, formatTopDate } from "@/utils/formatDate";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   className?: string;
+  id: string;
   date: string;
   worker: string;
   address: string;
@@ -15,17 +17,18 @@ type Props = {
 
 const MathcingListCard: React.FC<Props> = ({
   className,
+  id,
   date,
   worker,
   address,
   wage,
   requestDate,
 }) => {
+  const navigate = useNavigate();
   const isReviewAvailable = dayjs().diff(dayjs(requestDate), "day") <= 5;
 
   const handleReviewClick = () => {
-    // 리뷰 작성 페이지로 이동
-    console.log("리뷰 작성하러가기 클릭");
+    navigate(`/review-write/${id}`);
   };
 
   const handleInquiryClick = () => {
@@ -75,20 +78,26 @@ const MathcingListCard: React.FC<Props> = ({
         </div>
       </div>
 
-      <div className="flex gap-4 font-bold">
+      <div className="flex flex-col gap-2 text-sm font-bold">
         {isReviewAvailable && (
           <Button onClick={handleReviewClick} size="md" theme="secondary" block>
             리뷰작성하러가기
           </Button>
         )}
+        <div className="flex gap-4">
+          <Button onClick={handleInquiryClick} size="md" theme="tertiary" block>
+            문의하기
+          </Button>
 
-        <Button onClick={handleInquiryClick} size="md" theme="tertiary" block>
-          문의하기
-        </Button>
-
-        <Button onClick={handlePaymentClick} size="md" theme="secondary" block>
-          결제내역
-        </Button>
+          <Button
+            onClick={handlePaymentClick}
+            size="md"
+            theme="secondary"
+            block
+          >
+            결제내역
+          </Button>
+        </div>
       </div>
     </div>
   );

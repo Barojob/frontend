@@ -9,6 +9,7 @@ import LoginSuccessPage from "@/pages/LoginSuccessPage";
 import MainPage from "@/pages/MainPage";
 import MatchingListPage from "@/pages/MatchingListPage";
 import PaymentPage from "@/pages/PaymentPage.tsx";
+import ReviewWritePage from "@/pages/ReviewWritePage";
 import SignupPage from "@/pages/SignupPage";
 import WorkerMatchHistoryPage from "@/pages/Worker/WorkerMatchHistoryPage ";
 import WorkerDetailsPage from "@/pages/WorkerDetailsPage";
@@ -55,6 +56,10 @@ export const routes = [
   {
     path: "/matching-list",
     element: <MatchingListPage />,
+  },
+  {
+    path: "/review-write/:id",
+    element: <ReviewWritePage />,
   },
   {
     path: "/payment",
