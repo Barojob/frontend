@@ -1,75 +1,31 @@
-import Button from "@/components/Button";
-import JobRequestCard from "@/components/JobRequestCard";
-import MainCarousel from "@/components/MainCarousel";
-import NavBar from "@/components/NavBar";
-import UrgentRecruitmentCard from "@/components/UrgentRecruitmentCard";
-import BrandIcon from "@/svgs/BrandIcon";
-import { cn } from "@/utils/classname";
-import { BellIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import HomePage from "@/components/HomePage";
 import React from "react";
-import { Link } from "react-router-dom";
+
+// TODO: 실제 사용자 인증 훅으로 교체
+// import { useAuth } from "@/hooks/useAuth";
 
 const MainPage: React.FC = () => {
-  return (
-    <div className="bg-main-1 h-full px-6">
-      <div className="flex items-center justify-between py-6">
-        <BrandIcon className="max-w-37" />
-        <BellIcon className="size-7.5 text-blue-1" />
-      </div>
+  // TODO: 실제 로그인한 사용자 정보를 가져오는 로직
+  // const { user, isLoading } = useAuth();
 
-      <MainCarousel className="h-33 -mx-6" />
+  // 현재는 임시로 로컬스토리지나 다른 방법으로 사용자 타입을 판별
+  // 실제 구현에서는 JWT 토큰이나 컨텍스트에서 사용자 정보를 가져와야 함
+  const getUserType = (): "worker" | "employer" => {
+    // 예시: 로컬스토리지에서 사용자 타입 확인
+    const userType = localStorage.getItem("userType");
 
-      {/* 테스트용 Intro 페이지 이동 버튼 */}
-      <div className="mt-6">
-        <Link to="/intro">
-          <Button theme="primary" size="sm" block>
-            🧪 테스트: Intro 페이지로 이동
-          </Button>
-        </Link>
-      </div>
+    if (userType === "employer") return "employer";
+    return "worker";
+  };
 
-      <div className="mt-6">
-        <Link to="/worker-detail">
-          <Button theme="primary" size="sm" block>
-            🧪 테스트: 출퇴근 범위 설정 페이지로 이동
-          </Button>
-        </Link>
-      </div>
+  // TODO: 로딩 상태 처리
+  // if (isLoading) {
+  //   return <div className="flex h-screen items-center justify-center">로딩 중...</div>;
+  // }
 
-      <div className="mt-8">
-        <MainHeading title="경기 포천시" />
-        <Link to="/job-request">
-          <JobRequestCard className="mt-3" />
-        </Link>
-      </div>
+  const userType = getUserType();
 
-      <div className="mt-8">
-        <MainHeading title="채용 공고" />
-        <Link to="/job-post-location">
-          <JobRequestCard className="mt-3" />
-        </Link>
-      </div>
-
-      <div className="mt-8">
-        <MainHeading title="긴급 모집중" />
-        <UrgentRecruitmentCard className="h-30 mt-3" />
-      </div>
-
-      <NavBar className="fixed bottom-0 left-0 right-0" />
-    </div>
-  );
-};
-
-const MainHeading: React.FC<{ className?: string; title: string }> = ({
-  className,
-  title,
-}) => {
-  return (
-    <div className={cn("flex items-center gap-x-1", className)}>
-      <h2 className="font-bold text-[#494B4F]">{title}</h2>
-      <ChevronRightIcon className="stroke-4 size-3 text-[#6B7684]" />
-    </div>
-  );
+  return <HomePage userType={userType} />;
 };
 
 export default MainPage;

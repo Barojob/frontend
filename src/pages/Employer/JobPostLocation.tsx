@@ -20,13 +20,24 @@ const JobPostLocation: React.FC<Props> = ({
 }) => {
   const navigate = useNavigate();
 
+  // 사용자 타입 확인 함수
+  const getUserType = (): "worker" | "employer" => {
+    const userType = localStorage.getItem("userType");
+    return userType === "employer" ? "employer" : "worker";
+  };
+
   const handleLocationConfirm = (location: LocationData) => {
-    // 외부에서 전달된 onLocationConfirm이 있으면 그것을 사용, 없으면 기본 동작
     if (onLocationConfirm) {
       onLocationConfirm(location);
     } else {
-      // 기본 동작: job-posting 페이지로 이동하면서 선택된 위치 정보 전달
-      navigate("/job-posting", { state: { selectedLocation: location } });
+      // 사용자 타입에 따라 다른 페이지로 이동
+      const userType = getUserType();
+      console.log(" 현재 사용자 타입:", userType);
+      if (userType === "employer") {
+        navigate("/job-posting", { state: { selectedLocation: location } });
+      } else {
+        navigate("/commute-range", { state: { selectedLocation: location } });
+      }
     }
   };
 

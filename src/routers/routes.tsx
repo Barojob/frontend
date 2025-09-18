@@ -18,7 +18,6 @@ export const routes = [
     path: "/",
     element: <MainPage />,
   },
-
   {
     path: "/intro",
     element: <IntroPage />,
