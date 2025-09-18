@@ -21,10 +21,10 @@ const CommuteRangePage: React.FC = () => {
   } = useCommuteRangePage();
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-white">
-      <NavigationHeader title="출퇴근 가능 범위" backTo="/" />
+    <div className="safe-area-top flex h-screen flex-col overflow-hidden bg-white">
+      <NavigationHeader className="px-6" title="출퇴근 가능 범위" backTo="/" />
 
-      <div className="relative flex-1">
+      <div className="relative flex-1 pt-2">
         <Map className="h-full w-full" ref={mapRef} />
         {mapRef.current?.map && (
           <CommuteRangePolygon

@@ -48,3 +48,7 @@ export const formatMinuteSecond = (seconds: number): string => {
   const remainingSeconds = String(seconds % 60).padStart(2, "0");
   return `${remainingMinutes}:${remainingSeconds}`;
 };
+
+export const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat("ko-KR").format(amount);
+};
