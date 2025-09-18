@@ -17,7 +17,6 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ userType }) => {
-  // 사용자 타입에 따른 버튼 텍스트와 경로 설정
   const getMainButtonConfig = () => {
     if (userType === "worker") {
       return {
@@ -40,12 +39,12 @@ const HomePage: React.FC<HomePageProps> = ({ userType }) => {
     console.log(`🔄 사용자 타입 변경: ${userType} → ${newUserType}`);
     localStorage.setItem("userType", newUserType);
     console.log("💾 localStorage에 저장됨:", localStorage.getItem("userType"));
-    window.location.reload(); // 페이지 새로고침으로 변경사항 반영
+    window.location.reload();
   };
 
   return (
-    <div className="bg-main-1 h-full px-6">
-      <div className="flex items-center justify-between py-6">
+    <div className="bg-main-1 safe-area-top h-full px-6">
+      <div className="flex items-center justify-between py-4">
         <BrandIcon className="max-w-37" />
         <BellIcon className="size-7.5 text-blue-1" />
       </div>
@@ -53,7 +52,7 @@ const HomePage: React.FC<HomePageProps> = ({ userType }) => {
       <MainCarousel className="h-33 -mx-6" />
 
       {/* 테스트용 사용자 타입 변경 버튼 */}
-      <div className="mt-6">
+      <div className="mt-3">
         <button
           onClick={toggleUserType}
           className="w-full rounded-lg bg-gray-200 py-3 text-sm font-medium text-gray-700"
@@ -63,8 +62,7 @@ const HomePage: React.FC<HomePageProps> = ({ userType }) => {
         </button>
       </div>
 
-      {/* 메인 액션 버튼 - 사용자 타입에 따라 다름 */}
-      <div className="mt-8">
+      <div className="safe-area-top">
         <MainHeading className="mx-2" title="경기 포천시" />
         <Link to={mainButtonConfig.path}>
           <div className={cn("bg-blue-1 mt-3 h-28 rounded-2xl")}>
@@ -116,7 +114,9 @@ const MainHeading: React.FC<{ className?: string; title: string }> = ({
 }) => {
   return (
     <div className={cn("flex items-center gap-x-1", className)}>
-      <h2 className="font-bold text-[#494B4F]">{title}</h2>
+      <h2 className="font-['Noto_Sans_KR'] text-xl font-bold leading-tight text-[#494B4F]">
+        {title}
+      </h2>
       <ChevronRightIcon className="stroke-4 size-3 text-[#6B7684]" />
     </div>
   );
