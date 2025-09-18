@@ -51,6 +51,7 @@ const MatchingListPage: React.FC = () => {
                   address={item.address}
                   wage={item.wage}
                   requestDate={item.requestDate}
+                  contactPhone={"010-1234-5678"}
                 />
               ))}
             </div>
