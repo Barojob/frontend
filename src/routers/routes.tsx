@@ -1,26 +1,31 @@
-import CommuteRangePage from "@/pages/CommuteRangePage";
-import JobPostingPage from "@/pages/Employer/JobPostingPage";
-import JobPostLocation from "@/pages/Employer/JobPostLocation";
-import MatchingResultsPage from "@/pages/Employer/MatchingResultsPage";
-import IntroPage from "@/pages/IntroPage";
-import JobRequestPage from "@/pages/JobRequestPage";
-import LoginPage from "@/pages/LoginPage";
-import LoginSuccessPage from "@/pages/LoginSuccessPage";
-import MainPage from "@/pages/MainPage";
-import MatchingListPage from "@/pages/MatchingListPage";
-import PaymentPage from "@/pages/PaymentPage.tsx";
-import ReviewWritePage from "@/pages/ReviewWritePage";
-import SignupPage from "@/pages/SignupPage";
-import WorkerMatchHistoryPage from "@/pages/Worker/WorkerMatchHistoryPage ";
-import WorkerDetailsPage from "@/pages/WorkerDetailsPage";
+import { lazy } from "react";
 import { type RouteObject } from "react-router-dom";
 
-export const routes = [
+const CommuteRangePage = lazy(() => import("@/pages/CommuteRangePage"));
+const JobPostingPage = lazy(() => import("@/pages/Employer/JobPostingPage"));
+const JobPostLocation = lazy(() => import("@/pages/Employer/JobPostLocation"));
+const MatchingResultsPage = lazy(
+  () => import("@/pages/Employer/MatchingResultsPage"),
+);
+const IntroPage = lazy(() => import("@/pages/IntroPage"));
+const JobRequestPage = lazy(() => import("@/pages/JobRequestPage"));
+const LoginPage = lazy(() => import("@/pages/LoginPage"));
+const LoginSuccessPage = lazy(() => import("@/pages/LoginSuccessPage"));
+const MainPage = lazy(() => import("@/pages/MainPage"));
+const MatchingListPage = lazy(() => import("@/pages/MatchingListPage"));
+const PaymentPage = lazy(() => import("@/pages/PaymentPage.tsx"));
+const ReviewWritePage = lazy(() => import("@/pages/ReviewWritePage"));
+const SignupPage = lazy(() => import("@/pages/SignupPage"));
+const WorkerMatchHistoryPage = lazy(
+  () => import("@/pages/Worker/WorkerMatchHistoryPage "),
+);
+const WorkerDetailsPage = lazy(() => import("@/pages/WorkerDetailsPage"));
+
+export const routes: RouteObject[] = [
   {
     path: "/",
     element: <MainPage />,
   },
-
   {
     path: "/intro",
     element: <IntroPage />,
@@ -77,4 +82,4 @@ export const routes = [
     path: "/worker-match-history",
     element: <WorkerMatchHistoryPage />,
   },
-] satisfies RouteObject[];
+];

@@ -1,6 +1,7 @@
+import LoadingScreen from "@/components/LoadingScreen";
 import PresenceTransition from "@/components/PresenceTransition";
 import { routes } from "@/routers/routes";
-import React from "react";
+import React, { Suspense } from "react";
 import { useLocation, useRoutes } from "react-router-dom";
 
 const AnimatedRoutes: React.FC = () => {
@@ -13,7 +14,7 @@ const AnimatedRoutes: React.FC = () => {
       transitionKey={location.pathname}
       variant="softFadeIn"
     >
-      {element}
+      <Suspense fallback={<LoadingScreen />}>{element}</Suspense>
     </PresenceTransition>
   );
 };
