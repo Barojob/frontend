@@ -27,7 +27,7 @@ export const matchingHistoryData: MatchingHistoryItem[] = [
     worker: "보통인부 3명, 철거 2명",
     address: "서울시 강남구 테헤란로 123",
     wage: 150000,
-    requestDate: "2025-09-13",
+    requestDate: "2025-09-23",
     workers: [
       {
         id: "w1",
@@ -68,11 +68,11 @@ export const matchingHistoryData: MatchingHistoryItem[] = [
   },
   {
     id: "2",
-    date: "2025-08-20",
+    date: "2025-09-10",
     worker: "보통인부 3명, 철거 2명",
     address: "서울시 서초구 서초대로 456",
     wage: 180000,
-    requestDate: "2025-08-15",
+    requestDate: "2025-09-15",
     workers: [
       {
         id: "w6",
@@ -113,7 +113,7 @@ export const matchingHistoryData: MatchingHistoryItem[] = [
   },
   {
     id: "3",
-    date: "2025-09-22",
+    date: "2025-08-22",
     worker: "보통인부 3명, 철거 2명",
     address: "서울시 송파구 올림픽로 789",
     wage: 200000,
