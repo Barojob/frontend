@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import Calendar from "@/components/Calendar";
 import MathcingListCard from "@/components/MathcingListCard";
 import NavigationHeader from "@/components/NavigationHeader";
 import Tab from "@/components/Tab";
@@ -9,16 +10,21 @@ import { useNavigate } from "react-router-dom";
 
 const MatchingListPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"list" | "calendar">("list");
-  const [hasMatchingHistory] = useState(true); // true로 설정하여 카드가 보이도록 함
-  const handleTabClick = (tab: "list" | "calendar") => {
-    setActiveTab(tab);
-  };
+  const [hasMatchingHistory] = useState(true);
+  const [selectedDate, setSelectedDate] = useState<string>("");
 
   const navigate = useNavigate();
 
   const handleGoToMatching = () => {
     navigate("/");
   };
+
+  const handleDateSelect = (date: string) => {
+    setSelectedDate(date);
+  };
+
+  // 캘린더에서 항목 클릭 시 별도의 동작이 필요해지면 여기서 구현
+
   return (
     <div className="safe-area-top flex h-screen w-full flex-col bg-white">
       <div className="flex-shrink-0 bg-white px-6">
@@ -26,13 +32,13 @@ const MatchingListPage: React.FC = () => {
         <div className="mt-6 flex items-center justify-between px-12">
           <Tab
             isActive={activeTab === "list"}
-            onClick={() => handleTabClick("list")}
+            onClick={() => setActiveTab("list")}
           >
             리스트
           </Tab>
           <Tab
             isActive={activeTab === "calendar"}
-            onClick={() => handleTabClick("calendar")}
+            onClick={() => setActiveTab("calendar")}
           >
             캘린더
           </Tab>
@@ -40,22 +46,40 @@ const MatchingListPage: React.FC = () => {
       </div>
       <div className="bg-main-1 flex-1 overflow-hidden">
         {hasMatchingHistory ? (
-          <div className="h-full overflow-y-auto px-6 py-6 pb-12">
-            <div className="space-y-3">
-              {matchingHistoryData.map((item) => (
-                <MathcingListCard
-                  key={item.id}
-                  id={item.id}
-                  date={item.date}
-                  worker={item.worker}
-                  address={item.address}
-                  wage={item.wage}
-                  requestDate={item.requestDate}
-                  contactPhone={"010-1234-5678"}
-                />
-              ))}
+          activeTab === "list" ? (
+            <div className="h-full overflow-y-auto px-6 py-6 pb-12">
+              <div className="space-y-3">
+                {matchingHistoryData.map((item) => (
+                  <MathcingListCard
+                    key={item.id}
+                    id={item.id}
+                    date={item.date}
+                    worker={item.worker}
+                    address={item.address}
+                    wage={item.wage}
+                    requestDate={item.requestDate}
+                    contactPhone={"010-1234-5678"}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="h-full overflow-y-auto px-6 py-6 pb-24">
+              <Calendar
+                items={matchingHistoryData.map((item) => ({
+                  id: item.id,
+                  date: item.date,
+                  worker: item.worker,
+                  address: item.address,
+                  wage: item.wage,
+                  requestDate: item.requestDate,
+                  contactPhone: "010-1234-5678",
+                }))}
+                onDateSelect={handleDateSelect}
+                selectedDate={selectedDate}
+              />
+            </div>
+          )
         ) : (
           <div className="flex h-full flex-col items-center justify-center px-6">
             <div className="flex flex-1 flex-col items-center justify-center">

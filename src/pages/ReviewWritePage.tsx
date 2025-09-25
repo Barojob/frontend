@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import Modal from "@/components/Modal";
 import NavigationHeader from "@/components/NavigationHeader";
 import WorkerReviewCard from "@/components/WorkerReviewCard";
 import {
@@ -7,6 +8,7 @@ import {
   matchingHistoryData,
 } from "@/fixtures/matchingHistory";
 import MatchIcon from "@/svgs/MatchIcon";
+import WarningIcon from "@/svgs/WarningIcon";
 import { formatTopDate } from "@/utils/formatDate";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,6 +16,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const ReviewWritePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [showExitModal, setShowExitModal] = useState(false);
 
   // 실제로는 API에서 데이터를 가져와야 하지만, 여기서는 목업 데이터 사용
   const matchingData: MatchingHistoryItem | undefined =
@@ -69,9 +72,30 @@ const ReviewWritePage: React.FC = () => {
     );
   };
 
+  const hasAnyReview = workers.some(
+    (worker) =>
+      (worker.rating && worker.rating > 0) ||
+      (worker.review && worker.review.trim() !== "") ||
+      worker.isBlacklisted ||
+      worker.isPriorityMatched,
+  );
+
   const handleSubmit = () => {
     // 리뷰 제출 로직
     console.log("리뷰 제출:", workers);
+    navigate("/matching-list");
+  };
+
+  const handleBackClick = () => {
+    if (hasAnyReview) {
+      setShowExitModal(true);
+    } else {
+      navigate("/matching-list");
+    }
+  };
+
+  const handleExitConfirm = () => {
+    setShowExitModal(false);
     navigate("/matching-list");
   };
 
@@ -89,7 +113,11 @@ const ReviewWritePage: React.FC = () => {
   return (
     <div className="safe-area-top flex h-screen w-full flex-col bg-white">
       <div className="flex-shrink-0 bg-white px-6">
-        <NavigationHeader title="평가 및 리뷰 작성" backTo="/matching-list" />
+        <NavigationHeader
+          title="평가 및 리뷰 작성"
+          backTo="/matching-list"
+          onBack={handleBackClick}
+        />
         <div className="mt-6.5 flex flex-col gap-1 pb-5 text-2xl font-bold text-neutral-600">
           <p className="flex items-center gap-2">
             <MatchIcon className="mr-2" />
@@ -117,17 +145,50 @@ const ReviewWritePage: React.FC = () => {
             />
           ))}
         </div>
-        <div className="safe-area-bottom fixed inset-x-0 bottom-0 px-6">
-          <Button
-            onClick={handleSubmit}
-            size="xl"
-            theme="primary"
-            block
-            className="font-bold"
-          >
-            리뷰 저장하기
-          </Button>
-        </div>
+        {hasAnyReview && (
+          <div className="safe-area-bottom fixed inset-x-0 bottom-0 px-6">
+            <Button
+              onClick={handleSubmit}
+              size="xl"
+              theme="primary"
+              block
+              className="font-bold"
+            >
+              리뷰 저장하기
+            </Button>
+          </div>
+        )}
+
+        <Modal visible={showExitModal} onClose={() => setShowExitModal(false)}>
+          <div className="flex flex-col items-center px-5 py-9">
+            <WarningIcon className="size-22 flex items-center justify-center" />
+            <p className="mb-2.5 text-center text-2xl font-bold text-neutral-600">
+              리뷰를 저장하지 않고
+              <br /> 나가시겠어요?
+            </p>
+            <p className="mb-4.5 text-center text-xs text-gray-500">
+              저장하지 않으면 작성한 리뷰가 사라져요
+            </p>
+            <div className="flex w-full gap-3">
+              <Button
+                theme="tertiary"
+                size="md"
+                className="w-full font-bold"
+                onClick={handleExitConfirm}
+              >
+                나가기
+              </Button>
+              <Button
+                theme="secondary"
+                size="md"
+                className="w-full font-bold"
+                onClick={handleSubmit}
+              >
+                저장하기
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </div>
     </div>
   );

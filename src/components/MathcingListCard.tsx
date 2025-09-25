@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import Modal from "@/components/Modal";
+import Drawer from "@/components/Drawer";
 import MatchIcon from "@/svgs/MatchIcon";
 import PhoneIcon from "@/svgs/PhoneIcon";
 import { cn } from "@/utils/classname";
@@ -17,6 +17,7 @@ type Props = {
   wage: number;
   requestDate: string; // 요청일 (리뷰 작성 가능 기간 계산용)
   contactPhone?: string;
+  hideReviewButton?: boolean;
 };
 
 const MathcingListCard: React.FC<Props> = ({
@@ -27,7 +28,7 @@ const MathcingListCard: React.FC<Props> = ({
   address,
   wage,
   requestDate,
-  contactPhone = "010-1234-5678",
+  hideReviewButton = false,
 }) => {
   const navigate = useNavigate();
   const isReviewAvailable = dayjs().diff(dayjs(requestDate), "day") <= 5;
@@ -47,8 +48,8 @@ const MathcingListCard: React.FC<Props> = ({
   };
 
   const handleCall = () => {
-    const tel = contactPhone.replace(/[^0-9+]/g, "");
-    window.location.href = `tel:${tel}`;
+    const phoneNumber = "1543-1543".replace(/-/g, "");
+    window.location.href = `tel:${phoneNumber}`;
   };
 
   return (
@@ -89,9 +90,9 @@ const MathcingListCard: React.FC<Props> = ({
       </div>
 
       <div className="flex flex-col gap-2 text-sm font-bold">
-        {isReviewAvailable && (
+        {!hideReviewButton && isReviewAvailable && (
           <Button onClick={handleReviewClick} size="md" theme="secondary" block>
-            리뷰작성하러가기
+            리뷰작성하러 가기
           </Button>
         )}
         <div className="flex gap-4">
@@ -110,37 +111,33 @@ const MathcingListCard: React.FC<Props> = ({
         </div>
       </div>
 
-      <Modal visible={isInquiryOpen} onClose={() => setIsInquiryOpen(false)}>
-        <div className="flex flex-col items-center px-6 py-6">
-          <PhoneIcon className="mb-4 size-10" />
-          <h3 className="text-center text-lg font-bold text-neutral-800">
-            문의하기
-          </h3>
-          <div className="mb-4 rounded-xl bg-neutral-50 p-4 text-center text-base font-semibold text-neutral-700">
-            {contactPhone}
+      <Drawer
+        panelClassName="bg-white"
+        visible={isInquiryOpen}
+        onClose={() => setIsInquiryOpen(false)}
+      >
+        <div className="flex flex-col px-2">
+          <div className="mb-4 flex items-center gap-3.5" onClick={handleCall}>
+            <PhoneIcon className="size-5 text-blue-600" />
+            <p className="font-bold text-neutral-600">
+              통화 연결 <br />
+              <span className="text-sm font-normal text-gray-500">
+                1543-1543
+              </span>
+            </p>
           </div>
           <div className="flex w-full gap-3">
             <Button
               theme="tertiary"
               size="md"
-              className="w-full"
+              className="w-full font-bold"
               onClick={() => setIsInquiryOpen(false)}
             >
-              닫기
-            </Button>
-            <Button
-              theme="primary"
-              size="md"
-              className="w-full"
-              onClick={handleCall}
-            >
-              <span className="inline-flex items-center justify-center gap-1.5">
-                전화걸기
-              </span>
+              취소
             </Button>
           </div>
         </div>
-      </Modal>
+      </Drawer>
     </div>
   );
 };
