@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { authApi, SignInRequest, SignUpRequest } from "../apis/auth";
+import { UserType } from "../types/user";
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
@@ -55,6 +57,25 @@ export const useAuth = () => {
     return signOutMutation.mutateAsync();
   };
 
+  // 임시 유저 정보 가져오기
+  const [tempUser, setTempUser] = useState<{ type: UserType } | null>(null);
+
+  useEffect(() => {
+    try {
+      const userType = sessionStorage.getItem("userType");
+      if (userType) {
+        setTempUser({ type: JSON.parse(userType) });
+      }
+    } catch (error) {
+      console.error("Failed to parse userType from sessionStorage", error);
+    }
+  }, []);
+
+  const setTempUserType = (type: UserType) => {
+    sessionStorage.setItem("userType", JSON.stringify(type));
+    setTempUser({ type });
+  };
+
   return {
     // async 함수들 (Promise 반환)
     signIn,
@@ -70,6 +91,9 @@ export const useAuth = () => {
     signInError: signInMutation.error,
     signUpError: signUpMutation.error,
     signOutError: signOutMutation.error,
+
+    tempUser,
+    setTempUserType,
 
     // 원본 mutation 객체들 (필요시 직접 접근)
     signInMutation,

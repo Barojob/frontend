@@ -1,19 +1,50 @@
 import Button from "@/components/Button";
-import JobRequestCard from "@/components/JobRequestCard";
-import MainCarousel from "@/components/MainCarousel";
+import EmployerContent from "@/components/MainPage/EmployerContent";
+import WorkerContent from "@/components/MainPage/WorkerContent";
 import NavBar from "@/components/NavBar";
-import UrgentRecruitmentCard from "@/components/UrgentRecruitmentCard";
+import { useAuth } from "@/hooks/useAuth";
 import AlertIcon from "@/svgs/AlertIcon";
 import BrandIcon from "@/svgs/BrandIcon";
-import { cn } from "@/utils/classname";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import React from "react";
-import { Link } from "react-router-dom";
 
 const MainPage: React.FC = () => {
+  const { tempUser: user, setTempUserType } = useAuth();
+
+  // 임시로 사용자 유형을 토글하는 함수
+  const toggleUserType = () => {
+    const newUserType = user?.type === "worker" ? "employer" : "worker";
+    if (newUserType) {
+      setTempUserType(newUserType);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-4 p-4">
+        <div className="flex w-full max-w-xs gap-4">
+          <Button
+            onClick={() => setTempUserType("worker")}
+            theme="primary"
+            size="xl"
+            block
+          >
+            근로자로 시작
+          </Button>
+          <Button
+            onClick={() => setTempUserType("employer")}
+            theme="secondary"
+            size="xl"
+            block
+          >
+            구인자로 시작
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-main-1 safe-area-top safe-area-bottom h-full">
-      {/* 고정 헤더 */}
       <div className="safe-area-top bg-main-1 fixed left-0 right-0 top-0 z-20 px-6 backdrop-blur-sm">
         <div className="flex items-center justify-between py-6">
           <BrandIcon className="max-w-37" />
@@ -21,60 +52,17 @@ const MainPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 스크롤 가능한 콘텐츠 영역 */}
-      <div className="px-6 pb-20 pt-20">
-        <MainCarousel className="h-33 -mx-6" />
-
-        {/* 테스트용 Intro 페이지 이동 버튼 */}
-        <div className="mt-6">
-          <Link to="/intro">
-            <Button theme="primary" size="sm" block>
-              🧪 테스트: Intro 페이지로 이동
-            </Button>
-          </Link>
+      <main className="overflow-y-auto px-6 pb-20 pt-20">
+        {user.type === "worker" ? <WorkerContent /> : <EmployerContent />}
+        <div className="mb-4">
+          <Button onClick={toggleUserType} theme="secondary" size="sm" block>
+            🧪 현재: {user.type} |{" "}
+            {user.type === "worker" ? "구인자" : "근로자"}로 변경
+          </Button>
         </div>
-
-        <div className="mt-6">
-          <Link to="/worker-detail">
-            <Button theme="primary" size="sm" block>
-              🧪 테스트: 출퇴근 범위 설정 페이지로 이동
-            </Button>
-          </Link>
-        </div>
-
-        <div className="mt-8">
-          <MainHeading title="경기 포천시" />
-          <Link to="/job-request">
-            <JobRequestCard className="mt-3" />
-          </Link>
-        </div>
-
-        <div className="mt-8">
-          <MainHeading title="채용 공고" />
-          <Link to="/job-post-location">
-            <JobRequestCard className="mt-3" />
-          </Link>
-        </div>
-
-        <div className="mt-8">
-          <MainHeading title="긴급 모집중" />
-          <UrgentRecruitmentCard className="h-30 mt-3" />
-        </div>
-      </div>
+      </main>
 
       <NavBar className="fixed bottom-0 left-0 right-0" />
-    </div>
-  );
-};
-
-const MainHeading: React.FC<{ className?: string; title: string }> = ({
-  className,
-  title,
-}) => {
-  return (
-    <div className={cn("flex items-center gap-x-1", className)}>
-      <h2 className="font-bold text-[#494B4F]">{title}</h2>
-      <ChevronRightIcon className="stroke-4 size-3 text-[#6B7684]" />
     </div>
   );
 };
