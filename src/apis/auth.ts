@@ -330,7 +330,7 @@ export const signUpEmployer = async (req: SignUpEmployerRequest) => {
 
   console.log("최종 headers:", headers);
 
-  const apiUrl = createApiUrl("/api/user/signup/employer");
+  const apiUrl = createApiUrl("/auth/sign-up/employer");
   console.log("최종 API URL:", apiUrl);
 
   const requestBody = {
@@ -345,6 +345,7 @@ export const signUpEmployer = async (req: SignUpEmployerRequest) => {
     accountNumber: req.accountNumber,
   };
   console.log("최종 request body:", JSON.stringify(requestBody, null, 2));
+  console.log("최종 request headers:", JSON.stringify(headers, null, 2));
 
   const response = await fetch(apiUrl, {
     method: "POST",
