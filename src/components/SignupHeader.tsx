@@ -14,8 +14,7 @@ type Props = {
 const SignupHeader: React.FC<Props> = ({ className, step, onStepChange }) => {
   const navigate = useNavigate();
 
-  const showBackButton =
-    step !== SignupStep.TERMS && step !== SignupStep.SIGNUP_SUCCESS;
+  const showBackButton = step !== SignupStep.SIGNUP_SUCCESS;
 
   if (step === SignupStep.SIGNUP_SUCCESS) {
     return null;

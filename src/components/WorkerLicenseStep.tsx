@@ -32,6 +32,7 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const {
     uploadedImage,
+    isUploading,
     showSkipModal,
     setShowSkipModal,
     showCameraPermissionModal,
@@ -152,8 +153,9 @@ const WorkerLicenseStep: React.FC<WorkerLicenseStepProps> = ({
             theme="primary"
             size="md"
             block
+            disabled={isUploading}
           >
-            {uploadedImage ? "완료" : "건너뛰기"}
+            {isUploading ? "업로드 중..." : uploadedImage ? "완료" : "건너뛰기"}
           </Button>
         </div>
       )}

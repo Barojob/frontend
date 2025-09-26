@@ -1,14 +1,8 @@
-import useSignupContext from "@/hooks/useSignupContext";
-import { SignupStep } from "@/types/signup";
 import { useEffect, useState } from "react";
 
 export const useWorkerAccount = (
   onValidityChange: (isValid: boolean) => void,
 ) => {
-  const {
-    stepState: [, setCurrentStep],
-  } = useSignupContext();
-
   const [selectedBank, setSelectedBank] = useState<string>("");
   const [accountNumber, setAccountNumber] = useState<string>("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -41,11 +35,6 @@ export const useWorkerAccount = (
     setShowConfirmModal(true);
   };
 
-  const handleConfirmModalClose = () => {
-    setShowConfirmModal(false);
-    setCurrentStep(SignupStep.SIGNUP_SUCCESS);
-  };
-
   const handleErrorModalClose = () => {
     setShowErrorModal(false);
   };
@@ -56,11 +45,11 @@ export const useWorkerAccount = (
     accountNumber,
     handleAccountNumberChange,
     showConfirmModal,
+    setShowConfirmModal,
     showErrorModal,
     errorMessage,
     handleAddAccount,
     handleSkip,
-    handleConfirmModalClose,
     handleErrorModalClose,
   };
 };

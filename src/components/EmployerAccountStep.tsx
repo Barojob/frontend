@@ -11,22 +11,22 @@ import {
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
 import { BANK_LIST } from "@/fixtures/banks";
+import { useEmployerSignUp } from "@/hooks/useEmployerSignUp";
 import useSignupContext from "@/hooks/useSignupContext";
 import { useWorkerAccount } from "@/hooks/useWorkerAccount";
-import { useWorkerSignUp } from "@/hooks/useWorkerSignUp";
 import WarningIcon from "@/svgs/WarningIcon";
 import { SignupStep } from "@/types/signup";
 import { cn } from "@/utils/classname";
-import { createWorkerSignUpRequest } from "@/utils/workerSignupHelpers";
+import { createEmployerSignUpRequest } from "@/utils/employerSignupHelpers";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
-type WorkerAccountStepProps = {
+type EmployerAccountStepProps = {
   className?: string;
   onValidityChange: (isValid: boolean) => void;
 };
 
-const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
+const EmployerAccountStep: React.FC<EmployerAccountStepProps> = ({
   className,
   onValidityChange,
 }) => {
@@ -41,36 +41,60 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
     showErrorModal,
     errorMessage,
     handleAddAccount,
-    handleSkip,
     handleErrorModalClose,
   } = useWorkerAccount(onValidityChange);
 
   const {
     stepState: [, setCurrentStep],
     personalInfoState: [personalInfo],
+    employerInfoState: [employerInfo],
     signUpKeyState: [signUpKey],
   } = useSignupContext();
 
-  const { mutateAsync: workerSignUpAsync, isPending: isWorkerSignUpPending } =
-    useWorkerSignUp();
+  const {
+    mutateAsync: employerSignUpAsync,
+    isPending: isEmployerSignUpPending,
+  } = useEmployerSignUp();
+
+  const handleSkipSignUp = async () => {
+    console.log("고용주 회원가입 시작 - signUpKey:", signUpKey);
+    try {
+      const requestData = createEmployerSignUpRequest({
+        personalInfo,
+        employerInfo,
+        bankName: "",
+        accountNumber: "",
+      });
+      console.log("고용주 회원가입 요청 데이터:", requestData);
+      const result = await employerSignUpAsync({
+        ...requestData,
+        signUpKey: signUpKey || "",
+      });
+      console.log("고용주 회원가입 결과:", result);
+      setCurrentStep(SignupStep.SIGNUP_SUCCESS);
+    } catch (error) {
+      console.error("고용주 회원가입 중 오류가 발생했습니다:", error);
+    }
+  };
 
   const handleConfirmModalClose = async () => {
     setShowConfirmModal(false);
 
     try {
-      const requestData = createWorkerSignUpRequest({
+      const requestData = createEmployerSignUpRequest({
         personalInfo,
-        bankName: selectedBank,
+        employerInfo,
+        bankName: selectedBank || "",
         accountNumber,
       });
-      const result = await workerSignUpAsync({
+      const result = await employerSignUpAsync({
         ...requestData,
         signUpKey: signUpKey || "",
       });
-      console.log("근로자 회원가입 결과:", result);
+      console.log("고용주 회원가입 결과:", result);
       setCurrentStep(SignupStep.SIGNUP_SUCCESS);
     } catch (error) {
-      console.error("근로자 회원가입 중 오류가 발생했습니다:", error);
+      console.error("고용주 회원가입 중 오류가 발생했습니다:", error);
     }
   };
 
@@ -79,7 +103,7 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
       <div className="flex-1">
         <div className="mt-8">
           <div className="text-2xl font-bold text-gray-900">
-            임금을 <span className="text-blue-500">지급받을 계좌</span>를
+            임금을 <span className="text-blue-500">지급할 계좌</span>를
           </div>
           <div className="mt-1 text-2xl font-bold text-gray-900">
             등록해주세요
@@ -91,41 +115,33 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
 
         <div className="mb-6 mt-12 space-y-4">
           <div>
-            <label className="mb-3 block text-base font-medium text-gray-900">
-              은행명
+            <label className="block text-sm font-medium text-gray-900">
+              은행 <span className="text-red-500">*</span>
             </label>
             <DeprecatedDrawer>
               <DeprecatedDrawerTrigger asChild>
-                <button
-                  className={cn(
-                    "flex h-11 w-full items-center justify-between rounded-lg border",
-                    "border-gray-200 bg-white px-4 py-3 text-left",
-                    "focus:border-gray-400 focus:outline-none",
-                  )}
-                >
+                <div className="mt-2 flex cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-3 text-left shadow-sm">
                   <span
-                    className={cn(
-                      "text-base",
-                      selectedBank ? "text-gray-900" : "text-gray-400",
-                    )}
+                    className={selectedBank ? "text-gray-900" : "text-gray-400"}
                   >
-                    {selectedBank || "은행을 선택해주세요"}
+                    {selectedBank || "은행을 선택하세요"}
                   </span>
                   <ChevronDownIcon className="h-5 w-5 text-gray-400" />
-                </button>
+                </div>
               </DeprecatedDrawerTrigger>
               <DeprecatedDrawerContent>
                 <DeprecatedDrawerHeader>
                   <DeprecatedDrawerTitle>은행 선택</DeprecatedDrawerTitle>
                 </DeprecatedDrawerHeader>
-                <div className="grid grid-cols-3 gap-3 p-6">
+                <div className="grid gap-3 px-6 pb-6">
                   {BANK_LIST.map((bank) => (
-                    <DeprecatedDrawerClose key={bank.id} asChild>
+                    <DeprecatedDrawerClose key={bank.name} asChild>
                       <BoxButton
-                        name={bank.name}
+                        key={bank.name}
                         image={bank.image}
-                        selected={selectedBank === bank.name}
+                        name={bank.name}
                         onClick={() => setSelectedBank(bank.name)}
+                        className="h-12"
                       />
                     </DeprecatedDrawerClose>
                   ))}
@@ -135,23 +151,23 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
           </div>
 
           <div>
-            <label className="mb-3 block text-base font-medium text-gray-900">
-              계좌번호
+            <label className="block text-sm font-medium text-gray-900">
+              계좌번호 <span className="text-red-500">*</span>
             </label>
             <Input
+              type="text"
+              placeholder="계좌번호를 입력하세요"
               value={accountNumber}
               onValueChange={handleAccountNumberChange}
-              placeholder="'-' 없이 숫자만 입력해주세요"
-              type="text"
+              className="mt-2 w-full rounded-lg border-0 bg-gray-100 px-4 py-3"
               inputMode="numeric"
-              className="w-full rounded-lg border-0 bg-gray-100 px-4 py-3"
             />
           </div>
         </div>
       </div>
 
       <div className="fixed-bottom-button flex gap-3">
-        <Button onClick={handleSkip} theme="secondary" size="md" block>
+        <Button onClick={handleSkipSignUp} theme="secondary" size="md" block>
           건너뛰기
         </Button>
         <Button onClick={handleAddAccount} theme="primary" size="md" block>
@@ -177,8 +193,8 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
             theme="primary"
             size="md"
             className="mx-auto w-full max-w-[200px]"
-            loading={isWorkerSignUpPending}
-            disabled={isWorkerSignUpPending}
+            loading={isEmployerSignUpPending}
+            disabled={isEmployerSignUpPending}
           >
             확인했어요
           </Button>
@@ -186,18 +202,17 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
       </Modal>
 
       <Modal visible={showErrorModal} onClose={handleErrorModalClose}>
-        <div className="px-8 py-10 text-center">
-          <div className="mb-6 flex justify-center">
-            <WarningIcon />
+        <div className="space-y-4 p-6">
+          <div className="flex items-center space-x-3">
+            <WarningIcon className="h-6 w-6 text-red-500" />
+            <h3 className="text-lg font-semibold text-gray-900">오류</h3>
           </div>
-          <h2 className="mb-8 text-xl font-bold text-gray-900">
-            {errorMessage}
-          </h2>
+          <p className="text-sm text-gray-600">{errorMessage}</p>
           <Button
-            onClick={handleErrorModalClose}
+            size="sm"
             theme="primary"
-            size="md"
-            className="mx-auto w-full max-w-[200px]"
+            onClick={handleErrorModalClose}
+            className="w-full"
           >
             확인
           </Button>
@@ -207,4 +222,4 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
   );
 };
 
-export default WorkerAccountStep;
+export default EmployerAccountStep;

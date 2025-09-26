@@ -14,6 +14,7 @@ export const useWorkerExperience = ({
 }: UseWorkerExperienceProps) => {
   const {
     stepState: [, setCurrentStep],
+    workerExperienceState: [, setWorkerExperience],
   } = useSignupContext();
 
   const [selectedCategory, setSelectedCategory] = useState<JobCategory | "">(
@@ -38,7 +39,11 @@ export const useWorkerExperience = ({
   };
 
   const handleNext = () => {
-    // FIXME: 선택된 경험(selectedJobs)을 상태나 API로 저장하는 로직 필요
+    // 선택된 경험을 SignupContext에 저장
+    setWorkerExperience({
+      experienceCategories: selectedJobs,
+    });
+
     setCurrentStep(SignupStep.WORKER_LICENSE);
   };
 

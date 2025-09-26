@@ -8,10 +8,8 @@ const config: CapacitorConfig = {
   appName: process.env.VITE_APP_NAME,
   webDir: "dist",
   ios: {
-    // iOS 네이티브 스와이프 뒤로가기 활성화
     allowsLinkPreview: false,
     backgroundColor: "#ffffff",
-    // 스와이프 뒤로가기 활성화
     preferredContentMode: "mobile",
   },
   server: {
@@ -21,7 +19,6 @@ const config: CapacitorConfig = {
     cleartext: true,
   },
   plugins: {
-    // iOS의 네이티브 스와이프 뒤로가기를 위한 설정
     App: {
       launchAutoHide: true,
     },

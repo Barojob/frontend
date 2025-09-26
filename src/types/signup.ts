@@ -4,13 +4,14 @@ import { type UserType } from "@/types/user";
 import React from "react";
 
 export enum SignupStep {
+  USER_TYPE_SELECTION,
   TERMS,
   PERSONAL_INFO,
   PHONE_VERIFICATION,
   PHONE_VERIFICATION_SUCCESS,
-  USER_TYPE_SELECTION,
   ALREADY_REGISTERED,
   EMPLOYER_INFO,
+  EMPLOYER_ACCOUNT,
   WORKER_INFO,
   WORKER_EXPERIENCE,
   WORKER_LICENSE,
@@ -44,9 +45,14 @@ export type VerificationState = {
 };
 
 export type EmployerState = {
+  companyName: string;
   position: string;
   email: string;
   businessNumber: string;
+};
+
+export type WorkerExperienceState = {
+  experienceCategories: string[];
 };
 
 export type SignUpContextType = {
@@ -60,6 +66,10 @@ export type SignUpContextType = {
     VerificationState,
     React.Dispatch<React.SetStateAction<VerificationState>>,
   ];
+  signUpKeyState: [
+    string | null,
+    React.Dispatch<React.SetStateAction<string | null>>,
+  ];
   userTypeState: [
     UserTypeState,
     React.Dispatch<React.SetStateAction<UserTypeState>>,
@@ -67,5 +77,9 @@ export type SignUpContextType = {
   employerInfoState: [
     EmployerState,
     React.Dispatch<React.SetStateAction<EmployerState>>,
+  ];
+  workerExperienceState: [
+    WorkerExperienceState,
+    React.Dispatch<React.SetStateAction<WorkerExperienceState>>,
   ];
 };
