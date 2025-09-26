@@ -19,17 +19,16 @@ const SIGNUP_STEP_TITLES: Record<SignupStep, string> = {
 };
 
 const PREVIOUS_STEP_MAP: Partial<Record<SignupStep, SignupStep>> = {
-  // 새로운 플로우: 약관동의 -> 타입선택 -> 개인정보 -> 인증번호 -> 각자 정보입력 -> 계좌 -> 완료
-  [SignupStep.USER_TYPE_SELECTION]: SignupStep.TERMS,
-  [SignupStep.PERSONAL_INFO]: SignupStep.USER_TYPE_SELECTION,
+  // 새로운 플로우: 유저타입선택 -> 약관동의 -> 개인정보 -> 인증번호 -> 각자 정보입력 -> 계좌 -> 완료
+  // USER_TYPE_SELECTION은 첫 번째 단계이므로 이전 단계가 없음 (인트로 페이지로 이동)
+  [SignupStep.TERMS]: SignupStep.USER_TYPE_SELECTION,
+  [SignupStep.PERSONAL_INFO]: SignupStep.TERMS,
   [SignupStep.PHONE_VERIFICATION]: SignupStep.PERSONAL_INFO,
   [SignupStep.PHONE_VERIFICATION_SUCCESS]: SignupStep.PHONE_VERIFICATION,
 
-  // 고용주 플로우: 타입선택 -> 개인정보 -> 인증 -> 고용주정보 -> 계좌 -> 완료
   [SignupStep.EMPLOYER_INFO]: SignupStep.PHONE_VERIFICATION,
   [SignupStep.EMPLOYER_ACCOUNT]: SignupStep.EMPLOYER_INFO, // 고용주의 계좌 등록
 
-  // 근로자 플로우: 타입선택 -> 개인정보 -> 인증 -> 경력체크 -> 이수증 -> 계좌 -> 완료
   [SignupStep.WORKER_EXPERIENCE]: SignupStep.PHONE_VERIFICATION,
   [SignupStep.WORKER_LICENSE]: SignupStep.WORKER_EXPERIENCE,
   [SignupStep.WORKER_ACCOUNT]: SignupStep.WORKER_LICENSE, // 근로자의 계좌 등록

@@ -23,6 +23,7 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
   const {
     personalInfoState: [personalInfo],
     verificationState: [verification, setVerification],
+    signUpKeyState: [, setSignUpKey],
   } = useSignupContext();
 
   const inputsRef = useRef<HTMLInputElement[]>([]);
@@ -146,21 +147,35 @@ const PhoneVerificationCodeStep: React.FC<PhoneVerificationCodeStepProps> = ({
   }
 
   async function handleVerifySms() {
+    console.log("인증번호 확인 시작:", verification.code);
     try {
       const result = await verifySmsAsync({
         phoneNumber: personalInfo.phoneNumber,
         code: verification.code,
       });
 
-      if (!result) {
-        // TODO: handle validation error, show error modal
-        console.debug("Code does not match");
+      console.log("인증번호 확인 결과:", result);
+      console.log("결과 타입:", typeof result);
+
+      if (!result.success) {
+        console.debug("인증번호가 일치하지 않음");
         return;
       }
 
-      onNext();
+      // signUpKey를 상태에 저장
+      if (result.signUpKey) {
+        console.log("signUpKey 저장:", result.signUpKey);
+        setSignUpKey(result.signUpKey);
+        console.log("다음 단계로 이동");
+        onNext();
+      } else {
+        console.log("signUpKey가 없음 - 회원가입을 진행할 수 없습니다");
+        // signUpKey가 없으면 에러 처리
+        console.error("signUpKey를 받지 못했습니다. 다시 시도해주세요.");
+        return;
+      }
     } catch (error) {
-      console.error("Error occured in our BE server", error);
+      console.error("인증번호 확인 중 오류:", error);
     }
   }
 };

@@ -48,6 +48,7 @@ const EmployerAccountStep: React.FC<EmployerAccountStepProps> = ({
     stepState: [, setCurrentStep],
     personalInfoState: [personalInfo],
     employerInfoState: [employerInfo],
+    signUpKeyState: [signUpKey],
   } = useSignupContext();
 
   const {
@@ -56,6 +57,7 @@ const EmployerAccountStep: React.FC<EmployerAccountStepProps> = ({
   } = useEmployerSignUp();
 
   const handleSkipSignUp = async () => {
+    console.log("고용주 회원가입 시작 - signUpKey:", signUpKey);
     try {
       const requestData = createEmployerSignUpRequest({
         personalInfo,
@@ -63,7 +65,12 @@ const EmployerAccountStep: React.FC<EmployerAccountStepProps> = ({
         bankName: "",
         accountNumber: "",
       });
-      await employerSignUpAsync(requestData);
+      console.log("고용주 회원가입 요청 데이터:", requestData);
+      const result = await employerSignUpAsync({
+        ...requestData,
+        signUpKey: signUpKey || "",
+      });
+      console.log("고용주 회원가입 결과:", result);
       setCurrentStep(SignupStep.SIGNUP_SUCCESS);
     } catch (error) {
       console.error("고용주 회원가입 중 오류가 발생했습니다:", error);
@@ -80,7 +87,11 @@ const EmployerAccountStep: React.FC<EmployerAccountStepProps> = ({
         bankName: selectedBank || "",
         accountNumber,
       });
-      await employerSignUpAsync(requestData);
+      const result = await employerSignUpAsync({
+        ...requestData,
+        signUpKey: signUpKey || "",
+      });
+      console.log("고용주 회원가입 결과:", result);
       setCurrentStep(SignupStep.SIGNUP_SUCCESS);
     } catch (error) {
       console.error("고용주 회원가입 중 오류가 발생했습니다:", error);

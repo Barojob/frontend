@@ -45,6 +45,7 @@ export type VerificationState = {
 };
 
 export type EmployerState = {
+  companyName: string;
   position: string;
   email: string;
   businessNumber: string;
@@ -64,6 +65,10 @@ export type SignUpContextType = {
   verificationState: [
     VerificationState,
     React.Dispatch<React.SetStateAction<VerificationState>>,
+  ];
+  signUpKeyState: [
+    string | null,
+    React.Dispatch<React.SetStateAction<string | null>>,
   ];
   userTypeState: [
     UserTypeState,

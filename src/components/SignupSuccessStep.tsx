@@ -1,12 +1,20 @@
 import Button from "@/components/Button";
+import useSignupContext from "@/hooks/useSignupContext";
 import CongratsIcon from "@/svgs/CongratsIcon";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignupSuccessStep: React.FC = () => {
   const navigate = useNavigate();
+  const {
+    personalInfoState: [personalInfo],
+    userTypeState: [userType],
+  } = useSignupContext();
 
   const handleGoToLogin = () => {
+    // 회원가입한 정보를 localStorage에 저장
+    localStorage.setItem("recentSignupPhone", personalInfo.phoneNumber);
+    localStorage.setItem("recentSignupUserType", userType || "");
     navigate("/login");
   };
 

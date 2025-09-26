@@ -39,6 +39,7 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
     setEmailDomain,
     isCustomDomain,
     setIsCustomDomain,
+    showPositionField,
     showEmailField,
     showBusinessNumberField,
     isFormValid,
@@ -47,10 +48,6 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
   const emailLocalRef = useRef<HTMLInputElement>(null);
   const customDomainRef = useRef<HTMLInputElement>(null);
   const businessNumberRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (showEmailField) emailLocalRef.current?.focus();
-  }, [showEmailField]);
 
   useEffect(() => {
     if (isCustomDomain) customDomainRef.current?.focus();
@@ -77,18 +74,35 @@ const EmployerInfoStep: React.FC<EmployerInfoStepProps> = ({
       <div className="mt-8 flex-1 space-y-6">
         <div className="space-y-4">
           <label className="block text-sm font-medium text-gray-900">
-            직함 <span className="text-red-500">*</span>
+            회사명 <span className="text-red-500">*</span>
           </label>
           <Input
             type="text"
-            placeholder="직함을 입력하세요"
-            value={employerInfo.position}
+            placeholder="회사명을 입력하세요"
+            value={employerInfo.companyName}
             onValueChange={(value) =>
-              setEmployerInfo((prev) => ({ ...prev, position: value }))
+              setEmployerInfo((prev) => ({ ...prev, companyName: value }))
             }
             className="w-full rounded-lg border-0 bg-gray-100 px-4 py-3"
           />
         </div>
+
+        {showPositionField && (
+          <div className="animate-slide-up space-y-4">
+            <label className="block text-sm font-medium text-gray-900">
+              직함 <span className="text-red-500">*</span>
+            </label>
+            <Input
+              type="text"
+              placeholder="직함을 입력하세요"
+              value={employerInfo.position}
+              onValueChange={(value) =>
+                setEmployerInfo((prev) => ({ ...prev, position: value }))
+              }
+              className="w-full rounded-lg border-0 bg-gray-100 px-4 py-3"
+            />
+          </div>
+        )}
 
         {showEmailField && (
           <div className="animate-slide-up space-y-4">

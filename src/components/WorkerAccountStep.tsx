@@ -48,6 +48,7 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
   const {
     stepState: [, setCurrentStep],
     personalInfoState: [personalInfo],
+    signUpKeyState: [signUpKey],
   } = useSignupContext();
 
   const { mutateAsync: workerSignUpAsync, isPending: isWorkerSignUpPending } =
@@ -62,7 +63,11 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
         bankName: selectedBank,
         accountNumber,
       });
-      await workerSignUpAsync(requestData);
+      const result = await workerSignUpAsync({
+        ...requestData,
+        signUpKey: signUpKey || "",
+      });
+      console.log("근로자 회원가입 결과:", result);
       setCurrentStep(SignupStep.SIGNUP_SUCCESS);
     } catch (error) {
       console.error("근로자 회원가입 중 오류가 발생했습니다:", error);

@@ -30,8 +30,10 @@ const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
     requestedAt: null,
     verifiedAt: null,
   });
+  const signUpKeyState = React.useState<string | null>(null);
 
   const employerInfoState = React.useState<EmployerState>({
+    companyName: "",
     position: "",
     email: "",
     businessNumber: "",
@@ -51,6 +53,7 @@ const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
         userTypeState,
         employerInfoState,
         workerExperienceState,
+        signUpKeyState,
       }}
     >
       {children}

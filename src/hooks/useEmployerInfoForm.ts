@@ -12,6 +12,7 @@ export const useEmployerInfoForm = (
   const [emailLocal, setEmailLocal] = useState("");
   const [emailDomain, setEmailDomain] = useState("");
   const [isCustomDomain, setIsCustomDomain] = useState(false);
+  const [showPositionField, setShowPositionField] = useState(false);
   const [showEmailField, setShowEmailField] = useState(false);
   const [showBusinessNumberField, setShowBusinessNumberField] = useState(false);
 
@@ -20,8 +21,12 @@ export const useEmployerInfoForm = (
     [emailLocal, emailDomain],
   );
 
+  const isCompanyNameValid = useMemo(
+    () => employerInfo.companyName.trim().length > 0,
+    [employerInfo.companyName],
+  );
   const isPositionValid = useMemo(
-    () => employerInfo.position.trim().length > 0,
+    () => employerInfo.position.trim().length >= 2,
     [employerInfo.position],
   );
   const isEmailValid = useMemo(
@@ -34,9 +39,17 @@ export const useEmployerInfoForm = (
   );
 
   const isFormValid = useMemo(
-    () => isPositionValid && isEmailValid && isBusinessNumberValid,
-    [isPositionValid, isEmailValid, isBusinessNumberValid],
+    () =>
+      isCompanyNameValid &&
+      isPositionValid &&
+      isEmailValid &&
+      isBusinessNumberValid,
+    [isCompanyNameValid, isPositionValid, isEmailValid, isBusinessNumberValid],
   );
+
+  useEffect(() => {
+    if (isCompanyNameValid) setShowPositionField(true);
+  }, [isCompanyNameValid]);
 
   useEffect(() => {
     if (isPositionValid) setShowEmailField(true);
@@ -55,6 +68,7 @@ export const useEmployerInfoForm = (
   }, [isFormValid, onValidityChange]);
 
   useEffect(() => {
+    if (employerInfo.companyName) setShowPositionField(true);
     if (employerInfo.position) setShowEmailField(true);
     if (employerInfo.email) {
       setShowBusinessNumberField(true);
@@ -67,7 +81,7 @@ export const useEmployerInfoForm = (
         }
       }
     }
-  }, [employerInfo.position, employerInfo.email]);
+  }, [employerInfo.companyName, employerInfo.position, employerInfo.email]);
 
   return {
     employerInfo,
@@ -78,6 +92,7 @@ export const useEmployerInfoForm = (
     setEmailDomain,
     isCustomDomain,
     setIsCustomDomain,
+    showPositionField,
     showEmailField,
     showBusinessNumberField,
     isFormValid,

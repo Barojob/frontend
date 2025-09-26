@@ -2,6 +2,9 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
 import NavigationHeader from "@/components/NavigationHeader";
+import { useAuth } from "@/hooks/useAuth";
+import { useCheckUser } from "@/hooks/useCheckUser";
+import { useSendLogin } from "@/hooks/useSendLogin";
 import WarningIcon from "@/svgs/WarningIcon";
 import { cn } from "@/utils/classname";
 import React, { useEffect, useRef, useState } from "react";
@@ -17,9 +20,38 @@ const LoginPage: React.FC<Props> = () => {
   const [timer, setTimer] = useState(300);
   const [verificationCode, setVerificationCode] = useState("");
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
+
+  // API 훅들
+  const { mutateAsync: checkUserAsync, isPending: isCheckingUser } =
+    useCheckUser();
+  const { mutateAsync: sendLoginAsync, isPending: isSendingLogin } =
+    useSendLogin();
+  const { signIn, isSigningIn } = useAuth();
+
+  // 컴포넌트 마운트 시 최근 회원가입한 번호가 있다면 자동 입력
+  React.useEffect(() => {
+    const recentSignupPhone = localStorage.getItem("recentSignupPhone");
+    const recentSignupUserType = localStorage.getItem("recentSignupUserType");
+
+    if (recentSignupPhone) {
+      setPhoneNumber(recentSignupPhone);
+      console.log(
+        "최근 회원가입한 번호 자동 입력:",
+        recentSignupPhone,
+        "타입:",
+        recentSignupUserType,
+      );
+
+      // 사용한 후 localStorage에서 제거
+      localStorage.removeItem("recentSignupPhone");
+      localStorage.removeItem("recentSignupUserType");
+    }
+  }, []);
 
   const handleBack = () => {
     if (verificationSent) {
@@ -45,22 +77,83 @@ const LoginPage: React.FC<Props> = () => {
     return () => clearInterval(countdown);
   }, [verificationSent, timer]);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!verificationSent) {
-      // 첫 번째 클릭: 인증문자 발송
-      if (phoneNumber.length !== 13) return; // 버튼 비활성화된 상태에서 눌릴 경우 방지
-      setVerificationSent(true);
-      setTimer(120); // 인증번호 타이머는 2분(120초)으로 시작
-      setVerificationCode("");
-    } else {
-      // 두 번째 클릭: 로그인 처리 (인증번호 확인)
-      if (verificationCode.length >= 4) {
-        // 임시로 인증번호가 "1234"가 아니면 에러 모달 표시
-        if (verificationCode !== "1234") {
+      // 첫 번째 클릭: 사용자 확인 및 인증번호 발송
+      if (phoneNumber.length !== 13) return;
+
+      console.log("로그인 시도:", phoneNumber);
+
+      try {
+        // 1. 먼저 EMPLOYER로 체크
+        let userExists = false;
+        let role = "";
+
+        console.log("EMPLOYER 체크 중...");
+        const employerResult = await checkUserAsync({
+          role: "EMPLOYER",
+          phoneNumber,
+        });
+
+        console.log("EMPLOYER 결과:", employerResult);
+
+        if (employerResult.success && employerResult.exists) {
+          userExists = true;
+          role = "EMPLOYER";
+        } else {
+          // 2. EMPLOYER가 아니면 WORKER로 체크
+          console.log("WORKER 체크 중...");
+          const workerResult = await checkUserAsync({
+            role: "WORKER",
+            phoneNumber,
+          });
+
+          console.log("WORKER 결과:", workerResult);
+
+          if (workerResult.success && workerResult.exists) {
+            userExists = true;
+            role = "WORKER";
+          }
+        }
+
+        console.log("사용자 존재 여부:", userExists, "역할:", role);
+
+        if (!userExists) {
+          console.log("사용자가 존재하지 않아 에러 모달 표시");
+          setErrorMessage("가입되지 않은 휴대폰 번호입니다.");
           setShowErrorModal(true);
           return;
         }
-        navigate("/login-success"); // 로그인 성공 페이지로 이동
+
+        // 3. 사용자가 존재하면 로그인용 인증번호 발송
+        console.log("인증번호 발송 중...");
+        const loginResult = await sendLoginAsync({ phoneNumber });
+        console.log("인증번호 발송 결과:", loginResult);
+
+        setUserRole(role);
+        setVerificationSent(true);
+        setTimer(120);
+        setVerificationCode("");
+      } catch (error) {
+        console.error("로그인 처리 중 오류:", error);
+        setErrorMessage("로그인 중 오류가 발생했습니다.");
+        setShowErrorModal(true);
+      }
+    } else {
+      // 두 번째 클릭: 로그인 처리 (인증번호 확인)
+      if (verificationCode.length >= 4 && userRole) {
+        try {
+          await signIn({
+            verificationCode,
+            phoneNumber,
+            role: userRole,
+          });
+          navigate("/login-success");
+        } catch (error) {
+          console.error("로그인 실패:", error);
+          setErrorMessage("인증번호가 올바르지 않습니다.");
+          setShowErrorModal(true);
+        }
       }
     }
   };
@@ -73,9 +166,10 @@ const LoginPage: React.FC<Props> = () => {
 
   const isPhoneNumberValid = phoneNumber.length === 13;
   const isVerificationCodeValid = verificationCode.length >= 4;
+  const isLoading = isCheckingUser || isSendingLogin || isSigningIn;
   const isLoginButtonEnabled = !verificationSent
-    ? isPhoneNumberValid
-    : isVerificationCodeValid;
+    ? isPhoneNumberValid && !isLoading
+    : isVerificationCodeValid && !isLoading;
 
   // 입력 필드가 focus될 때 자동 스크롤
   useEffect(() => {
@@ -194,10 +288,19 @@ const LoginPage: React.FC<Props> = () => {
 
             {/* 인증번호 다시 받기 - 작은 텍스트 형식 */}
             <button
-              onClick={() => {
-                setVerificationSent(true);
-                setTimer(120);
-                setVerificationCode("");
+              onClick={async () => {
+                if (userRole) {
+                  try {
+                    console.log("인증번호 재발송 중...");
+                    await sendLoginAsync({ phoneNumber });
+                    setTimer(120);
+                    setVerificationCode("");
+                  } catch (error) {
+                    console.error("인증번호 재발송 실패:", error);
+                    setErrorMessage("인증번호 재발송에 실패했습니다.");
+                    setShowErrorModal(true);
+                  }
+                }
               }}
               className="text-xs text-neutral-500 underline"
             >
@@ -213,6 +316,7 @@ const LoginPage: React.FC<Props> = () => {
           theme="primary"
           onClick={handleLogin}
           disabled={!isLoginButtonEnabled}
+          loading={isLoading}
           className={cn(
             "w-full rounded-[0.625rem] border text-base font-normal transition-colors",
             isLoginButtonEnabled
@@ -224,7 +328,7 @@ const LoginPage: React.FC<Props> = () => {
         </Button>
       </div>
 
-      {/* 인증번호 오류 모달 */}
+      {/* 에러 모달 */}
       <Modal
         visible={showErrorModal}
         onClose={() => setShowErrorModal(false)}
@@ -235,13 +339,11 @@ const LoginPage: React.FC<Props> = () => {
         <div className="mb-4 text-center text-[1.375rem] font-bold text-neutral-600">
           앗!
           <br />
-          인증번호가 올바르지 않아요
+          오류가 발생했어요
         </div>
 
         <div className="mb-4 text-center text-xs text-neutral-400">
-          인증번호가 맞지 않아요.
-          <br />
-          다시 보내드릴까요?
+          {errorMessage || "다시 시도해주세요."}
         </div>
 
         <Button
@@ -250,10 +352,11 @@ const LoginPage: React.FC<Props> = () => {
           onClick={() => {
             setShowErrorModal(false);
             setVerificationCode("");
+            setErrorMessage("");
           }}
           className="w-fit rounded-[0.625rem] border-blue-600 bg-violet-200 px-5 text-sm text-blue-600"
         >
-          다시 입력하기
+          확인
         </Button>
       </Modal>
     </div>

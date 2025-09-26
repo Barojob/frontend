@@ -1,29 +1,23 @@
-import { apiClient } from "@/configs/apis";
+import {
+  authApi,
+  type SignUpResponse,
+  type WorkerSignUpRequest,
+} from "@/apis/auth";
 import { useMutation } from "@tanstack/react-query";
 
-export type WorkerSignUpRequest = {
-  phoneNumber: string;
-  name: string;
-  bankName: string;
-  AccountNumber: string;
-  birthDate: string;
-};
-
-export type WorkerSignUpResponse = {
-  user: {
-    phoneNumber: string;
-    name: string;
-  };
+type WorkerSignUpArgs = WorkerSignUpRequest & {
+  signUpKey: string;
 };
 
 export const useWorkerSignUp = () => {
   return useMutation({
     mutationKey: ["auth:workerSignUp"],
-    mutationFn: async (
-      signUpData: WorkerSignUpRequest,
-    ): Promise<WorkerSignUpResponse> => {
-      const response = await apiClient.post("/auth/sign-up/worker", signUpData);
-      return response.data;
+    mutationFn: async ({
+      signUpKey,
+      ...signUpData
+    }: WorkerSignUpArgs): Promise<SignUpResponse> => {
+      const response = await authApi.signUpWorker(signUpData, signUpKey);
+      return response;
     },
   });
 };
