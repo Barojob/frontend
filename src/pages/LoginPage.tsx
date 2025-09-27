@@ -3,7 +3,6 @@ import Input from "@/components/Input";
 import Modal from "@/components/Modal";
 import NavigationHeader from "@/components/NavigationHeader";
 import { useAuth } from "@/hooks/useAuth";
-import { useCheckUser } from "@/hooks/useCheckUser";
 import { useSendLogin } from "@/hooks/useSendLogin";
 import WarningIcon from "@/svgs/WarningIcon";
 import { cn } from "@/utils/classname";
@@ -21,14 +20,11 @@ const LoginPage: React.FC<Props> = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [userRole, setUserRole] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
 
   // API 훅들
-  const { mutateAsync: checkUserAsync, isPending: isCheckingUser } =
-    useCheckUser();
   const { mutateAsync: sendLoginAsync, isPending: isSendingLogin } =
     useSendLogin();
   const { signIn, isSigningIn } = useAuth();
@@ -85,52 +81,12 @@ const LoginPage: React.FC<Props> = () => {
       console.log("로그인 시도:", phoneNumber);
 
       try {
-        // 1. 먼저 EMPLOYER로 체크
-        let userExists = false;
-        let role = "";
-
-        console.log("EMPLOYER 체크 중...");
-        const employerResult = await checkUserAsync({
-          role: "EMPLOYER",
-          phoneNumber,
-        });
-
-        console.log("EMPLOYER 결과:", employerResult);
-
-        if (employerResult.success && employerResult.exists) {
-          userExists = true;
-          role = "EMPLOYER";
-        } else {
-          // 2. EMPLOYER가 아니면 WORKER로 체크
-          console.log("WORKER 체크 중...");
-          const workerResult = await checkUserAsync({
-            role: "WORKER",
-            phoneNumber,
-          });
-
-          console.log("WORKER 결과:", workerResult);
-
-          if (workerResult.success && workerResult.exists) {
-            userExists = true;
-            role = "WORKER";
-          }
-        }
-
-        console.log("사용자 존재 여부:", userExists, "역할:", role);
-
-        if (!userExists) {
-          console.log("사용자가 존재하지 않아 에러 모달 표시");
-          setErrorMessage("가입되지 않은 휴대폰 번호입니다.");
-          setShowErrorModal(true);
-          return;
-        }
-
-        // 3. 사용자가 존재하면 로그인용 인증번호 발송
+        // 1단계: 로그인용 인증번호 발송
         console.log("인증번호 발송 중...");
         const loginResult = await sendLoginAsync({ phoneNumber });
         console.log("인증번호 발송 결과:", loginResult);
 
-        setUserRole(role);
+        // 인증번호 발송이 성공했다면 사용자가 존재한다는 의미
         setVerificationSent(true);
         setTimer(120);
         setVerificationCode("");
@@ -141,16 +97,33 @@ const LoginPage: React.FC<Props> = () => {
       }
     } else {
       // 두 번째 클릭: 로그인 처리 (인증번호 확인)
-      if (verificationCode.length >= 4 && userRole) {
+      if (verificationCode.length >= 4) {
         try {
+          // EMPLOYER로 먼저 시도 (일반적으로 구인자가 더 적을 것으로 예상)
+          console.log("EMPLOYER로 로그인 시도...");
+          try {
+            await signIn({
+              verificationCode,
+              phoneNumber,
+              role: "EMPLOYER",
+            });
+            console.log("EMPLOYER 로그인 성공");
+            navigate("/login-success");
+            return;
+          } catch (error) {
+            console.log("EMPLOYER 로그인 실패, WORKER로 시도...");
+          }
+
+          // EMPLOYER 실패 시 WORKER로 시도
           await signIn({
             verificationCode,
             phoneNumber,
-            role: userRole,
+            role: "WORKER",
           });
+          console.log("WORKER 로그인 성공");
           navigate("/login-success");
         } catch (error) {
-          console.error("로그인 실패:", error);
+          console.error("모든 역할로 로그인 실패:", error);
           setErrorMessage("인증번호가 올바르지 않습니다.");
           setShowErrorModal(true);
         }
@@ -166,7 +139,7 @@ const LoginPage: React.FC<Props> = () => {
 
   const isPhoneNumberValid = phoneNumber.length === 13;
   const isVerificationCodeValid = verificationCode.length >= 4;
-  const isLoading = isCheckingUser || isSendingLogin || isSigningIn;
+  const isLoading = isSendingLogin || isSigningIn;
   const isLoginButtonEnabled = !verificationSent
     ? isPhoneNumberValid && !isLoading
     : isVerificationCodeValid && !isLoading;
@@ -289,17 +262,15 @@ const LoginPage: React.FC<Props> = () => {
             {/* 인증번호 다시 받기 - 작은 텍스트 형식 */}
             <button
               onClick={async () => {
-                if (userRole) {
-                  try {
-                    console.log("인증번호 재발송 중...");
-                    await sendLoginAsync({ phoneNumber });
-                    setTimer(120);
-                    setVerificationCode("");
-                  } catch (error) {
-                    console.error("인증번호 재발송 실패:", error);
-                    setErrorMessage("인증번호 재발송에 실패했습니다.");
-                    setShowErrorModal(true);
-                  }
+                try {
+                  console.log("인증번호 재발송 중...");
+                  await sendLoginAsync({ phoneNumber });
+                  setTimer(120);
+                  setVerificationCode("");
+                } catch (error) {
+                  console.error("인증번호 재발송 실패:", error);
+                  setErrorMessage("인증번호 재발송에 실패했습니다.");
+                  setShowErrorModal(true);
                 }
               }}
               className="text-xs text-neutral-500 underline"

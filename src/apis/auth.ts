@@ -89,12 +89,24 @@ const MOCK_USERS = {
 export const authApi = {
   // 사용자 존재 확인 및 인증번호 발송
   async checkUser(data: CheckUserRequest): Promise<CheckUserResponse> {
+    // 전화번호에서 하이픈 제거
+    const cleanedData = {
+      ...data,
+      phoneNumber: data.phoneNumber.replace(/[^0-9]/g, ""),
+    };
+    console.log(
+      "checkUser - 원본:",
+      data.phoneNumber,
+      "정제된:",
+      cleanedData.phoneNumber,
+    );
+
     const response = await fetch(createApiUrl("/auth/checkUser"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(cleanedData),
     });
 
     return response.json();
@@ -102,15 +114,39 @@ export const authApi = {
 
   // 로그인용 인증번호 발송
   async sendLogin(data: SendLoginRequest): Promise<SendLoginResponse> {
+    // 전화번호에서 하이픈 제거
+    const cleanedData = {
+      ...data,
+      phoneNumber: data.phoneNumber.replace(/[^0-9]/g, ""),
+    };
+    console.log(
+      "sendLogin - 원본:",
+      data.phoneNumber,
+      "정제된:",
+      cleanedData.phoneNumber,
+    );
+
     const response = await fetch(createApiUrl("/auth/send/login"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(cleanedData),
     });
 
-    return response.json();
+    // 백엔드가 텍스트를 반환할 수 있으므로 처리
+    const responseText = await response.text();
+    console.log("sendLogin 응답:", responseText);
+
+    // JSON 파싱 시도, 실패하면 텍스트로 처리
+    try {
+      return JSON.parse(responseText);
+    } catch {
+      return {
+        success: true,
+        message: responseText,
+      };
+    }
   },
 
   // 문자 인증 확인 (signUpKey 발급)
@@ -173,12 +209,24 @@ export const authApi = {
     };
   }, // SMS 인증번호를 통한 로그인
   async signIn(data: SignInRequest): Promise<SignInResponse> {
+    // 전화번호에서 하이픈 제거
+    const cleanedData = {
+      ...data,
+      phoneNumber: data.phoneNumber.replace(/[^0-9]/g, ""),
+    };
+    console.log(
+      "signIn - 원본:",
+      data.phoneNumber,
+      "정제된:",
+      cleanedData.phoneNumber,
+    );
+
     const response = await fetch(createApiUrl("/auth/sign-in"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(cleanedData),
       credentials: "include",
     });
 
@@ -190,8 +238,21 @@ export const authApi = {
     data: WorkerSignUpRequest,
     signUpKey: string,
   ): Promise<SignUpResponse> {
-    console.log("근로자 회원가입 API 호출:", data, "signUpKey:", signUpKey);
-    console.log("근로자 회원가입 request body:", JSON.stringify(data, null, 2));
+    // 전화번호에서 하이픈 제거
+    const cleanedData = {
+      ...data,
+      phoneNumber: data.phoneNumber.replace(/[^0-9]/g, ""),
+    };
+    console.log(
+      "근로자 회원가입 API 호출:",
+      cleanedData,
+      "signUpKey:",
+      signUpKey,
+    );
+    console.log(
+      "근로자 회원가입 request body:",
+      JSON.stringify(cleanedData, null, 2),
+    );
 
     const response = await fetch(createApiUrl("/auth/sign-up/worker"), {
       method: "POST",
@@ -199,7 +260,7 @@ export const authApi = {
         "Content-Type": "application/json",
         signUpKey,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(cleanedData),
     });
 
     console.log("근로자 회원가입 API 응답 status:", response.status);
@@ -213,7 +274,17 @@ export const authApi = {
     data: EmployerSignUpRequest,
     signUpKey: string,
   ): Promise<SignUpResponse> {
-    console.log("구인자 회원가입 API 호출:", data, "signUpKey:", signUpKey);
+    // 전화번호에서 하이픈 제거
+    const cleanedData = {
+      ...data,
+      phoneNumber: data.phoneNumber.replace(/[^0-9]/g, ""),
+    };
+    console.log(
+      "구인자 회원가입 API 호출:",
+      cleanedData,
+      "signUpKey:",
+      signUpKey,
+    );
 
     const response = await fetch(createApiUrl("/auth/sign-up/employer"), {
       method: "POST",
@@ -221,7 +292,7 @@ export const authApi = {
         "Content-Type": "application/json",
         signUpKey,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(cleanedData),
     });
 
     const result = await response.json();
@@ -318,7 +389,15 @@ export interface SignUpEmployerRequest {
 }
 
 export const signUpEmployer = async (req: SignUpEmployerRequest) => {
+  // 전화번호에서 하이픈 제거
+  const cleanedPhoneNumber = req.phoneNumber.replace(/[^0-9]/g, "");
   console.log("signUpEmployer API 호출 - request data:", req);
+  console.log(
+    "signUpEmployer API 호출 - 원본 전화번호:",
+    req.phoneNumber,
+    "정제된:",
+    cleanedPhoneNumber,
+  );
   console.log("signUpEmployer API 호출 - signUpKey:", req.signUpKey);
 
   const headers: Record<string, string> = {
@@ -337,7 +416,7 @@ export const signUpEmployer = async (req: SignUpEmployerRequest) => {
 
   const requestBody = {
     email: req.email,
-    phoneNumber: req.phoneNumber,
+    phoneNumber: cleanedPhoneNumber,
     name: req.name,
     companyName: req.companyName,
     title: req.title,

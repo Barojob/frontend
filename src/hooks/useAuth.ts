@@ -7,9 +7,17 @@ export const useAuth = () => {
   // 로그인 mutation
   const signInMutation = useMutation({
     mutationFn: authApi.signIn,
-    onSuccess: (_data, variables) => {
+    onSuccess: (data, variables) => {
+      console.log("로그인 성공 응답:", data);
+
+      // sessionId 저장
+      if (data.sessionId) {
+        sessionStorage.setItem("sessionId", data.sessionId);
+        console.log("sessionId 저장됨:", data.sessionId);
+      }
+
       // 로그인 성공 시 role 정보를 세션스토리지에 저장
-      const userType = variables.role === "employer" ? "employer" : "worker";
+      const userType = variables.role.toLowerCase();
       sessionStorage.setItem("userType", JSON.stringify(userType));
 
       // 유저 정보 캐시 무효화하여 최신 정보 다시 가져오기
@@ -36,6 +44,7 @@ export const useAuth = () => {
     onSuccess: () => {
       // 로그아웃 시 세션스토리지 클리어
       sessionStorage.removeItem("userType");
+      sessionStorage.removeItem("sessionId");
 
       // 모든 쿼리 캐시 클리어
       queryClient.clear();
