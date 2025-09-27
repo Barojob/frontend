@@ -21,6 +21,7 @@ export const useWorkerExperience = ({
     "",
   );
   const [selectedJobs, setSelectedJobs] = useState<string[]>([]);
+  const [showPreparingModal, setShowPreparingModal] = useState(false);
 
   useEffect(() => {
     onValidityChange(true);
@@ -28,6 +29,10 @@ export const useWorkerExperience = ({
   }, [onValidityChange, selectedJobs, onSelectedJobsChange]);
 
   const handleCategorySelect = (category: JobCategory) => {
+    if (category === "기능공") {
+      setShowPreparingModal(true);
+      return;
+    }
     setSelectedCategory(category);
     setSelectedJobs([]);
   };
@@ -39,17 +44,19 @@ export const useWorkerExperience = ({
   };
 
   const handleNext = () => {
-    // 선택된 경험을 SignupContext에 저장
+    // 선택된 경험을 SignupContext에 저장 (API 호출 X)
     setWorkerExperience({
       experienceCategories: selectedJobs,
     });
 
-    setCurrentStep(SignupStep.WORKER_LICENSE);
+    setCurrentStep(SignupStep.WORKER_LICENSE); // 이수증 단계로 이동
   };
 
   return {
     selectedCategory,
     selectedJobs,
+    showPreparingModal,
+    setShowPreparingModal,
     handleCategorySelect,
     handleJobToggle,
     handleNext,

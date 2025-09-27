@@ -1,6 +1,8 @@
 import Button from "@/components/Button";
+import Modal from "@/components/Modal";
 import { JOB_CATEGORIES, JobCategory } from "@/fixtures/jobs";
 import { useWorkerExperience } from "@/hooks/useWorkerExperience";
+import WarningIcon from "@/svgs/WarningIcon";
 import { cn } from "@/utils/classname";
 import React from "react";
 
@@ -18,6 +20,8 @@ const WorkerExperienceStep: React.FC<WorkerExperienceStepProps> = ({
   const {
     selectedCategory,
     selectedJobs,
+    showPreparingModal,
+    setShowPreparingModal,
     handleCategorySelect,
     handleJobToggle,
     handleNext,
@@ -93,6 +97,32 @@ const WorkerExperienceStep: React.FC<WorkerExperienceStepProps> = ({
           {selectedJobs.length === 0 ? "건너뛰기" : "다음 단계"}
         </Button>
       </div>
+
+      <Modal
+        visible={showPreparingModal}
+        onClose={() => setShowPreparingModal(false)}
+      >
+        <div className="px-8 py-10 text-center">
+          <div className="mb-4 flex justify-center">
+            <WarningIcon />
+          </div>
+          <h2 className="mb-1 text-2xl font-bold">앗!</h2>
+          <h2 className="mb-3 text-2xl font-bold">서비스 준비 중이예요</h2>
+          <p className="mb-8 text-xs font-medium text-gray-500">
+            기능공 관련 기능은 현재 준비중입니다.
+            <br />
+            조금만 기다려주세요!
+          </p>
+          <Button
+            onClick={() => setShowPreparingModal(false)}
+            theme="primary"
+            size="md"
+            className="mx-auto w-full max-w-[200px]"
+          >
+            확인
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -9,10 +9,10 @@ export const useWorkerLicense = (
 ) => {
   const {
     stepState: [, setCurrentStep],
+    workerLicenseState: [, setWorkerLicense], // 이수증 상태 관리
   } = useSignupContext();
 
-  const { mutateAsync: uploadCertificate, isPending: isUploading } =
-    useCertificateUpload();
+  const { isPending: isUploading } = useCertificateUpload();
 
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [showSkipModal, setShowSkipModal] = useState(false);
@@ -54,21 +54,13 @@ export const useWorkerLicense = (
   };
 
   const handleComplete = async () => {
-    if (!uploadedImage) {
-      setCurrentStep(SignupStep.WORKER_ACCOUNT);
-      return;
-    }
+    // 이수증 데이터를 Context에 저장
+    setWorkerLicense({
+      certificateImage: uploadedImage, // base64 이미지 데이터 또는 null
+    });
 
-    try {
-      await uploadCertificate({
-        certificate: uploadedImage,
-      });
-      setCurrentStep(SignupStep.WORKER_ACCOUNT);
-    } catch (error) {
-      console.error("이수증 업로드 실패:", error);
-      // 실패해도 일단 다음 단계로 진행
-      setCurrentStep(SignupStep.WORKER_ACCOUNT);
-    }
+    // 계좌 단계로 이동 (API 호출 X)
+    setCurrentStep(SignupStep.WORKER_ACCOUNT);
   };
 
   const handleSkipConfirm = () => {

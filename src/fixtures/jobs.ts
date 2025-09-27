@@ -25,6 +25,7 @@ export const JOB_LIST: Job[] = [
   { id: "carrying", name: "곰방", category: "보통인부", dailyWage: 180000 },
   { id: "demolition", name: "철거", category: "보통인부", dailyWage: 170000 },
 
+  // 기능공 카테고리
   {
     id: "form_carpenter",
     name: "형틀 목수",

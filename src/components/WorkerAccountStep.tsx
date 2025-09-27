@@ -11,13 +11,17 @@ import {
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
 import { BANK_LIST } from "@/fixtures/banks";
+import { useCertificateUpload } from "@/hooks/useCertificateUpload";
 import useSignupContext from "@/hooks/useSignupContext";
 import { useWorkerAccount } from "@/hooks/useWorkerAccount";
 import { useWorkerSignUp } from "@/hooks/useWorkerSignUp";
 import WarningIcon from "@/svgs/WarningIcon";
 import { SignupStep } from "@/types/signup";
 import { cn } from "@/utils/classname";
-import { createWorkerSignUpRequest } from "@/utils/workerSignupHelpers";
+import {
+  createWorkerSignUpRequest,
+  mapExperienceCategoryToId,
+} from "@/utils/workerSignupHelpers";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
@@ -49,25 +53,58 @@ const WorkerAccountStep: React.FC<WorkerAccountStepProps> = ({
     stepState: [, setCurrentStep],
     personalInfoState: [personalInfo],
     signUpKeyState: [signUpKey],
+    workerExperienceState: [workerExperience],
+    workerLicenseState: [workerLicense], // 이수증 데이터 가져오기
   } = useSignupContext();
 
   const { mutateAsync: workerSignUpAsync, isPending: isWorkerSignUpPending } =
     useWorkerSignUp();
 
+  // 이수증 업로드 훅도 가져오기
+  const { mutateAsync: uploadCertificate } = useCertificateUpload();
+
   const handleConfirmModalClose = async () => {
     setShowConfirmModal(false);
 
     try {
-      const requestData = createWorkerSignUpRequest({
-        personalInfo,
-        bankName: selectedBank,
-        accountNumber,
-      });
-      const result = await workerSignUpAsync({
-        ...requestData,
-        signUpKey: signUpKey || "",
-      });
-      console.log("근로자 회원가입 결과:", result);
+      // 이수증 유무에 따라 API 분기 처리
+      if (workerLicense.certificateImage) {
+        // 이수증이 있는 경우: worker-form API 사용 (multipart)
+        console.log("이수증 있음 - worker-form API 호출");
+
+        // 경험 카테고리를 백엔드 Enum 값으로 변환
+        const mappedCategories = workerExperience.experienceCategories.map(
+          mapExperienceCategoryToId,
+        );
+
+        const result = await uploadCertificate({
+          signUpKey: signUpKey || "",
+          imageDataUrl: workerLicense.certificateImage,
+          personalInfo,
+          experienceCategories: mappedCategories,
+          equipmentTypes: [],
+          bankName: selectedBank,
+          accountNumber,
+        });
+        console.log("이수증 포함 회원가입 결과:", result);
+      } else {
+        // 이수증이 없는 경우: worker API 사용 (JSON)
+        console.log("이수증 없음 - worker API 호출");
+
+        const requestData = createWorkerSignUpRequest({
+          personalInfo,
+          bankName: selectedBank,
+          accountNumber,
+          experienceCategories: workerExperience.experienceCategories,
+        });
+        const result = await workerSignUpAsync({
+          ...requestData,
+          signUpKey: signUpKey || "",
+        });
+        console.log("기본 회원가입 결과:", result);
+      }
+
+      // 성공 시 완료 단계로 이동
       setCurrentStep(SignupStep.SIGNUP_SUCCESS);
     } catch (error) {
       console.error("근로자 회원가입 중 오류가 발생했습니다:", error);

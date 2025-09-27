@@ -30,8 +30,8 @@ const PREVIOUS_STEP_MAP: Partial<Record<SignupStep, SignupStep>> = {
   [SignupStep.EMPLOYER_ACCOUNT]: SignupStep.EMPLOYER_INFO, // 고용주의 계좌 등록
 
   [SignupStep.WORKER_EXPERIENCE]: SignupStep.PHONE_VERIFICATION,
-  [SignupStep.WORKER_LICENSE]: SignupStep.WORKER_EXPERIENCE,
-  [SignupStep.WORKER_ACCOUNT]: SignupStep.WORKER_LICENSE, // 근로자의 계좌 등록
+  [SignupStep.WORKER_LICENSE]: SignupStep.WORKER_EXPERIENCE, // 원래 순서로 복구
+  [SignupStep.WORKER_ACCOUNT]: SignupStep.WORKER_LICENSE, // 계좌는 마지막 단계
 
   // 기타
   [SignupStep.ALREADY_REGISTERED]: SignupStep.USER_TYPE_SELECTION,

@@ -8,6 +8,7 @@ import {
   SignupStep,
   VerificationState,
   WorkerExperienceState,
+  WorkerLicenseState,
 } from "@/types/signup";
 import { type UserType } from "@/types/user";
 import React, { PropsWithChildren } from "react";
@@ -43,6 +44,10 @@ const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
     experienceCategories: [],
   });
 
+  const workerLicenseState = React.useState<WorkerLicenseState>({
+    certificateImage: null,
+  });
+
   return (
     <SignupContext.Provider
       value={{
@@ -53,6 +58,7 @@ const SignupProvider: React.FC<PropsWithChildren> = ({ children }) => {
         userTypeState,
         employerInfoState,
         workerExperienceState,
+        workerLicenseState,
         signUpKeyState,
       }}
     >

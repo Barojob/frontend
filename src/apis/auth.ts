@@ -53,7 +53,7 @@ export interface WorkerSignUpRequest {
   experienceCategories: string[];
   equipmentTypes: string[];
   bankName: string;
-  accountNumber: string;
+  AccountNumber: string; // 백엔드와 일치하도록 대문자로 수정
   birthDate: string;
 }
 
@@ -191,6 +191,7 @@ export const authApi = {
     signUpKey: string,
   ): Promise<SignUpResponse> {
     console.log("근로자 회원가입 API 호출:", data, "signUpKey:", signUpKey);
+    console.log("근로자 회원가입 request body:", JSON.stringify(data, null, 2));
 
     const response = await fetch(createApiUrl("/auth/sign-up/worker"), {
       method: "POST",
@@ -201,6 +202,7 @@ export const authApi = {
       body: JSON.stringify(data),
     });
 
+    console.log("근로자 회원가입 API 응답 status:", response.status);
     const result = await response.json();
     console.log("근로자 회원가입 API 응답:", result);
     return result;

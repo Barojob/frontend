@@ -55,6 +55,10 @@ export type WorkerExperienceState = {
   experienceCategories: string[];
 };
 
+export type WorkerLicenseState = {
+  certificateImage: string | null; // base64 이미지 데이터
+};
+
 export type SignUpContextType = {
   termsState: [CheckItem[], React.Dispatch<React.SetStateAction<CheckItem[]>>];
   stepState: [SignupStep, React.Dispatch<React.SetStateAction<SignupStep>>];
@@ -81,5 +85,9 @@ export type SignUpContextType = {
   workerExperienceState: [
     WorkerExperienceState,
     React.Dispatch<React.SetStateAction<WorkerExperienceState>>,
+  ];
+  workerLicenseState: [
+    WorkerLicenseState,
+    React.Dispatch<React.SetStateAction<WorkerLicenseState>>,
   ];
 };
