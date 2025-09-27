@@ -97,7 +97,6 @@ export const useCertificateUpload = () => {
         {
           headers: {
             signUpKey: signUpKey,
-            // Content-Type은 제거 - axios가 FormData를 보고 자동으로 multipart/form-data 설정
           },
         },
       );
